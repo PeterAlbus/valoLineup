@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.SITE_URL ?? 'http://localhost:3000'),
+  metadataBase: new URL(process.env.SITE_URL ?? 'https://lineup-atlas-cn.peteralbus.chatgpt.site'),
   title: 'Lineup Atlas｜无畏契约点位图鉴',
   description: '按地图与英雄浏览无畏契约技能 Lineup，查看落点、站位、瞄点和操作方法。',
   icons: { icon: '/agents/sova/recon-bolt.png' },
