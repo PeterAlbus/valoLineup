@@ -1,0 +1,13 @@
+- id: sova
+  name: 猎枭
+  icon: /agents/sova/icon.png
+  abilities:
+    - id: shock-bolt
+      name: 雷击箭
+      icon: /agents/sova/shock-bolt.png
+    - id: recon-bolt
+      name: 寻敌箭
+      icon: /agents/sova/recon-bolt.png
+    - id: hunters-fury
+      name: 狂猎之怒
+      icon: /agents/sova/hunters-fury.png

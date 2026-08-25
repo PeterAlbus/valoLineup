@@ -1,0 +1,17 @@
+- id: corrode
+  name: 天枢云阙
+  image: /maps/corrode.png
+  width: 1024
+  height: 1024
+
+- id: ascent
+  name: 亚海悬城
+  image: /maps/ascent.png
+  width: 1024
+  height: 1024
+
+- id: haven
+  name: 隐世修所
+  image: /maps/haven.png
+  width: 1024
+  height: 1024

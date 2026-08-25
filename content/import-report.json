@@ -1,0 +1,47 @@
+{
+  "source": "content/sources/先锋.md",
+  "importedLineups": 26,
+  "orphanImages": [
+    {
+      "line": 9,
+      "file": "image-20260624164625541.png",
+      "context": {
+        "map": "天枢云阙",
+        "agent": "猎枭",
+        "side": "进攻",
+        "area": "A点"
+      },
+      "available": true
+    },
+    {
+      "line": 11,
+      "file": "image-20260624164720359.png",
+      "context": {
+        "map": "天枢云阙",
+        "agent": "猎枭",
+        "side": "进攻",
+        "area": "A点"
+      },
+      "available": false
+    },
+    {
+      "line": 15,
+      "file": "image-20260624164827577.png",
+      "context": {
+        "map": "天枢云阙",
+        "agent": "猎枭",
+        "side": "进攻",
+        "area": "中路"
+      },
+      "available": false
+    }
+  ],
+  "missingImages": [],
+  "suspiciousHeadings": [
+    {
+      "line": 215,
+      "value": "隐世修所",
+      "expectedLevel": 1
+    }
+  ]
+}
