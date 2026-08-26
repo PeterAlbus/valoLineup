@@ -1,17 +1,263 @@
-- id: corrode
-  name: 天枢云阙
-  image: /maps/corrode.png
-  width: 1024
-  height: 1024
-
 - id: ascent
   name: 亚海悬城
   image: /maps/ascent.png
+  imageHiRes: /maps/hires/ascent.png
   width: 1024
   height: 1024
+  sites:
+    - label: A
+      region: { x: 0.3115, y: 0.1475, width: 0.0898, height: 0.1426, rotation: 0 }
+    - label: B
+      region: { x: 0.2720, y: 0.7920, width: 0.1338, height: 0.1230, rotation: 0 }
+  spawns:
+    attack:
+      labelPosition: { x: 0.8174, y: 0.5690 }
+    defense:
+      labelPosition: { x: 0.1318, y: 0.4336 }
+  perspectives:
+    attack: { rotation: 90 }
+    defense: { rotation: -90 }
+
+- id: bind
+  name: 源工重镇
+  image: /maps/bind.png
+  imageHiRes: /maps/hires/bind.png
+  width: 1024
+  height: 1024
+  sites:
+    - label: A
+      region: { x: 0.7251, y: 0.3276, width: 0.0986, height: 0.1006, rotation: 0 }
+    - label: B
+      region: { x: 0.2920, y: 0.2773, width: 0.0879, height: 0.0703, rotation: 0 }
+  spawns:
+    attack:
+      labelPosition: { x: 0.5815, y: 0.9200 }
+    defense:
+      labelPosition: { x: 0.5169, y: 0.1037 }
+  perspectives:
+    attack: { rotation: 0 }
+    defense: { rotation: 180 }
 
 - id: haven
   name: 隐世修所
   image: /maps/haven.png
+  imageHiRes: /maps/hires/haven.png
   width: 1024
   height: 1024
+  sites:
+    - label: A
+      region: { x: 0.3760, y: 0.1421, width: 0.1016, height: 0.1182, rotation: 0 }
+    - label: B
+      region: { x: 0.3940, y: 0.4985, width: 0.0986, height: 0.1084, rotation: 0 }
+    - label: C
+      region: { x: 0.3643, y: 0.8452, width: 0.1094, height: 0.1533, rotation: 0 }
+  spawns:
+    attack:
+      labelPosition: { x: 0.8952, y: 0.5121 }
+    defense:
+      labelPosition: { x: 0.1398, y: 0.4218 }
+  perspectives:
+    attack: { rotation: 90 }
+    defense: { rotation: -90 }
+
+- id: split
+  name: 霓虹町
+  image: /maps/split.png
+  imageHiRes: /maps/hires/split.png
+  width: 1024
+  height: 1024
+  sites:
+    - label: A
+      region: { x: 0.3330, y: 0.0986, width: 0.1855, height: 0.1094, rotation: 0 }
+    - label: B
+      region: { x: 0.3257, y: 0.8267, width: 0.0830, height: 0.1377, rotation: 0 }
+  spawns:
+    attack:
+      labelPosition: { x: 0.8468, y: 0.5492 }
+    defense:
+      labelPosition: { x: 0.1429, y: 0.5305 }
+  perspectives:
+    attack: { rotation: 90 }
+    defense: { rotation: -90 }
+
+- id: icebox
+  name: 森寒冬港
+  image: /maps/icebox.png
+  imageHiRes: /maps/hires/icebox.png
+  width: 1024
+  height: 1024
+  sites:
+    - label: A
+      region: { x: 0.7275, y: 0.8086, width: 0.1094, height: 0.1895, rotation: 0 }
+    - label: B
+      region: { x: 0.6143, y: 0.2192, width: 0.1426, height: 0.1221, rotation: 0 }
+  spawns:
+    attack:
+      labelPosition: { x: 0.1398, y: 0.5873 }
+    defense:
+      labelPosition: { x: 0.9300, y: 0.5747 }
+  perspectives:
+    attack: { rotation: -90 }
+    defense: { rotation: 90 }
+
+- id: breeze
+  name: 微风岛屿
+  image: /maps/breeze.png
+  imageHiRes: /maps/hires/breeze.png
+  width: 1024
+  height: 1024
+  sites:
+    - label: A
+      region: { x: 0.8882, y: 0.4556, width: 0.1611, height: 0.0752, rotation: 0 }
+    - label: B
+      region: { x: 0.1401, y: 0.2886, width: 0.0889, height: 0.0889, rotation: 0 }
+  spawns:
+    attack:
+      labelPosition: { x: 0.4336, y: 0.8733 }
+    defense:
+      labelPosition: { x: 0.7119, y: 0.2101 }
+  perspectives:
+    attack: { rotation: 0 }
+    defense: { rotation: 180 }
+
+- id: fracture
+  name: 裂变峡谷
+  image: /maps/fracture.png
+  imageHiRes: /maps/hires/fracture.png
+  width: 1024
+  height: 1024
+  sites:
+    - label: A
+      region: { x: 0.8770, y: 0.5068, width: 0.0957, height: 0.1367, rotation: 0 }
+    - label: B
+      region: { x: 0.1040, y: 0.5298, width: 0.1357, height: 0.1357, rotation: 0 }
+  spawns:
+    attack:
+      labelPosition: { x: 0.4830, y: 0.8169 }
+    defense:
+      labelPosition: { x: 0.5041, y: 0.4417 }
+  perspectives:
+    attack: { rotation: 0 }
+    defense: { rotation: 180 }
+
+- id: pearl
+  name: 深海明珠
+  image: /maps/pearl.png
+  imageHiRes: /maps/hires/pearl.png
+  width: 1024
+  height: 1024
+  sites:
+    - label: A
+      region: { x: 0.8589, y: 0.3091, width: 0.1279, height: 0.1338, rotation: 0 }
+    - label: B
+      region: { x: 0.1860, y: 0.4023, width: 0.0908, height: 0.1328, rotation: 0 }
+  spawns:
+    attack:
+      labelPosition: { x: 0.5450, y: 0.9300 }
+    defense:
+      labelPosition: { x: 0.5800, y: 0.1000 }
+  perspectives:
+    attack: { rotation: 0 }
+    defense: { rotation: 180 }
+
+- id: lotus
+  name: 莲华古城
+  image: /maps/lotus.png
+  imageHiRes: /maps/hires/lotus.png
+  width: 1024
+  height: 1024
+  sites:
+    - label: A
+      region: { x: 0.8813, y: 0.3223, width: 0.0986, height: 0.1211, rotation: 0 }
+    - label: B
+      region: { x: 0.4834, y: 0.4204, width: 0.1348, height: 0.0811, rotation: 0 }
+    - label: C
+      region: { x: 0.1084, y: 0.4575, width: 0.1094, height: 0.0986, rotation: 0 }
+  spawns:
+    attack:
+      labelPosition: { x: 0.5108, y: 0.8169 }
+    defense:
+      labelPosition: { x: 0.5770, y: 0.2203 }
+  perspectives:
+    attack: { rotation: 0 }
+    defense: { rotation: 180 }
+
+- id: sunset
+  name: 日落之城
+  image: /maps/sunset.png
+  imageHiRes: /maps/hires/sunset.png
+  width: 1024
+  height: 1024
+  sites:
+    - label: A
+      region: { x: 0.8198, y: 0.3745, width: 0.1143, height: 0.1299, rotation: 0 }
+    - label: B
+      region: { x: 0.1245, y: 0.4292, width: 0.1611, height: 0.1143, rotation: 0 }
+  spawns:
+    attack:
+      labelPosition: { x: 0.5500, y: 0.9300 }
+    defense:
+      labelPosition: { x: 0.5000, y: 0.0900 }
+  perspectives:
+    attack: { rotation: 0 }
+    defense: { rotation: 180 }
+
+- id: abyss
+  name: 幽邃地窟
+  image: /maps/abyss.png
+  imageHiRes: /maps/hires/abyss.png
+  width: 1024
+  height: 1024
+  sites:
+    - label: A
+      region: { x: 0.4268, y: 0.0967, width: 0.1191, height: 0.1660, rotation: 0 }
+    - label: B
+      region: { x: 0.3906, y: 0.9146, width: 0.1230, height: 0.0947, rotation: 0 }
+  spawns:
+    attack:
+      labelPosition: { x: 0.9010, y: 0.4230 }
+    defense:
+      labelPosition: { x: 0.0727, y: 0.4230 }
+  perspectives:
+    attack: { rotation: 90 }
+    defense: { rotation: -90 }
+
+- id: corrode
+  name: 盐海矿镇
+  image: /maps/corrode.png
+  imageHiRes: /maps/hires/corrode.png
+  width: 1024
+  height: 1024
+  sites:
+    - label: A
+      region: { x: 0.3965, y: 0.1929, width: 0.0820, height: 0.1025, rotation: 0 }
+    - label: B
+      region: { x: 0.4004, y: 0.7627, width: 0.0879, height: 0.0879, rotation: 0 }
+  spawns:
+    attack:
+      labelPosition: { x: 0.9234, y: 0.5018 }
+    defense:
+      labelPosition: { x: 0.1237, y: 0.4994 }
+  perspectives:
+    attack: { rotation: 90 }
+    defense: { rotation: -90 }
+
+- id: summit
+  name: 天枢云阙
+  image: /maps/summit.png
+  imageHiRes: /maps/hires/summit.png
+  width: 1024
+  height: 1024
+  sites:
+    - label: A
+      region: { x: 0.9146, y: 0.4302, width: 0.1025, height: 0.1260, rotation: 0 }
+    - label: B
+      region: { x: 0.1323, y: 0.3022, width: 0.1611, height: 0.1104, rotation: 0 }
+  spawns:
+    attack:
+      labelPosition: { x: 0.5000, y: 0.9300 }
+    defense:
+      labelPosition: { x: 0.5105, y: 0.1000 }
+  perspectives:
+    attack: { rotation: 0 }
+    defense: { rotation: 180 }

@@ -7,14 +7,14 @@
   },
   "scripts": {
     "content:import": "node scripts/import-markdown.mjs",
+    "content:import-agents": "node scripts/import-riot-agents.mjs",
     "content:build": "node scripts/build-content.mjs",
-    "content": "npm run content:import && npm run content:build",
-    "predev": "npm run content",
+    "predev": "npm run content:build",
     "dev": "vinext dev",
-    "prebuild": "npm run content",
+    "prebuild": "npm run content:build",
     "build": "vinext build",
     "start": "vinext start",
-    "test": "npm run content && node scripts/check-content.mjs",
+    "test": "npm run content:build && node scripts/check-content.mjs",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next"
   },
   "dependencies": {
@@ -37,6 +37,7 @@
     "eslint": "9.39.4",
     "eslint-config-next": "16.2.6",
     "react-server-dom-webpack": "19.2.6",
+    "sharp": "0.34.5",
     "tailwindcss": "4.2.1",
     "typescript": "5.9.3",
     "vinext": "1.0.0-beta.3",
