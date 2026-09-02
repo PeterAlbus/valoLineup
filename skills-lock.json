@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "toy": {
+      "source": "bilibili/toy",
+      "sourceType": "github",
+      "skillPath": "skills/toy/SKILL.md",
+      "computedHash": "d2739791b695306e5fde05d003ab9c5ef3dff175f293179926d8cb178bf0909b"
+    }
+  }
+}
