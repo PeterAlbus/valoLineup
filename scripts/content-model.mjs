@@ -1,4 +1,4 @@
-import { createHash, randomUUID } from 'node:crypto';
+import { randomUUID } from 'node:crypto';
 import { access, mkdir, readFile, rename, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { parse, stringify } from 'yaml';
@@ -41,11 +41,9 @@ export const lineupSchema = z.object({
   title: z.string().min(1),
   side: z.enum(['attack', 'defense']),
   area: z.string().min(1),
-  videoUrl: z.union([
+  videoBvid: z.union([
     z.literal(''),
-    z.url().refine((value) => ['http:', 'https:'].includes(new URL(value).protocol), {
-      message: '视频链接必须是 HTTP 或 HTTPS 地址',
-    }),
+    z.string().regex(/^BV[0-9A-Za-z]{10}$/, '教学视频必须填写完整 BV 号'),
   ]),
   target: z.object({
     groupId: z.string().min(1),
@@ -70,8 +68,8 @@ export const lineupsSchema = z.array(lineupSchema);
 export const mapsSchema = z.array(z.object({
   id: z.string().regex(/^[a-z0-9-]+$/),
   name: z.string().min(1),
-  image: z.string().startsWith('/'),
-  imageHiRes: z.string().startsWith('/'),
+  image: assetKeySchema,
+  imageHiRes: assetKeySchema,
   width: z.number().positive(),
   height: z.number().positive(),
   sites: z.array(z.object({
@@ -91,20 +89,16 @@ export const mapsSchema = z.array(z.object({
 export const agentsSchema = z.array(z.object({
   id: z.string().min(1),
   name: z.string().min(1),
-  icon: z.string().startsWith('/'),
+  icon: assetKeySchema,
   abilities: z.array(z.object({
     id: z.string().min(1),
     name: z.string().min(1),
-    icon: z.string().startsWith('/'),
+    icon: assetKeySchema,
   })),
 }));
 
 async function readYaml(root, name) {
   return parse(await readFile(path.join(root, 'content', name), 'utf8'));
-}
-
-export function contentRevision(source) {
-  return createHash('sha256').update(source).digest('hex');
 }
 
 export function stringifyLineups(lineups) {
@@ -125,14 +119,6 @@ export async function readSourceContent(root = process.cwd()) {
     readYaml(root, 'lineups.yaml'),
   ]);
   return { maps, agents, lineups };
-}
-
-export async function readContentDocument(root = process.cwd()) {
-  const sourcePath = path.join(root, 'content', 'lineups.yaml');
-  const source = await readFile(sourcePath, 'utf8');
-  const content = await readSourceContent(root);
-  const validated = await validateContent(content, { root, verifyAssets: true });
-  return { ...validated, revision: contentRevision(source) };
 }
 
 export async function validateContent(content, { root = process.cwd(), verifyAssets = true } = {}) {
@@ -181,12 +167,12 @@ export async function validateContent(content, { root = process.cwd(), verifyAss
 
   if (verifyAssets) {
     for (const map of maps) {
-      await access(path.join(root, 'public', map.image.slice(1)));
-      await access(path.join(root, 'public', map.imageHiRes.slice(1)));
+      await access(path.join(root, 'public', map.image));
+      await access(path.join(root, 'public', map.imageHiRes));
     }
     for (const agent of agents) {
-      await access(path.join(root, 'public', agent.icon.slice(1)));
-      for (const ability of agent.abilities) await access(path.join(root, 'public', ability.icon.slice(1)));
+      await access(path.join(root, 'public', agent.icon));
+      for (const ability of agent.abilities) await access(path.join(root, 'public', ability.icon));
     }
   }
 
@@ -195,8 +181,8 @@ export async function validateContent(content, { root = process.cwd(), verifyAss
 
 export async function buildContent(root = process.cwd(), { quiet = false } = {}) {
   const validated = await validateContent(await readSourceContent(root), { root, verifyAssets: true });
-  const outputPath = path.join(root, 'app', 'data', 'content.json');
+  const outputPath = path.join(root, 'src', 'data', 'content.json');
   await writeTextAtomic(outputPath, `${JSON.stringify(validated, null, 2)}\n`);
-  if (!quiet) console.log(`Validated ${validated.lineups.length} lineups and generated app/data/content.json`);
+  if (!quiet) console.log(`Validated ${validated.lineups.length} lineups and generated src/data/content.json`);
   return validated;
 }

@@ -1,6 +1,3 @@
-'use client';
-
-/* eslint-disable @next/next/no-img-element */
 import { useEffect, useMemo, useState } from 'react';
 
 type MapOption = { id: string; name: string; sites: { label: string }[] };
@@ -13,7 +10,7 @@ export type NewLineupInput = {
   side: 'attack' | 'defense';
   area: string;
   title: string;
-  videoUrl: string;
+  videoBvid: string;
   instructions: string[];
 };
 
@@ -37,7 +34,7 @@ export default function NewLineupDialog({ maps, agents, initialMapId, initialAge
   const [side, setSide] = useState<'attack' | 'defense'>('attack');
   const [area, setArea] = useState(`${maps.find((map) => map.id === initialMapId)?.sites[0]?.label ?? 'A'}点`);
   const [title, setTitle] = useState('');
-  const [videoUrl, setVideoUrl] = useState('');
+  const [videoBvid, setVideoBvid] = useState('');
   const [instructions, setInstructions] = useState('');
   const activeAgent = useMemo(() => agents.find((agent) => agent.id === agentId) ?? agents[0], [agentId, agents]);
   const activeAbility = activeAgent.abilities.find((ability) => ability.id === abilityId) ?? activeAgent.abilities[0];
@@ -54,7 +51,7 @@ export default function NewLineupDialog({ maps, agents, initialMapId, initialAge
     <div className="dialog-backdrop" onMouseDown={(event) => event.target === event.currentTarget && onCancel()}>
       <section aria-labelledby="new-lineup-title" aria-modal="true" className="new-lineup-dialog" role="dialog">
         <div className="dialog-heading">
-          <div><p className="eyebrow">本地元数据</p><h2 id="new-lineup-title">新增 Lineup 点位</h2></div>
+          <div><p className="eyebrow">浏览器草稿</p><h2 id="new-lineup-title">新增 Lineup 点位</h2></div>
           <button aria-label="关闭新增点位窗口" onClick={onCancel} type="button">×</button>
         </div>
         <p className="dialog-intro">先定义点位内容，下一步到地图上点击技能最终落点。坐标不会使用默认值。</p>
@@ -69,7 +66,7 @@ export default function NewLineupDialog({ maps, agents, initialMapId, initialAge
               side,
               area: area.trim(),
               title: title.trim(),
-              videoUrl: videoUrl.trim(),
+              videoBvid: videoBvid.trim(),
               instructions: instructions.split('\n').map((value) => value.trim()).filter(Boolean),
             });
           }}
@@ -119,9 +116,9 @@ export default function NewLineupDialog({ maps, agents, initialMapId, initialAge
           </label>
 
           <div className="selection-preview">
-            <img alt="" src={activeAgent.icon} />
+            <img alt="" src={`${import.meta.env.BASE_URL}${activeAgent.icon}`} />
             <span><small>{activeAgent.name}</small><b>{activeAbility.name}</b></span>
-            <img alt="" src={activeAbility.icon} />
+            <img alt="" src={`${import.meta.env.BASE_URL}${activeAbility.icon}`} />
           </div>
 
           <div className="form-grid">
@@ -136,8 +133,15 @@ export default function NewLineupDialog({ maps, agents, initialMapId, initialAge
           </div>
 
           <label>
-            <span>教学视频链接 <small>可选</small></span>
-            <input onChange={(event) => setVideoUrl(event.target.value)} placeholder="https://..." type="url" value={videoUrl} />
+            <span>B站教学视频 BV 号 <small>可选</small></span>
+            <input
+              maxLength={12}
+              onChange={(event) => setVideoBvid(event.target.value.trim())}
+              pattern="BV[0-9A-Za-z]{10}"
+              placeholder="BV17x411w7KC"
+              title="请输入以 BV 开头的 12 位 BV 号"
+              value={videoBvid}
+            />
           </label>
 
           <label>
@@ -146,7 +150,7 @@ export default function NewLineupDialog({ maps, agents, initialMapId, initialAge
           </label>
 
           <div className="dialog-footer">
-            <p>创建后仍是未保存草稿，可以继续拖动并添加站位、瞄点和效果图。</p>
+            <p>创建后仍是浏览器草稿，可以继续拖动并添加站位、瞄点和效果图，最后统一导出编辑包。</p>
             <div><button className="dialog-cancel" onClick={onCancel} type="button">取消</button><button className="dialog-next" type="submit">下一步：在地图上放置</button></div>
           </div>
         </form>

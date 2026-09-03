@@ -3,8 +3,8 @@
     {
       "id": "ascent",
       "name": "亚海悬城",
-      "image": "/maps/ascent.png",
-      "imageHiRes": "/maps/hires/ascent.png",
+      "image": "maps/ascent.png",
+      "imageHiRes": "maps/hires/ascent.png",
       "width": 1024,
       "height": 1024,
       "sites": [
@@ -55,8 +55,8 @@
     {
       "id": "bind",
       "name": "源工重镇",
-      "image": "/maps/bind.png",
-      "imageHiRes": "/maps/hires/bind.png",
+      "image": "maps/bind.png",
+      "imageHiRes": "maps/hires/bind.png",
       "width": 1024,
       "height": 1024,
       "sites": [
@@ -107,8 +107,8 @@
     {
       "id": "haven",
       "name": "隐世修所",
-      "image": "/maps/haven.png",
-      "imageHiRes": "/maps/hires/haven.png",
+      "image": "maps/haven.png",
+      "imageHiRes": "maps/hires/haven.png",
       "width": 1024,
       "height": 1024,
       "sites": [
@@ -169,8 +169,8 @@
     {
       "id": "split",
       "name": "霓虹町",
-      "image": "/maps/split.png",
-      "imageHiRes": "/maps/hires/split.png",
+      "image": "maps/split.png",
+      "imageHiRes": "maps/hires/split.png",
       "width": 1024,
       "height": 1024,
       "sites": [
@@ -221,8 +221,8 @@
     {
       "id": "icebox",
       "name": "森寒冬港",
-      "image": "/maps/icebox.png",
-      "imageHiRes": "/maps/hires/icebox.png",
+      "image": "maps/icebox.png",
+      "imageHiRes": "maps/hires/icebox.png",
       "width": 1024,
       "height": 1024,
       "sites": [
@@ -273,8 +273,8 @@
     {
       "id": "breeze",
       "name": "微风岛屿",
-      "image": "/maps/breeze.png",
-      "imageHiRes": "/maps/hires/breeze.png",
+      "image": "maps/breeze.png",
+      "imageHiRes": "maps/hires/breeze.png",
       "width": 1024,
       "height": 1024,
       "sites": [
@@ -325,8 +325,8 @@
     {
       "id": "fracture",
       "name": "裂变峡谷",
-      "image": "/maps/fracture.png",
-      "imageHiRes": "/maps/hires/fracture.png",
+      "image": "maps/fracture.png",
+      "imageHiRes": "maps/hires/fracture.png",
       "width": 1024,
       "height": 1024,
       "sites": [
@@ -377,8 +377,8 @@
     {
       "id": "pearl",
       "name": "深海明珠",
-      "image": "/maps/pearl.png",
-      "imageHiRes": "/maps/hires/pearl.png",
+      "image": "maps/pearl.png",
+      "imageHiRes": "maps/hires/pearl.png",
       "width": 1024,
       "height": 1024,
       "sites": [
@@ -429,8 +429,8 @@
     {
       "id": "lotus",
       "name": "莲华古城",
-      "image": "/maps/lotus.png",
-      "imageHiRes": "/maps/hires/lotus.png",
+      "image": "maps/lotus.png",
+      "imageHiRes": "maps/hires/lotus.png",
       "width": 1024,
       "height": 1024,
       "sites": [
@@ -491,8 +491,8 @@
     {
       "id": "sunset",
       "name": "日落之城",
-      "image": "/maps/sunset.png",
-      "imageHiRes": "/maps/hires/sunset.png",
+      "image": "maps/sunset.png",
+      "imageHiRes": "maps/hires/sunset.png",
       "width": 1024,
       "height": 1024,
       "sites": [
@@ -543,8 +543,8 @@
     {
       "id": "abyss",
       "name": "幽邃地窟",
-      "image": "/maps/abyss.png",
-      "imageHiRes": "/maps/hires/abyss.png",
+      "image": "maps/abyss.png",
+      "imageHiRes": "maps/hires/abyss.png",
       "width": 1024,
       "height": 1024,
       "sites": [
@@ -595,8 +595,8 @@
     {
       "id": "corrode",
       "name": "盐海矿镇",
-      "image": "/maps/corrode.png",
-      "imageHiRes": "/maps/hires/corrode.png",
+      "image": "maps/corrode.png",
+      "imageHiRes": "maps/hires/corrode.png",
       "width": 1024,
       "height": 1024,
       "sites": [
@@ -647,8 +647,8 @@
     {
       "id": "summit",
       "name": "天枢云阙",
-      "image": "/maps/summit.png",
-      "imageHiRes": "/maps/hires/summit.png",
+      "image": "maps/summit.png",
+      "imageHiRes": "maps/hires/summit.png",
       "width": 1024,
       "height": 1024,
       "sites": [
@@ -701,793 +701,793 @@
     {
       "id": "astra",
       "name": "星礈",
-      "icon": "/agents/astra/icon.webp",
+      "icon": "agents/astra/icon.webp",
       "abilities": [
         {
           "id": "nova-pulse",
           "name": "新星脉冲",
-          "icon": "/agents/astra/nova-pulse.webp"
+          "icon": "agents/astra/nova-pulse.webp"
         },
         {
           "id": "nebula-dissipate",
           "name": "星云/消散",
-          "icon": "/agents/astra/nebula-dissipate.webp"
+          "icon": "agents/astra/nebula-dissipate.webp"
         },
         {
           "id": "gravity-well",
           "name": "重力之阱",
-          "icon": "/agents/astra/gravity-well.webp"
+          "icon": "agents/astra/gravity-well.webp"
         },
         {
           "id": "astral-form-cosmic-divide",
           "name": "星界形态/宇宙分裂",
-          "icon": "/agents/astra/astral-form-cosmic-divide.webp"
+          "icon": "agents/astra/astral-form-cosmic-divide.webp"
         },
         {
           "id": "astral-form",
           "name": "星界形态",
-          "icon": "/agents/astra/astral-form.webp"
+          "icon": "agents/astra/astral-form.webp"
         }
       ]
     },
     {
       "id": "breach",
       "name": "铁臂",
-      "icon": "/agents/breach/icon.webp",
+      "icon": "agents/breach/icon.webp",
       "abilities": [
         {
           "id": "flashpoint",
           "name": "闪点爆破",
-          "icon": "/agents/breach/flashpoint.webp"
+          "icon": "agents/breach/flashpoint.webp"
         },
         {
           "id": "fault-line",
           "name": "山崩地陷",
-          "icon": "/agents/breach/fault-line.webp"
+          "icon": "agents/breach/fault-line.webp"
         },
         {
           "id": "aftershock",
           "name": "剧震余波",
-          "icon": "/agents/breach/aftershock.webp"
+          "icon": "agents/breach/aftershock.webp"
         },
         {
           "id": "rolling-thunder",
           "name": "惊雷卷地",
-          "icon": "/agents/breach/rolling-thunder.webp"
+          "icon": "agents/breach/rolling-thunder.webp"
         }
       ]
     },
     {
       "id": "brimstone",
       "name": "炼狱",
-      "icon": "/agents/brimstone/icon.webp",
+      "icon": "agents/brimstone/icon.webp",
       "abilities": [
         {
           "id": "incendiary",
           "name": "燃烧榴弹",
-          "icon": "/agents/brimstone/incendiary.webp"
+          "icon": "agents/brimstone/incendiary.webp"
         },
         {
           "id": "sky-smoke",
           "name": "空投烟幕",
-          "icon": "/agents/brimstone/sky-smoke.webp"
+          "icon": "agents/brimstone/sky-smoke.webp"
         },
         {
           "id": "stim-beacon",
           "name": "振奋信标",
-          "icon": "/agents/brimstone/stim-beacon.webp"
+          "icon": "agents/brimstone/stim-beacon.webp"
         },
         {
           "id": "orbital-strike",
           "name": "天基光束",
-          "icon": "/agents/brimstone/orbital-strike.webp"
+          "icon": "agents/brimstone/orbital-strike.webp"
         }
       ]
     },
     {
       "id": "chamber",
       "name": "尚勃勒",
-      "icon": "/agents/chamber/icon.webp",
+      "icon": "agents/chamber/icon.webp",
       "abilities": [
         {
           "id": "headhunter",
           "name": "金牌猎头",
-          "icon": "/agents/chamber/headhunter.webp"
+          "icon": "agents/chamber/headhunter.webp"
         },
         {
           "id": "rendezvous",
           "name": "闪转自如",
-          "icon": "/agents/chamber/rendezvous.webp"
+          "icon": "agents/chamber/rendezvous.webp"
         },
         {
           "id": "trademark",
           "name": "贵宾限行",
-          "icon": "/agents/chamber/trademark.webp"
+          "icon": "agents/chamber/trademark.webp"
         },
         {
           "id": "tour-de-force",
           "name": "孤高火力",
-          "icon": "/agents/chamber/tour-de-force.webp"
+          "icon": "agents/chamber/tour-de-force.webp"
         }
       ]
     },
     {
       "id": "clove",
       "name": "暮蝶",
-      "icon": "/agents/clove/icon.webp",
+      "icon": "agents/clove/icon.webp",
       "abilities": [
         {
           "id": "meddle",
           "name": "整蛊",
-          "icon": "/agents/clove/meddle.webp"
+          "icon": "agents/clove/meddle.webp"
         },
         {
           "id": "ruse",
           "name": "霞染",
-          "icon": "/agents/clove/ruse.webp"
+          "icon": "agents/clove/ruse.webp"
         },
         {
           "id": "pick-me-up",
           "name": "虹吸",
-          "icon": "/agents/clove/pick-me-up.webp"
+          "icon": "agents/clove/pick-me-up.webp"
         },
         {
           "id": "not-dead-yet",
           "name": "化蝶",
-          "icon": "/agents/clove/not-dead-yet.webp"
+          "icon": "agents/clove/not-dead-yet.webp"
         }
       ]
     },
     {
       "id": "cypher",
       "name": "零",
-      "icon": "/agents/cypher/icon.webp",
+      "icon": "agents/cypher/icon.webp",
       "abilities": [
         {
           "id": "cyber-cage",
           "name": "赛博囚笼",
-          "icon": "/agents/cypher/cyber-cage.webp"
+          "icon": "agents/cypher/cyber-cage.webp"
         },
         {
           "id": "spycam",
           "name": "战术监控",
-          "icon": "/agents/cypher/spycam.webp"
+          "icon": "agents/cypher/spycam.webp"
         },
         {
           "id": "trapwire",
           "name": "震慑绊线",
-          "icon": "/agents/cypher/trapwire.webp"
+          "icon": "agents/cypher/trapwire.webp"
         },
         {
           "id": "neural-theft",
           "name": "神经取析",
-          "icon": "/agents/cypher/neural-theft.webp"
+          "icon": "agents/cypher/neural-theft.webp"
         }
       ]
     },
     {
       "id": "deadlock",
       "name": "钢锁",
-      "icon": "/agents/deadlock/icon.webp",
+      "icon": "agents/deadlock/icon.webp",
       "abilities": [
         {
           "id": "sonic-sensor",
           "name": "声感陷阱",
-          "icon": "/agents/deadlock/sonic-sensor.webp"
+          "icon": "agents/deadlock/sonic-sensor.webp"
         },
         {
           "id": "gravnet",
           "name": "重力捕网",
-          "icon": "/agents/deadlock/gravnet.webp"
+          "icon": "agents/deadlock/gravnet.webp"
         },
         {
           "id": "barrier-mesh",
           "name": "阻域屏障",
-          "icon": "/agents/deadlock/barrier-mesh.webp"
+          "icon": "agents/deadlock/barrier-mesh.webp"
         },
         {
           "id": "annihilation",
           "name": "断魂索道",
-          "icon": "/agents/deadlock/annihilation.webp"
+          "icon": "agents/deadlock/annihilation.webp"
         }
       ]
     },
     {
       "id": "fade",
       "name": "黑梦",
-      "icon": "/agents/fade/icon.webp",
+      "icon": "agents/fade/icon.webp",
       "abilities": [
         {
           "id": "seize",
           "name": "幽爪",
-          "icon": "/agents/fade/seize.webp"
+          "icon": "agents/fade/seize.webp"
         },
         {
           "id": "haunt",
           "name": "诡眼",
-          "icon": "/agents/fade/haunt.webp"
+          "icon": "agents/fade/haunt.webp"
         },
         {
           "id": "prowler",
           "name": "黯兽",
-          "icon": "/agents/fade/prowler.webp"
+          "icon": "agents/fade/prowler.webp"
         },
         {
           "id": "nightfall",
           "name": "夜临",
-          "icon": "/agents/fade/nightfall.webp"
+          "icon": "agents/fade/nightfall.webp"
         }
       ]
     },
     {
       "id": "gekko",
       "name": "盖可",
-      "icon": "/agents/gekko/icon.webp",
+      "icon": "agents/gekko/icon.webp",
       "abilities": [
         {
           "id": "wingman",
           "name": "顽皮搭档",
-          "icon": "/agents/gekko/wingman.webp"
+          "icon": "agents/gekko/wingman.webp"
         },
         {
           "id": "dizzy",
           "name": "炫晕光波",
-          "icon": "/agents/gekko/dizzy.webp"
+          "icon": "agents/gekko/dizzy.webp"
         },
         {
           "id": "mosh-pit",
           "name": "嗨爆全场",
-          "icon": "/agents/gekko/mosh-pit.webp"
+          "icon": "agents/gekko/mosh-pit.webp"
         },
         {
           "id": "thrash",
           "name": "无敌超鲨",
-          "icon": "/agents/gekko/thrash.webp"
+          "icon": "agents/gekko/thrash.webp"
         }
       ]
     },
     {
       "id": "harbor",
       "name": "海神",
-      "icon": "/agents/harbor/icon.webp",
+      "icon": "agents/harbor/icon.webp",
       "abilities": [
         {
           "id": "high-tide",
           "name": "狂潮",
-          "icon": "/agents/harbor/high-tide.webp"
+          "icon": "agents/harbor/high-tide.webp"
         },
         {
           "id": "cove",
           "name": "海盾",
-          "icon": "/agents/harbor/cove.webp"
+          "icon": "agents/harbor/cove.webp"
         },
         {
           "id": "storm-surge",
           "name": "乱涌",
-          "icon": "/agents/harbor/storm-surge.webp"
+          "icon": "agents/harbor/storm-surge.webp"
         },
         {
           "id": "reckoning",
           "name": "怒涛",
-          "icon": "/agents/harbor/reckoning.webp"
+          "icon": "agents/harbor/reckoning.webp"
         }
       ]
     },
     {
       "id": "iso",
       "name": "壹决",
-      "icon": "/agents/iso/icon.webp",
+      "icon": "agents/iso/icon.webp",
       "abilities": [
         {
           "id": "undercut",
           "name": "稳态剥离",
-          "icon": "/agents/iso/undercut.webp"
+          "icon": "agents/iso/undercut.webp"
         },
         {
           "id": "double-tap",
           "name": "战斗心流",
-          "icon": "/agents/iso/double-tap.webp"
+          "icon": "agents/iso/double-tap.webp"
         },
         {
           "id": "contingency",
           "name": "绝对屏障",
-          "icon": "/agents/iso/contingency.webp"
+          "icon": "agents/iso/contingency.webp"
         },
         {
           "id": "kill-contract",
           "name": "决斗通牒",
-          "icon": "/agents/iso/kill-contract.webp"
+          "icon": "agents/iso/kill-contract.webp"
         }
       ]
     },
     {
       "id": "jett",
       "name": "捷风",
-      "icon": "/agents/jett/icon.webp",
+      "icon": "agents/jett/icon.webp",
       "abilities": [
         {
           "id": "updraft",
           "name": "凌空",
-          "icon": "/agents/jett/updraft.webp"
+          "icon": "agents/jett/updraft.webp"
         },
         {
           "id": "tailwind",
           "name": "逐风",
-          "icon": "/agents/jett/tailwind.webp"
+          "icon": "agents/jett/tailwind.webp"
         },
         {
           "id": "cloudburst",
           "name": "瞬云",
-          "icon": "/agents/jett/cloudburst.webp"
+          "icon": "agents/jett/cloudburst.webp"
         },
         {
           "id": "blade-storm",
           "name": "飓刃",
-          "icon": "/agents/jett/blade-storm.webp"
+          "icon": "agents/jett/blade-storm.webp"
         },
         {
           "id": "drift",
           "name": "飘移",
-          "icon": "/agents/jett/drift.webp"
+          "icon": "agents/jett/drift.webp"
         }
       ]
     },
     {
       "id": "kay-o",
       "name": "K/O",
-      "icon": "/agents/kay-o/icon.webp",
+      "icon": "agents/kay-o/icon.webp",
       "abilities": [
         {
           "id": "flash-drive",
           "name": "闪存过载",
-          "icon": "/agents/kay-o/flash-drive.webp"
+          "icon": "agents/kay-o/flash-drive.webp"
         },
         {
           "id": "zero-point",
           "name": "零点嗅探",
-          "icon": "/agents/kay-o/zero-point.webp"
+          "icon": "agents/kay-o/zero-point.webp"
         },
         {
           "id": "frag-ment",
           "name": "碎片溢出",
-          "icon": "/agents/kay-o/frag-ment.webp"
+          "icon": "agents/kay-o/frag-ment.webp"
         },
         {
           "id": "null-cmd",
           "name": "无效命令",
-          "icon": "/agents/kay-o/null-cmd.webp"
+          "icon": "agents/kay-o/null-cmd.webp"
         }
       ]
     },
     {
       "id": "killjoy",
       "name": "奇乐",
-      "icon": "/agents/killjoy/icon.webp",
+      "icon": "agents/killjoy/icon.webp",
       "abilities": [
         {
           "id": "alarmbot",
           "name": "自动哨兵",
-          "icon": "/agents/killjoy/alarmbot.webp"
+          "icon": "agents/killjoy/alarmbot.webp"
         },
         {
           "id": "turret",
           "name": "哨戒炮台",
-          "icon": "/agents/killjoy/turret.webp"
+          "icon": "agents/killjoy/turret.webp"
         },
         {
           "id": "nanoswarm",
           "name": "纳米蜂群",
-          "icon": "/agents/killjoy/nanoswarm.webp"
+          "icon": "agents/killjoy/nanoswarm.webp"
         },
         {
           "id": "lockdown",
           "name": "全面封锁",
-          "icon": "/agents/killjoy/lockdown.webp"
+          "icon": "agents/killjoy/lockdown.webp"
         }
       ]
     },
     {
       "id": "miks",
       "name": "迷核",
-      "icon": "/agents/miks/icon.webp",
+      "icon": "agents/miks/icon.webp",
       "abilities": [
         {
           "id": "harmonize",
           "name": "共振谐律",
-          "icon": "/agents/miks/harmonize.webp"
+          "icon": "agents/miks/harmonize.webp"
         },
         {
           "id": "waveform",
           "name": "声波帷幕",
-          "icon": "/agents/miks/waveform.webp"
+          "icon": "agents/miks/waveform.webp"
         },
         {
           "id": "m-pulse",
           "name": "电音脉冲",
-          "icon": "/agents/miks/m-pulse.webp"
+          "icon": "agents/miks/m-pulse.webp"
         },
         {
           "id": "bassquake",
           "name": "音脉强袭",
-          "icon": "/agents/miks/bassquake.webp"
+          "icon": "agents/miks/bassquake.webp"
         }
       ]
     },
     {
       "id": "neon",
       "name": "霓虹",
-      "icon": "/agents/neon/icon.webp",
+      "icon": "agents/neon/icon.webp",
       "abilities": [
         {
           "id": "relay-bolt",
           "name": "闪电弹球",
-          "icon": "/agents/neon/relay-bolt.webp"
+          "icon": "agents/neon/relay-bolt.webp"
         },
         {
           "id": "high-gear",
           "name": "充能疾驰",
-          "icon": "/agents/neon/high-gear.webp"
+          "icon": "agents/neon/high-gear.webp"
         },
         {
           "id": "fast-lane",
           "name": "高速通道",
-          "icon": "/agents/neon/fast-lane.webp"
+          "icon": "agents/neon/fast-lane.webp"
         },
         {
           "id": "overdrive",
           "name": "超限暴走",
-          "icon": "/agents/neon/overdrive.webp"
+          "icon": "agents/neon/overdrive.webp"
         }
       ]
     },
     {
       "id": "omen",
       "name": "幽影",
-      "icon": "/agents/omen/icon.webp",
+      "icon": "agents/omen/icon.webp",
       "abilities": [
         {
           "id": "paranoia",
           "name": "暗魇",
-          "icon": "/agents/omen/paranoia.webp"
+          "icon": "agents/omen/paranoia.webp"
         },
         {
           "id": "dark-cover",
           "name": "黑瘴",
-          "icon": "/agents/omen/dark-cover.webp"
+          "icon": "agents/omen/dark-cover.webp"
         },
         {
           "id": "shrouded-step",
           "name": "践影",
-          "icon": "/agents/omen/shrouded-step.webp"
+          "icon": "agents/omen/shrouded-step.webp"
         },
         {
           "id": "from-the-shadows",
           "name": "离魂",
-          "icon": "/agents/omen/from-the-shadows.webp"
+          "icon": "agents/omen/from-the-shadows.webp"
         }
       ]
     },
     {
       "id": "phoenix",
       "name": "不死鸟",
-      "icon": "/agents/phoenix/icon.webp",
+      "icon": "agents/phoenix/icon.webp",
       "abilities": [
         {
           "id": "hot-hands",
           "name": "火热手感",
-          "icon": "/agents/phoenix/hot-hands.webp"
+          "icon": "agents/phoenix/hot-hands.webp"
         },
         {
           "id": "curveball",
           "name": "闪光曲球",
-          "icon": "/agents/phoenix/curveball.webp"
+          "icon": "agents/phoenix/curveball.webp"
         },
         {
           "id": "blaze",
           "name": "火冒三丈",
-          "icon": "/agents/phoenix/blaze.webp"
+          "icon": "agents/phoenix/blaze.webp"
         },
         {
           "id": "run-it-back",
           "name": "再火一回",
-          "icon": "/agents/phoenix/run-it-back.webp"
+          "icon": "agents/phoenix/run-it-back.webp"
         }
       ]
     },
     {
       "id": "raze",
       "name": "雷兹",
-      "icon": "/agents/raze/icon.webp",
+      "icon": "agents/raze/icon.webp",
       "abilities": [
         {
           "id": "blast-pack",
           "name": "惊喜翻腾",
-          "icon": "/agents/raze/blast-pack.webp"
+          "icon": "agents/raze/blast-pack.webp"
         },
         {
           "id": "paint-shells",
           "name": "彩雷飞溅",
-          "icon": "/agents/raze/paint-shells.webp"
+          "icon": "agents/raze/paint-shells.webp"
         },
         {
           "id": "boom-bot",
           "name": "花车巡游",
-          "icon": "/agents/raze/boom-bot.webp"
+          "icon": "agents/raze/boom-bot.webp"
         },
         {
           "id": "showstopper",
           "name": "晚安焰火",
-          "icon": "/agents/raze/showstopper.webp"
+          "icon": "agents/raze/showstopper.webp"
         }
       ]
     },
     {
       "id": "reyna",
       "name": "芮娜",
-      "icon": "/agents/reyna/icon.webp",
+      "icon": "agents/reyna/icon.webp",
       "abilities": [
         {
           "id": "devour",
           "name": "噬尽",
-          "icon": "/agents/reyna/devour.webp"
+          "icon": "agents/reyna/devour.webp"
         },
         {
           "id": "dismiss",
           "name": "逐散",
-          "icon": "/agents/reyna/dismiss.webp"
+          "icon": "agents/reyna/dismiss.webp"
         },
         {
           "id": "leer",
           "name": "睥睨",
-          "icon": "/agents/reyna/leer.webp"
+          "icon": "agents/reyna/leer.webp"
         },
         {
           "id": "empress",
           "name": "女皇旨令",
-          "icon": "/agents/reyna/empress.webp"
+          "icon": "agents/reyna/empress.webp"
         }
       ]
     },
     {
       "id": "sage",
       "name": "贤者",
-      "icon": "/agents/sage/icon.webp",
+      "icon": "agents/sage/icon.webp",
       "abilities": [
         {
           "id": "slow-orb",
           "name": "薄冰",
-          "icon": "/agents/sage/slow-orb.webp"
+          "icon": "agents/sage/slow-orb.webp"
         },
         {
           "id": "healing-orb",
           "name": "逢春",
-          "icon": "/agents/sage/healing-orb.webp"
+          "icon": "agents/sage/healing-orb.webp"
         },
         {
           "id": "barrier-orb",
           "name": "玉城",
-          "icon": "/agents/sage/barrier-orb.webp"
+          "icon": "agents/sage/barrier-orb.webp"
         },
         {
           "id": "resurrection",
           "name": "再起",
-          "icon": "/agents/sage/resurrection.webp"
+          "icon": "agents/sage/resurrection.webp"
         }
       ]
     },
     {
       "id": "skye",
       "name": "斯凯",
-      "icon": "/agents/skye/icon.webp",
+      "icon": "agents/skye/icon.webp",
       "abilities": [
         {
           "id": "trailblazer",
           "name": "辟林之虎",
-          "icon": "/agents/skye/trailblazer.webp"
+          "icon": "agents/skye/trailblazer.webp"
         },
         {
           "id": "guiding-light",
           "name": "引路之隼",
-          "icon": "/agents/skye/guiding-light.webp"
+          "icon": "agents/skye/guiding-light.webp"
         },
         {
           "id": "regrowth",
           "name": "愈生之息",
-          "icon": "/agents/skye/regrowth.webp"
+          "icon": "agents/skye/regrowth.webp"
         },
         {
           "id": "seekers",
           "name": "追猎之灵",
-          "icon": "/agents/skye/seekers.webp"
+          "icon": "agents/skye/seekers.webp"
         }
       ]
     },
     {
       "id": "sova",
       "name": "猎枭",
-      "icon": "/agents/sova/icon.webp",
+      "icon": "agents/sova/icon.webp",
       "abilities": [
         {
           "id": "shock-bolt",
           "name": "雷击箭",
-          "icon": "/agents/sova/shock-bolt.webp"
+          "icon": "agents/sova/shock-bolt.webp"
         },
         {
           "id": "recon-bolt",
           "name": "寻敌箭",
-          "icon": "/agents/sova/recon-bolt.webp"
+          "icon": "agents/sova/recon-bolt.webp"
         },
         {
           "id": "owl-drone",
           "name": "枭型无人机",
-          "icon": "/agents/sova/owl-drone.webp"
+          "icon": "agents/sova/owl-drone.webp"
         },
         {
           "id": "hunters-fury",
           "name": "狂猎之怒",
-          "icon": "/agents/sova/hunters-fury.webp"
+          "icon": "agents/sova/hunters-fury.webp"
         }
       ]
     },
     {
       "id": "tejo",
       "name": "钛狐",
-      "icon": "/agents/tejo/icon.webp",
+      "icon": "agents/tejo/icon.webp",
       "abilities": [
         {
           "id": "special-delivery",
           "name": "特快专递",
-          "icon": "/agents/tejo/special-delivery.webp"
+          "icon": "agents/tejo/special-delivery.webp"
         },
         {
           "id": "guided-salvo",
           "name": "精准投放",
-          "icon": "/agents/tejo/guided-salvo.webp"
+          "icon": "agents/tejo/guided-salvo.webp"
         },
         {
           "id": "stealth-drone",
           "name": "潜袭爬虫",
-          "icon": "/agents/tejo/stealth-drone.webp"
+          "icon": "agents/tejo/stealth-drone.webp"
         },
         {
           "id": "armageddon",
           "name": "末日审判",
-          "icon": "/agents/tejo/armageddon.webp"
+          "icon": "agents/tejo/armageddon.webp"
         }
       ]
     },
     {
       "id": "veto",
       "name": "禁灭",
-      "icon": "/agents/veto/icon.webp",
+      "icon": "agents/veto/icon.webp",
       "abilities": [
         {
           "id": "chokehold",
           "name": "裂变残片",
-          "icon": "/agents/veto/chokehold.webp"
+          "icon": "agents/veto/chokehold.webp"
         },
         {
           "id": "interceptor",
           "name": "噬源体",
-          "icon": "/agents/veto/interceptor.webp"
+          "icon": "agents/veto/interceptor.webp"
         },
         {
           "id": "crosscut",
           "name": "涡流折跃",
-          "icon": "/agents/veto/crosscut.webp"
+          "icon": "agents/veto/crosscut.webp"
         },
         {
           "id": "evolution",
           "name": "完全进化",
-          "icon": "/agents/veto/evolution.webp"
+          "icon": "agents/veto/evolution.webp"
         }
       ]
     },
     {
       "id": "viper",
       "name": "蝰蛇",
-      "icon": "/agents/viper/icon.webp",
+      "icon": "agents/viper/icon.webp",
       "abilities": [
         {
           "id": "poison-cloud",
           "name": "瘴云",
-          "icon": "/agents/viper/poison-cloud.webp"
+          "icon": "agents/viper/poison-cloud.webp"
         },
         {
           "id": "toxic-screen",
           "name": "毒幕",
-          "icon": "/agents/viper/toxic-screen.webp"
+          "icon": "agents/viper/toxic-screen.webp"
         },
         {
           "id": "snake-bite",
           "name": "蛇吻",
-          "icon": "/agents/viper/snake-bite.webp"
+          "icon": "agents/viper/snake-bite.webp"
         },
         {
           "id": "vipers-pit",
           "name": "蝰腹",
-          "icon": "/agents/viper/vipers-pit.webp"
+          "icon": "agents/viper/vipers-pit.webp"
         }
       ]
     },
     {
       "id": "vyse",
       "name": "维斯",
-      "icon": "/agents/vyse/icon.webp",
+      "icon": "agents/vyse/icon.webp",
       "abilities": [
         {
           "id": "shear",
           "name": "裁断",
-          "icon": "/agents/vyse/shear.webp"
+          "icon": "agents/vyse/shear.webp"
         },
         {
           "id": "arc-rose",
           "name": "弧光玫瑰",
-          "icon": "/agents/vyse/arc-rose.webp"
+          "icon": "agents/vyse/arc-rose.webp"
         },
         {
           "id": "razorvine",
           "name": "剃刀藤蔓",
-          "icon": "/agents/vyse/razorvine.webp"
+          "icon": "agents/vyse/razorvine.webp"
         },
         {
           "id": "steel-garden",
           "name": "铁棘禁园",
-          "icon": "/agents/vyse/steel-garden.webp"
+          "icon": "agents/vyse/steel-garden.webp"
         }
       ]
     },
     {
       "id": "waylay",
       "name": "幻棱",
-      "icon": "/agents/waylay/icon.webp",
+      "icon": "agents/waylay/icon.webp",
       "abilities": [
         {
           "id": "lightspeed",
           "name": "光速飞跃",
-          "icon": "/agents/waylay/lightspeed.webp"
+          "icon": "agents/waylay/lightspeed.webp"
         },
         {
           "id": "refract",
           "name": "溯流回光",
-          "icon": "/agents/waylay/refract.webp"
+          "icon": "agents/waylay/refract.webp"
         },
         {
           "id": "saturate",
           "name": "光棱闪爆",
-          "icon": "/agents/waylay/saturate.webp"
+          "icon": "agents/waylay/saturate.webp"
         },
         {
           "id": "convergent-paths",
           "name": "时光修罗场",
-          "icon": "/agents/waylay/convergent-paths.webp"
+          "icon": "agents/waylay/convergent-paths.webp"
         }
       ]
     },
     {
       "id": "yoru",
       "name": "夜露",
-      "icon": "/agents/yoru/icon.webp",
+      "icon": "agents/yoru/icon.webp",
       "abilities": [
         {
           "id": "blindside",
           "name": "攻其不备",
-          "icon": "/agents/yoru/blindside.webp"
+          "icon": "agents/yoru/blindside.webp"
         },
         {
           "id": "gatecrash",
           "name": "不请自来",
-          "icon": "/agents/yoru/gatecrash.webp"
+          "icon": "agents/yoru/gatecrash.webp"
         },
         {
           "id": "fakeout",
           "name": "出其不意",
-          "icon": "/agents/yoru/fakeout.webp"
+          "icon": "agents/yoru/fakeout.webp"
         },
         {
           "id": "dimensional-drift",
           "name": "神鬼不觉",
-          "icon": "/agents/yoru/dimensional-drift.webp"
+          "icon": "agents/yoru/dimensional-drift.webp"
         }
       ]
     }
@@ -1501,7 +1501,7 @@
       "title": "A包点全扫，射到第二个高处炮管上",
       "side": "attack",
       "area": "A点",
-      "videoUrl": "",
+      "videoBvid": "",
       "target": {
         "groupId": "a-site-scan",
         "x": 0.29,
@@ -1538,7 +1538,7 @@
       "title": "A包点全扫，射到第二个高处炮管上",
       "side": "attack",
       "area": "A点",
-      "videoUrl": "",
+      "videoBvid": "",
       "target": {
         "groupId": "a-site-scan",
         "x": 0.29,
@@ -1575,7 +1575,7 @@
       "title": "A包点快攻，射到第二个高处炮管上",
       "side": "attack",
       "area": "A点",
-      "videoUrl": "",
+      "videoBvid": "",
       "target": {
         "groupId": "a-site-scan",
         "x": 0.29,
@@ -1611,7 +1611,7 @@
       "title": "A包快攻，第一个高处炮管",
       "side": "attack",
       "area": "A点",
-      "videoUrl": "",
+      "videoBvid": "",
       "target": {
         "groupId": "a-site-fast",
         "x": 0.28072,
@@ -1642,7 +1642,7 @@
       "title": "A包快攻，二楼掩体上方的墙面上",
       "side": "attack",
       "area": "A点",
-      "videoUrl": "",
+      "videoBvid": "",
       "target": {
         "groupId": "a-site-upper",
         "x": 0.28761,
@@ -1678,7 +1678,7 @@
       "title": "中路屋檐",
       "side": "attack",
       "area": "中路",
-      "videoUrl": "",
+      "videoBvid": "",
       "target": {
         "groupId": "mid-eaves",
         "x": 0.49,
@@ -1715,7 +1715,7 @@
       "title": "射到中路拱门内侧",
       "side": "attack",
       "area": "中路",
-      "videoUrl": "",
+      "videoBvid": "",
       "target": {
         "groupId": "mid-arch",
         "x": 0.5,
@@ -1752,7 +1752,7 @@
       "title": "拱门内墙角",
       "side": "attack",
       "area": "中路",
-      "videoUrl": "",
+      "videoBvid": "",
       "target": {
         "groupId": "mid-arch-inner",
         "x": 0.535,
@@ -1789,7 +1789,7 @@
       "title": "开大箭",
       "side": "attack",
       "area": "中路",
-      "videoUrl": "",
+      "videoBvid": "",
       "target": {
         "groupId": "mid-ult-setup",
         "x": 0.48,
@@ -1820,7 +1820,7 @@
       "title": "清道具雷击箭",
       "side": "attack",
       "area": "中路",
-      "videoUrl": "",
+      "videoBvid": "",
       "target": {
         "groupId": "mid-utility",
         "x": 0.52,
@@ -1848,7 +1848,7 @@
       "title": "射中路窗户上",
       "side": "attack",
       "area": "B点",
-      "videoUrl": "",
+      "videoBvid": "",
       "target": {
         "groupId": "b-window",
         "x": 0.355,
@@ -1879,7 +1879,7 @@
       "title": "全扫，B点屋檐",
       "side": "attack",
       "area": "B点",
-      "videoUrl": "",
+      "videoBvid": "",
       "target": {
         "groupId": "b-eaves",
         "x": 0.32,
@@ -1916,7 +1916,7 @@
       "title": "包点箭射树上",
       "side": "attack",
       "area": "B点",
-      "videoUrl": "",
+      "videoBvid": "",
       "target": {
         "groupId": "b-tree",
         "x": 0.285,
@@ -1944,7 +1944,7 @@
       "title": "台上箭",
       "side": "attack",
       "area": "B点",
-      "videoUrl": "",
+      "videoBvid": "",
       "target": {
         "groupId": "b-platform",
         "x": 0.34,
@@ -1975,7 +1975,7 @@
       "title": "回防",
       "side": "defense",
       "area": "A点",
-      "videoUrl": "",
+      "videoBvid": "",
       "target": {
         "groupId": "a-retake",
         "x": 0.285,
@@ -2016,7 +2016,7 @@
       "title": "A外探测",
       "side": "defense",
       "area": "A点",
-      "videoUrl": "",
+      "videoBvid": "",
       "target": {
         "groupId": "a-outside",
         "x": 0.3,
@@ -2052,7 +2052,7 @@
       "title": "开大箭",
       "side": "defense",
       "area": "A点",
-      "videoUrl": "",
+      "videoBvid": "",
       "target": {
         "groupId": "a-retake",
         "x": 0.285,
@@ -2080,7 +2080,7 @@
       "title": "支援B",
       "side": "defense",
       "area": "A点",
-      "videoUrl": "",
+      "videoBvid": "",
       "target": {
         "groupId": "b-support",
         "x": 0.32,
@@ -2113,7 +2113,7 @@
       "title": "射到水塔上",
       "side": "defense",
       "area": "中路",
-      "videoUrl": "",
+      "videoBvid": "",
       "target": {
         "groupId": "mid-water-tower",
         "x": 0.5,
@@ -2144,7 +2144,7 @@
       "title": "第二时间中路箭",
       "side": "defense",
       "area": "中路",
-      "videoUrl": "",
+      "videoBvid": "",
       "target": {
         "groupId": "mid-second-timing",
         "x": 0.52,
@@ -2177,7 +2177,7 @@
       "title": "放血雷击",
       "side": "defense",
       "area": "B点",
-      "videoUrl": "",
+      "videoBvid": "",
       "target": {
         "groupId": "b-shock",
         "x": 0.325,
@@ -2205,7 +2205,7 @@
       "title": "B外箭，射外面台子上",
       "side": "defense",
       "area": "B点",
-      "videoUrl": "",
+      "videoBvid": "",
       "target": {
         "groupId": "b-outside-platform",
         "x": 0.35,
@@ -2241,7 +2241,7 @@
       "title": "B外箭，射B外屋顶",
       "side": "defense",
       "area": "B点",
-      "videoUrl": "",
+      "videoBvid": "",
       "target": {
         "groupId": "b-outside-roof",
         "x": 0.36,
@@ -2273,7 +2273,7 @@
       "title": "反刷箭",
       "side": "defense",
       "area": "B点",
-      "videoUrl": "",
+      "videoBvid": "",
       "target": {
         "groupId": "b-anti-rush",
         "x": 0.345,
@@ -2305,7 +2305,7 @@
       "title": "船坞箭，射墙上",
       "side": "defense",
       "area": "B点",
-      "videoUrl": "",
+      "videoBvid": "",
       "target": {
         "groupId": "b-boathouse",
         "x": 0.3,
@@ -2336,7 +2336,7 @@
       "title": "支援A，射进点墙上",
       "side": "defense",
       "area": "B点",
-      "videoUrl": "",
+      "videoBvid": "",
       "target": {
         "groupId": "a-retake",
         "x": 0.285,

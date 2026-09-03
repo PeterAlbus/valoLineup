@@ -50,11 +50,11 @@ for (const character of catalog.characters) {
     }
     const abilityId = slug(ability.name.defaultText);
     await sharp(source).resize(128, 128, { fit: 'contain' }).webp({ lossless: true }).toFile(path.join(agentDirectory, `${abilityId}.webp`));
-    abilities.push({ id: abilityId, name: localized(ability.name), icon: `/agents/${agentId}/${abilityId}.webp` });
+    abilities.push({ id: abilityId, name: localized(ability.name), icon: `agents/${agentId}/${abilityId}.webp` });
   }
 
   if (abilities.length < 4) throw new Error(`${localized(character.name)} 的主动技能资料不完整`);
-  agents.push({ id: agentId, name: localized(character.name), icon: `/agents/${agentId}/icon.webp`, abilities });
+  agents.push({ id: agentId, name: localized(character.name), icon: `agents/${agentId}/icon.webp`, abilities });
 }
 
 agents.sort((left, right) => left.id.localeCompare(right.id));

@@ -5,7 +5,7 @@
   title: A包点全扫，射到第二个高处炮管上
   side: attack
   area: A点
-  videoUrl: ""
+  videoBvid: ""
   target:
     groupId: a-site-scan
     x: 0.29
@@ -30,7 +30,7 @@
   title: A包点全扫，射到第二个高处炮管上
   side: attack
   area: A点
-  videoUrl: ""
+  videoBvid: ""
   target:
     groupId: a-site-scan
     x: 0.29
@@ -55,7 +55,7 @@
   title: A包点快攻，射到第二个高处炮管上
   side: attack
   area: A点
-  videoUrl: ""
+  videoBvid: ""
   target:
     groupId: a-site-scan
     x: 0.29
@@ -79,7 +79,7 @@
   title: A包快攻，第一个高处炮管
   side: attack
   area: A点
-  videoUrl: ""
+  videoBvid: ""
   target:
     groupId: a-site-fast
     x: 0.28072
@@ -101,7 +101,7 @@
   title: A包快攻，二楼掩体上方的墙面上
   side: attack
   area: A点
-  videoUrl: ""
+  videoBvid: ""
   target:
     groupId: a-site-upper
     x: 0.28761
@@ -125,7 +125,7 @@
   title: 中路屋檐
   side: attack
   area: 中路
-  videoUrl: ""
+  videoBvid: ""
   target:
     groupId: mid-eaves
     x: 0.49
@@ -150,7 +150,7 @@
   title: 射到中路拱门内侧
   side: attack
   area: 中路
-  videoUrl: ""
+  videoBvid: ""
   target:
     groupId: mid-arch
     x: 0.5
@@ -175,7 +175,7 @@
   title: 拱门内墙角
   side: attack
   area: 中路
-  videoUrl: ""
+  videoBvid: ""
   target:
     groupId: mid-arch-inner
     x: 0.535
@@ -200,7 +200,7 @@
   title: 开大箭
   side: attack
   area: 中路
-  videoUrl: ""
+  videoBvid: ""
   target:
     groupId: mid-ult-setup
     x: 0.48
@@ -222,7 +222,7 @@
   title: 清道具雷击箭
   side: attack
   area: 中路
-  videoUrl: ""
+  videoBvid: ""
   target:
     groupId: mid-utility
     x: 0.52
@@ -242,7 +242,7 @@
   title: 射中路窗户上
   side: attack
   area: B点
-  videoUrl: ""
+  videoBvid: ""
   target:
     groupId: b-window
     x: 0.355
@@ -264,7 +264,7 @@
   title: 全扫，B点屋檐
   side: attack
   area: B点
-  videoUrl: ""
+  videoBvid: ""
   target:
     groupId: b-eaves
     x: 0.32
@@ -289,7 +289,7 @@
   title: 包点箭射树上
   side: attack
   area: B点
-  videoUrl: ""
+  videoBvid: ""
   target:
     groupId: b-tree
     x: 0.285
@@ -309,7 +309,7 @@
   title: 台上箭
   side: attack
   area: B点
-  videoUrl: ""
+  videoBvid: ""
   target:
     groupId: b-platform
     x: 0.34
@@ -331,7 +331,7 @@
   title: 回防
   side: defense
   area: A点
-  videoUrl: ""
+  videoBvid: ""
   target:
     groupId: a-retake
     x: 0.285
@@ -358,7 +358,7 @@
   title: A外探测
   side: defense
   area: A点
-  videoUrl: ""
+  videoBvid: ""
   target:
     groupId: a-outside
     x: 0.3
@@ -382,7 +382,7 @@
   title: 开大箭
   side: defense
   area: A点
-  videoUrl: ""
+  videoBvid: ""
   target:
     groupId: a-retake
     x: 0.285
@@ -402,7 +402,7 @@
   title: 支援B
   side: defense
   area: A点
-  videoUrl: ""
+  videoBvid: ""
   target:
     groupId: b-support
     x: 0.32
@@ -424,7 +424,7 @@
   title: 射到水塔上
   side: defense
   area: 中路
-  videoUrl: ""
+  videoBvid: ""
   target:
     groupId: mid-water-tower
     x: 0.5
@@ -446,7 +446,7 @@
   title: 第二时间中路箭
   side: defense
   area: 中路
-  videoUrl: ""
+  videoBvid: ""
   target:
     groupId: mid-second-timing
     x: 0.52
@@ -470,7 +470,7 @@
   title: 放血雷击
   side: defense
   area: B点
-  videoUrl: ""
+  videoBvid: ""
   target:
     groupId: b-shock
     x: 0.325
@@ -490,7 +490,7 @@
   title: B外箭，射外面台子上
   side: defense
   area: B点
-  videoUrl: ""
+  videoBvid: ""
   target:
     groupId: b-outside-platform
     x: 0.35
@@ -514,7 +514,7 @@
   title: B外箭，射B外屋顶
   side: defense
   area: B点
-  videoUrl: ""
+  videoBvid: ""
   target:
     groupId: b-outside-roof
     x: 0.36
@@ -537,7 +537,7 @@
   title: 反刷箭
   side: defense
   area: B点
-  videoUrl: ""
+  videoBvid: ""
   target:
     groupId: b-anti-rush
     x: 0.345
@@ -560,7 +560,7 @@
   title: 船坞箭，射墙上
   side: defense
   area: B点
-  videoUrl: ""
+  videoBvid: ""
   target:
     groupId: b-boathouse
     x: 0.3
@@ -582,7 +582,7 @@
   title: 支援A，射进点墙上
   side: defense
   area: B点
-  videoUrl: ""
+  videoBvid: ""
   target:
     groupId: a-retake
     x: 0.285

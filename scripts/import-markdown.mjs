@@ -186,7 +186,7 @@ for (const [index, draft] of drafts.entries()) {
     title: draft.title,
     side: draft.side === '防守' ? 'defense' : 'attack',
     area: draft.area,
-    videoUrl: '',
+    videoBvid: '',
     target: { groupId, x, y },
     technique: techniqueFrom(draft.notes.join('，').replaceAll('，，', '，')),
     media,

@@ -1,9 +1,7 @@
-'use client';
-
-/* eslint-disable @next/next/no-img-element */
 import { useRef, useState } from 'react';
 import content from './data/content.json';
-import NewLineupDialog, { type NewLineupInput } from './new-lineup-dialog';
+import { downloadEditPackage, type PackageUpload } from './edit-package';
+import NewLineupDialog, { type NewLineupInput } from './NewLineupDialog';
 
 type MediaItem = { key: string; alt: string };
 type MediaKind = 'stance' | 'aim' | 'effect';
@@ -15,13 +13,13 @@ type Lineup = {
   title: string;
   side: 'attack' | 'defense';
   area: string;
-  videoUrl: string;
+  videoBvid: string;
   target: { groupId: string; x: number; y: number };
   technique: { charge?: 'none' | 'one' | 'two' | 'full'; bounce?: number; jump?: boolean; instructions: string[] };
   media: { stance: MediaItem[]; aim: MediaItem[]; effect: MediaItem[] };
 };
 type PendingUpload = {
-  field: string;
+  key: string;
   lineupId: string;
   kind: MediaKind;
   alt: string;
@@ -115,28 +113,36 @@ function techniqueSummary(lineup: Lineup) {
   return parts.join(' · ') || '查看操作说明';
 }
 
-function mediaUrl(key: string) {
-  return `/${key}`;
+function assetUrl(key: string) {
+  return `${import.meta.env.BASE_URL}${key}`;
+}
+
+function imageExtension(file: File) {
+  if (file.type === 'image/png') return 'png';
+  if (file.type === 'image/webp') return 'webp';
+  return 'jpg';
+}
+
+function nextMediaKey(lineup: Lineup, kind: MediaKind, file: File, reserved: Set<string>) {
+  let sequence = 1;
+  let key = '';
+  do {
+    key = `lineups/${lineup.id}/${kind}-${String(sequence).padStart(2, '0')}.${imageExtension(file)}`;
+    sequence += 1;
+  } while ([...reserved].some((candidate) => candidate.startsWith(key.slice(0, key.lastIndexOf('.') + 1))));
+  reserved.add(key);
+  return key;
 }
 
 function clampCoordinate(value: number) {
   return Number(Math.max(0, Math.min(1, value)).toFixed(5));
 }
 
-function nextLineupId(mapId: string, agentId: string, lineups: Lineup[]) {
-  const prefix = `${mapId}-${agentId}-`;
-  const used = new Set(lineups.map((lineup) => lineup.id));
-  const sequence = lineups.reduce((largest, lineup) => {
-    if (!lineup.id.startsWith(prefix)) return largest;
-    const value = Number(lineup.id.slice(prefix.length));
-    return Number.isInteger(value) ? Math.max(largest, value) : largest;
-  }, 0);
-  let next = sequence + 1;
-  while (used.has(`${prefix}${String(next).padStart(2, '0')}`)) next += 1;
-  return `${prefix}${String(next).padStart(2, '0')}`;
+function nextLineupId(mapId: string, agentId: string) {
+  return `${mapId}-${agentId}-${crypto.randomUUID().replaceAll('-', '').slice(0, 12)}`;
 }
 
-export default function Home() {
+export default function App() {
   const [savedLineups, setSavedLineups] = useState<Lineup[]>(initialLineups);
   const [draftLineups, setDraftLineups] = useState<Lineup[]>(initialLineups);
   const [selectedMapId, setSelectedMapId] = useState('ascent');
@@ -149,7 +155,6 @@ export default function Home() {
   const [isEditing, setIsEditing] = useState(false);
   const [isEditorBusy, setIsEditorBusy] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
-  const [revision, setRevision] = useState('');
   const [pendingUploads, setPendingUploads] = useState<PendingUpload[]>([]);
   const [editorNotice, setEditorNotice] = useState<EditorNotice | null>(null);
   const [isNewLineupDialogOpen, setIsNewLineupDialogOpen] = useState(false);
@@ -334,7 +339,7 @@ export default function Home() {
         : lineup
     )));
     setIsDirty(true);
-    setEditorNotice({ kind: 'info', text: `坐标 ${point.x.toFixed(5)}, ${point.y.toFixed(5)} · 尚未保存` });
+    setEditorNotice({ kind: 'info', text: `坐标 ${point.x.toFixed(5)}, ${point.y.toFixed(5)} · 尚未导出` });
   }
 
   function finishPinDrag(event: React.PointerEvent<HTMLButtonElement>) {
@@ -348,30 +353,17 @@ export default function Home() {
     setPendingUploads([]);
   }
 
-  async function enterEditMode() {
-    setIsEditorBusy(true);
-    setEditorNotice({ kind: 'info', text: '正在读取本地元数据…' });
-    try {
-      const response = await fetch('/api/editor/document', { cache: 'no-store' });
-      const result = await response.json();
-      if (!response.ok) throw new Error(result.error ?? '无法读取本地元数据');
-      setSavedLineups(result.lineups);
-      setDraftLineups(result.lineups);
-      setRevision(result.revision);
-      setIsDirty(false);
-      setIsEditing(true);
-      setIsNewLineupDialogOpen(false);
-      setNewLineupPlacement(null);
-      setEditorNotice({ kind: 'info', text: '拖动点位或添加图片，完成后统一保存' });
-    } catch (error) {
-      setEditorNotice({ kind: 'error', text: error instanceof Error ? error.message : '无法进入编辑模式' });
-    } finally {
-      setIsEditorBusy(false);
-    }
+  function enterEditMode() {
+    setDraftLineups(structuredClone(savedLineups));
+    setIsDirty(false);
+    setIsEditing(true);
+    setIsNewLineupDialogOpen(false);
+    setNewLineupPlacement(null);
+    setEditorNotice({ kind: 'info', text: '修改会暂存在当前浏览器页面；完成后导出编辑包交给开发者' });
   }
 
   function exitEditMode() {
-    if (isDirty && !window.confirm('尚有未保存的点位或图片，确定放弃吗？')) return;
+    if (isDirty && !window.confirm('尚有未导出的点位或图片，确定放弃吗？')) return;
     clearPendingUploads();
     setDraftLineups(savedLineups);
     setIsDirty(false);
@@ -396,7 +388,7 @@ export default function Home() {
 
   function createNewLineup(point: Point) {
     if (!newLineupPlacement) return;
-    const id = nextLineupId(newLineupPlacement.mapId, newLineupPlacement.agentId, draftLineups);
+    const id = nextLineupId(newLineupPlacement.mapId, newLineupPlacement.agentId);
     const lineup: Lineup = {
       id,
       mapId: newLineupPlacement.mapId,
@@ -405,7 +397,7 @@ export default function Home() {
       title: newLineupPlacement.title,
       side: newLineupPlacement.side,
       area: newLineupPlacement.area,
-      videoUrl: newLineupPlacement.videoUrl,
+      videoBvid: newLineupPlacement.videoBvid,
       target: { groupId: `${id}-target`, x: point.x, y: point.y },
       technique: { instructions: newLineupPlacement.instructions },
       media: { stance: [], aim: [], effect: [] },
@@ -425,51 +417,70 @@ export default function Home() {
       setEditorNotice({ kind: 'error', text: '只支持小于 12 MB 的 PNG、JPG 或 WebP 图片' });
       return;
     }
-    const existingCount = activeLineup.media[kind].length + activePendingUploads.filter((upload) => upload.kind === kind).length;
-    const uploads = supported.map((file, index) => ({
-      field: `file-${crypto.randomUUID()}`,
-      lineupId: activeLineup.id,
-      kind,
-      alt: `${activeLineup.title}${mediaLabels[kind]}图 ${existingCount + index + 1}`,
-      file,
-      previewUrl: URL.createObjectURL(file),
-    }));
+    const reserved = new Set(draftLineups.flatMap((lineup) => Object.values(lineup.media).flat().map((item) => item.key)));
+    const existingCount = activeLineup.media[kind].length;
+    const uploads = supported.map((file, index) => {
+      const alt = `${activeLineup.title}${mediaLabels[kind]}图 ${existingCount + index + 1}`;
+      return {
+        key: nextMediaKey(activeLineup, kind, file, reserved),
+        lineupId: activeLineup.id,
+        kind,
+        alt,
+        file,
+        previewUrl: URL.createObjectURL(file),
+      };
+    });
+    setDraftLineups((current) => current.map((lineup) => (
+      lineup.id === activeLineup.id
+        ? { ...lineup, media: { ...lineup.media, [kind]: [...lineup.media[kind], ...uploads.map(({ key, alt }) => ({ key, alt }))] } }
+        : lineup
+    )));
     setPendingUploads((current) => [...current, ...uploads]);
     setIsDirty(true);
-    setEditorNotice({ kind: 'info', text: `已暂存 ${uploads.length} 张${mediaLabels[kind]}图 · 尚未保存` });
+    setEditorNotice({ kind: 'info', text: `已暂存 ${uploads.length} 张${mediaLabels[kind]}图 · 尚未导出` });
   }
 
-  function updateActiveVideoUrl(videoUrl: string) {
+  function updateActiveVideoBvid(videoBvid: string) {
     if (!activeLineup) return;
     setDraftLineups((current) => current.map((lineup) => (
-      lineup.id === activeLineup.id ? { ...lineup, videoUrl } : lineup
+      lineup.id === activeLineup.id ? { ...lineup, videoBvid } : lineup
     )));
     setIsDirty(true);
-    setEditorNotice({ kind: 'info', text: '教学视频链接已修改 · 尚未保存' });
+    setEditorNotice({ kind: 'info', text: '教学视频 BV 号已修改 · 尚未导出' });
   }
 
   async function saveEdits() {
     if (!isDirty || isEditorBusy) return;
+    const invalidVideo = draftLineups.find((lineup) => lineup.videoBvid && !/^BV[0-9A-Za-z]{10}$/.test(lineup.videoBvid));
+    if (invalidVideo) {
+      setEditorNotice({ kind: 'error', text: `“${invalidVideo.title}”的教学视频不是完整 BV 号` });
+      return;
+    }
     setIsEditorBusy(true);
-    setEditorNotice({ kind: 'info', text: '正在校验并写入本地元数据…' });
-    const formData = new FormData();
-    formData.set('baseRevision', revision);
-    formData.set('lineups', JSON.stringify(draftLineups));
-    formData.set('uploads', JSON.stringify(pendingUploads.map(({ field, lineupId, kind, alt }) => ({ field, lineupId, kind, alt }))));
-    pendingUploads.forEach((upload) => formData.set(upload.field, upload.file, upload.file.name));
-
+    setEditorNotice({ kind: 'info', text: '正在生成编辑压缩包…' });
     try {
-      const response = await fetch('/api/editor/save', { method: 'POST', body: formData });
-      const result = await response.json();
-      if (!response.ok) throw new Error(result.error ?? '保存失败');
+      const result = await downloadEditPackage({
+        baseLineups: initialLineups,
+        lineups: draftLineups,
+        uploads: pendingUploads.map(({ previewUrl: _, ...upload }) => upload satisfies PackageUpload),
+      });
       clearPendingUploads();
-      setSavedLineups(result.lineups);
-      setDraftLineups(result.lineups);
-      setRevision(result.revision);
+      setSavedLineups(initialLineups);
+      setDraftLineups(initialLineups);
       setIsDirty(false);
-      setEditorNotice({ kind: 'success', text: '已保存到 content/lineups.yaml，并重新生成页面数据' });
+      setIsEditing(false);
+      setIsNewLineupDialogOpen(false);
+      setNewLineupPlacement(null);
+      if (!initialLineups.some((lineup) => lineup.id === selectedLineupId)) {
+        const fallback = initialLineups.find((lineup) => lineup.mapId === selectedMapId) ?? initialLineups[0];
+        setSelectedMapId(fallback.mapId);
+        setSelectedAgentId(fallback.agentId);
+        setSelectedGroupId(fallback.target.groupId);
+        setSelectedLineupId(fallback.id);
+      }
+      setEditorNotice({ kind: 'success', text: `编辑包已下载：${result.added} 个新增点位、${result.updated} 个修改点位、${result.uploads} 张图片。请将 ZIP 交给开发者导入` });
     } catch (error) {
-      setEditorNotice({ kind: 'error', text: error instanceof Error ? error.message : '保存失败' });
+      setEditorNotice({ kind: 'error', text: error instanceof Error ? error.message : '编辑包生成失败' });
     } finally {
       setIsEditorBusy(false);
     }
@@ -477,10 +488,13 @@ export default function Home() {
 
   function sectionItems(kind: MediaKind) {
     if (!activeLineup) return [];
-    return [
-      ...activeLineup.media[kind].map((item) => ({ id: item.key, src: mediaUrl(item.key), alt: item.alt, pending: false })),
-      ...activePendingUploads.filter((upload) => upload.kind === kind).map((upload) => ({ id: upload.field, src: upload.previewUrl, alt: upload.alt, pending: true })),
-    ];
+    const pendingByKey = new Map(activePendingUploads.map((upload) => [upload.key, upload]));
+    return activeLineup.media[kind].map((item) => ({
+      id: item.key,
+      src: pendingByKey.get(item.key)?.previewUrl ?? assetUrl(item.key),
+      alt: item.alt,
+      pending: pendingByKey.has(item.key),
+    }));
   }
 
   return (
@@ -499,7 +513,7 @@ export default function Home() {
                 onClick={() => selectMap(map.id)}
                 type="button"
               >
-                <span className="map-thumb"><img alt="" src={map.image} /></span>
+                <span className="map-thumb"><img alt="" src={assetUrl(map.image)} /></span>
                 <span className="map-name">{map.name}</span>
                 <span className="map-count">{String(count).padStart(2, '0')}</span>
               </button>
@@ -530,21 +544,21 @@ export default function Home() {
                     onClick={() => selectAgent(agent.id)}
                     type="button"
                   >
-                    <img alt={agent.name} src={agent.icon} />
+                    <img alt={agent.name} src={assetUrl(agent.icon)} />
                     <span><b>{agent.name}</b><small>{count} 个点位</small></span>
                   </button>
                 );
               })}
             </div>
-            <div className="editor-actions" aria-label="本地编辑">
+            <div className="editor-actions" aria-label="浏览器编辑">
               {isEditing ? (
                 <>
                   <button className="editor-new" disabled={isEditorBusy || Boolean(newLineupPlacement)} onClick={() => setIsNewLineupDialogOpen(true)} type="button">＋ 新增点位</button>
                   <button className="editor-cancel" disabled={isEditorBusy} onClick={exitEditMode} type="button">退出编辑</button>
-                  <button className="editor-save" disabled={!isDirty || isEditorBusy} onClick={saveEdits} type="button">{isEditorBusy ? '保存中…' : '保存修改'}</button>
+                  <button className="editor-save" disabled={!isDirty || isEditorBusy} onClick={saveEdits} type="button">{isEditorBusy ? '生成中…' : '导出编辑包'}</button>
                 </>
               ) : (
-                <button className="editor-enter" disabled={isEditorBusy} onClick={enterEditMode} type="button">{isEditorBusy ? '读取中…' : '编辑点位'}</button>
+                <button className="editor-enter" onClick={enterEditMode} type="button">编辑点位</button>
               )}
             </div>
           </div>
@@ -608,7 +622,7 @@ export default function Home() {
                   className="map-transform-layer"
                   style={{ transform: `translate3d(${mapViewport.x}px, ${mapViewport.y}px, 0) scale(${mapViewport.zoom}) rotate(${perspectiveRotation}deg)` }}
                 >
-                  <img className="map-image" alt={`${activeMap.name}俯视地图`} draggable="false" src={activeMap.imageHiRes} />
+                  <img className="map-image" alt={`${activeMap.name}俯视地图`} draggable="false" src={assetUrl(activeMap.imageHiRes)} />
                 </div>
                 {activeMap.sites.map((site) => (
                   <div aria-hidden="true" className="map-region map-site-region" key={`site-region-${site.label}`} style={regionStyle(site.region)} />
@@ -653,7 +667,7 @@ export default function Home() {
                       type="button"
                     >
                       <span className="pin-pulse" />
-                      <img alt="" src={ability?.icon ?? activeAgent.icon} />
+                      <img alt="" src={assetUrl(ability?.icon ?? activeAgent.icon)} />
                       <i>{String(index + 1).padStart(2, '0')}</i>
                       {group.items.length > 1 ? <b>{group.items.length}</b> : null}
                       <span className="pin-label">{representative.title}</span>
@@ -688,7 +702,7 @@ export default function Home() {
                 ) : null}
 
                 <div className="detail-kicker">
-                  <img alt="" src={activeAbility?.icon ?? activeAgent.icon} />
+                  <img alt="" src={assetUrl(activeAbility?.icon ?? activeAgent.icon)} />
                   <span>{activeAbility?.name} · {sideLabels[activeLineup.side]} · {activeLineup.area}</span>
                 </div>
                 <h2>{activeLineup.title}</h2>
@@ -702,16 +716,17 @@ export default function Home() {
 
                 {isEditing ? (
                   <label className="video-link-editor">
-                    <span>教学视频链接 <small>可留空</small></span>
+                    <span>B站教学视频 BV 号 <small>可留空</small></span>
                     <input
-                      onChange={(event) => updateActiveVideoUrl(event.target.value)}
-                      placeholder="https://..."
-                      type="url"
-                      value={activeLineup.videoUrl}
+                      maxLength={12}
+                      onChange={(event) => updateActiveVideoBvid(event.target.value.trim())}
+                      pattern="BV[0-9A-Za-z]{10}"
+                      placeholder="BV17x411w7KC"
+                      value={activeLineup.videoBvid}
                     />
                   </label>
-                ) : activeLineup.videoUrl ? (
-                  <a className="video-link" href={activeLineup.videoUrl} rel="noreferrer" target="_blank">
+                ) : activeLineup.videoBvid ? (
+                  <a className="video-link" href={`https://www.bilibili.com/video/${activeLineup.videoBvid}`} rel="noreferrer" target="_blank">
                     <span><small>教学视频</small>观看完整操作演示</span><b aria-hidden="true">↗</b>
                   </a>
                 ) : null}
@@ -725,7 +740,7 @@ export default function Home() {
                       {items.map((item) => (
                         <div className={`media-item ${item.pending ? 'is-pending' : ''}`} key={item.id}>
                           <img alt={item.alt} loading="lazy" src={item.src} />
-                          {item.pending ? <em>待保存</em> : null}
+                          {item.pending ? <em>待导出</em> : null}
                         </div>
                       ))}
                       {isEditing ? (
@@ -751,14 +766,14 @@ export default function Home() {
                   <section className="effect-preview">
                     <p><span>03</span>效果落点</p>
                     <div>
-                      <img alt="" className="effect-map" src={activeMap.imageHiRes} style={{ transform: `rotate(${perspectiveRotation}deg)` }} />
+                      <img alt="" className="effect-map" src={assetUrl(activeMap.imageHiRes)} style={{ transform: `rotate(${perspectiveRotation}deg)` }} />
                       {activeTargetPoint ? <i style={{ left: `${21.875 + activeTargetPoint.x * 56.25}%`, top: `${activeTargetPoint.y * 100}%` }} /> : null}
                       <strong>当前资料未包含游戏内效果截图</strong>
                     </div>
                   </section>
                 ) : null}
 
-                <p className="source-note">本地元数据：content/lineups.yaml</p>
+                <p className="source-note">页面内容来自仓库静态元数据</p>
               </>
             ) : (
               <div className="empty-state"><span>00</span><h2>暂无已整理点位</h2><p>该地图已经进入资料库，但本地 YAML 还没有对应的完整 Lineup。</p></div>

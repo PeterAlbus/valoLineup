@@ -1,7 +1,7 @@
 - id: ascent
   name: 亚海悬城
-  image: /maps/ascent.png
-  imageHiRes: /maps/hires/ascent.png
+  image: maps/ascent.png
+  imageHiRes: maps/hires/ascent.png
   width: 1024
   height: 1024
   sites:
@@ -20,8 +20,8 @@
 
 - id: bind
   name: 源工重镇
-  image: /maps/bind.png
-  imageHiRes: /maps/hires/bind.png
+  image: maps/bind.png
+  imageHiRes: maps/hires/bind.png
   width: 1024
   height: 1024
   sites:
@@ -40,8 +40,8 @@
 
 - id: haven
   name: 隐世修所
-  image: /maps/haven.png
-  imageHiRes: /maps/hires/haven.png
+  image: maps/haven.png
+  imageHiRes: maps/hires/haven.png
   width: 1024
   height: 1024
   sites:
@@ -62,8 +62,8 @@
 
 - id: split
   name: 霓虹町
-  image: /maps/split.png
-  imageHiRes: /maps/hires/split.png
+  image: maps/split.png
+  imageHiRes: maps/hires/split.png
   width: 1024
   height: 1024
   sites:
@@ -82,8 +82,8 @@
 
 - id: icebox
   name: 森寒冬港
-  image: /maps/icebox.png
-  imageHiRes: /maps/hires/icebox.png
+  image: maps/icebox.png
+  imageHiRes: maps/hires/icebox.png
   width: 1024
   height: 1024
   sites:
@@ -102,8 +102,8 @@
 
 - id: breeze
   name: 微风岛屿
-  image: /maps/breeze.png
-  imageHiRes: /maps/hires/breeze.png
+  image: maps/breeze.png
+  imageHiRes: maps/hires/breeze.png
   width: 1024
   height: 1024
   sites:
@@ -122,8 +122,8 @@
 
 - id: fracture
   name: 裂变峡谷
-  image: /maps/fracture.png
-  imageHiRes: /maps/hires/fracture.png
+  image: maps/fracture.png
+  imageHiRes: maps/hires/fracture.png
   width: 1024
   height: 1024
   sites:
@@ -142,8 +142,8 @@
 
 - id: pearl
   name: 深海明珠
-  image: /maps/pearl.png
-  imageHiRes: /maps/hires/pearl.png
+  image: maps/pearl.png
+  imageHiRes: maps/hires/pearl.png
   width: 1024
   height: 1024
   sites:
@@ -162,8 +162,8 @@
 
 - id: lotus
   name: 莲华古城
-  image: /maps/lotus.png
-  imageHiRes: /maps/hires/lotus.png
+  image: maps/lotus.png
+  imageHiRes: maps/hires/lotus.png
   width: 1024
   height: 1024
   sites:
@@ -184,8 +184,8 @@
 
 - id: sunset
   name: 日落之城
-  image: /maps/sunset.png
-  imageHiRes: /maps/hires/sunset.png
+  image: maps/sunset.png
+  imageHiRes: maps/hires/sunset.png
   width: 1024
   height: 1024
   sites:
@@ -204,8 +204,8 @@
 
 - id: abyss
   name: 幽邃地窟
-  image: /maps/abyss.png
-  imageHiRes: /maps/hires/abyss.png
+  image: maps/abyss.png
+  imageHiRes: maps/hires/abyss.png
   width: 1024
   height: 1024
   sites:
@@ -224,8 +224,8 @@
 
 - id: corrode
   name: 盐海矿镇
-  image: /maps/corrode.png
-  imageHiRes: /maps/hires/corrode.png
+  image: maps/corrode.png
+  imageHiRes: maps/hires/corrode.png
   width: 1024
   height: 1024
   sites:
@@ -244,8 +244,8 @@
 
 - id: summit
   name: 天枢云阙
-  image: /maps/summit.png
-  imageHiRes: /maps/hires/summit.png
+  image: maps/summit.png
+  imageHiRes: maps/hires/summit.png
   width: 1024
   height: 1024
   sites:
