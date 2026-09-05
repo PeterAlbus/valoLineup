@@ -3,6 +3,10 @@ import content from './data/content.json';
 import { downloadEditPackage, type PackageUpload } from './edit-package';
 import NewLineupDialog, { type NewLineupInput } from './NewLineupDialog';
 import { openBilibiliVideo } from './toy-sdk';
+import { usePanZoom } from './usePanZoom';
+import { useDecodedImage } from './useDecodedImage';
+import ZoomControls from './ZoomControls';
+import ImageLightbox from './ImageLightbox';
 
 type MediaItem = { key: string; alt: string };
 type MediaKind = 'stance' | 'aim' | 'effect';
@@ -39,14 +43,11 @@ const sideFilterLabels = { attack: '进攻方道具', defense: '防守方道具'
 const SUPPORTED_IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/webp'] as const;
 const MAX_IMAGE_BYTES = 12 * 1024 * 1024;
 const MIN_ZOOM = 1;
-const MAX_ZOOM = 8;
-const ZOOM_STEP = 0.5;
 const DESTINATION_CLUSTER_DISTANCE = 0.0125;
 const MOBILE_VIEW_QUERY = '(max-width: 760px)';
 
 type Point = { x: number; y: number };
 type MapRegion = Point & { width: number; height: number; rotation: number };
-type MapViewport = { zoom: number; x: number; y: number };
 type Perspective = 'attack' | 'defense';
 type SideFilter = Perspective | 'all';
 
@@ -153,8 +154,6 @@ export default function App() {
   const [selectedLineupId, setSelectedLineupId] = useState('ascent-sova-01');
   const [perspective, setPerspective] = useState<Perspective>('attack');
   const [sideFilter, setSideFilter] = useState<SideFilter>('attack');
-  const [mapViewport, setMapViewport] = useState<MapViewport>({ zoom: MIN_ZOOM, x: 0, y: 0 });
-  const [isDraggingMap, setIsDraggingMap] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isMobileView, setIsMobileView] = useState(false);
   const [isEditorBusy, setIsEditorBusy] = useState(false);
@@ -166,7 +165,8 @@ export default function App() {
   const [isNewLineupDialogOpen, setIsNewLineupDialogOpen] = useState(false);
   const [newLineupPlacement, setNewLineupPlacement] = useState<NewLineupInput | null>(null);
   const mapCanvasRef = useRef<HTMLDivElement>(null);
-  const dragRef = useRef<{ pointerId: number; startX: number; startY: number; originX: number; originY: number } | null>(null);
+  const mapStageRef = useRef<HTMLDivElement>(null);
+  const { viewport: mapViewport, isDragging: isDraggingMap, setZoom, reset: resetMapViewport, handlers: mapHandlers } = usePanZoom(mapStageRef, mapCanvasRef);
   const pinDragRef = useRef<{ pointerId: number; groupIds: string[] } | null>(null);
 
   useEffect(() => {
@@ -180,6 +180,7 @@ export default function App() {
   const isEditMode = isEditing && !isMobileView;
   const lineups = isEditMode ? draftLineups : savedLineups;
   const activeMap = maps.find((map) => map.id === selectedMapId) ?? maps[0];
+  const mapImage = useDecodedImage(assetUrl(activeMap.imageHiRes));
   const mapLineups = lineups.filter((lineup) => lineup.mapId === selectedMapId);
   const filteredMapLineups = mapLineups.filter((lineup) => sideFilter === 'all' || lineup.side === sideFilter);
   const agentLineups = filteredMapLineups.filter((lineup) => lineup.agentId === selectedAgentId);
@@ -209,39 +210,6 @@ export default function App() {
       height: `${region.height * 100 * mapViewport.zoom}%`,
       transform: `translate(-50%, -50%) rotate(${region.rotation + perspectiveRotation}deg)`,
     };
-  }
-
-  function constrainViewport(viewport: MapViewport) {
-    const canvas = mapCanvasRef.current;
-    if (!canvas || viewport.zoom === MIN_ZOOM) return { zoom: viewport.zoom, x: 0, y: 0 };
-    const maxX = canvas.clientWidth * (viewport.zoom - 1) / 2;
-    const maxY = canvas.clientHeight * (viewport.zoom - 1) / 2;
-    return {
-      zoom: viewport.zoom,
-      x: Math.max(-maxX, Math.min(maxX, viewport.x)),
-      y: Math.max(-maxY, Math.min(maxY, viewport.y)),
-    };
-  }
-
-  function setZoom(nextZoom: number, clientX?: number, clientY?: number) {
-    const canvas = mapCanvasRef.current;
-    setMapViewport((current) => {
-      const zoom = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, nextZoom));
-      if (!canvas || zoom === current.zoom) return current;
-      const rect = canvas.getBoundingClientRect();
-      const focusX = clientX === undefined ? 0 : clientX - (rect.left + rect.width / 2);
-      const focusY = clientY === undefined ? 0 : clientY - (rect.top + rect.height / 2);
-      const ratio = zoom / current.zoom;
-      return constrainViewport({
-        zoom,
-        x: focusX - (focusX - current.x) * ratio,
-        y: focusY - (focusY - current.y) * ratio,
-      });
-    });
-  }
-
-  function resetMapViewport() {
-    setMapViewport({ zoom: MIN_ZOOM, x: 0, y: 0 });
   }
 
   function selectMap(mapId: string) {
@@ -307,46 +275,15 @@ export default function App() {
     }
   }
 
-  function handleMapWheel(event: React.WheelEvent<HTMLDivElement>) {
-    event.preventDefault();
-    const direction = event.deltaY < 0 ? ZOOM_STEP : -ZOOM_STEP;
-    setZoom(mapViewport.zoom + direction, event.clientX, event.clientY);
-  }
-
   function handleMapPointerDown(event: React.PointerEvent<HTMLDivElement>) {
+    if (mapImage.status !== 'ready') return;
     if (isEditMode && newLineupPlacement) {
-      if ((event.target as HTMLElement).closest('button')) return;
+      if ((event.target as HTMLElement).closest('button, input, [data-zoom-controls]')) return;
       const point = rawPointFromPointer(event.clientX, event.clientY);
       if (point) createNewLineup(point);
       return;
     }
-    if (mapViewport.zoom === MIN_ZOOM || (event.target as HTMLElement).closest('button')) return;
-    event.currentTarget.setPointerCapture(event.pointerId);
-    dragRef.current = {
-      pointerId: event.pointerId,
-      startX: event.clientX,
-      startY: event.clientY,
-      originX: mapViewport.x,
-      originY: mapViewport.y,
-    };
-    setIsDraggingMap(true);
-  }
-
-  function handleMapPointerMove(event: React.PointerEvent<HTMLDivElement>) {
-    const drag = dragRef.current;
-    if (!drag || drag.pointerId !== event.pointerId) return;
-    setMapViewport((current) => constrainViewport({
-      zoom: current.zoom,
-      x: drag.originX + event.clientX - drag.startX,
-      y: drag.originY + event.clientY - drag.startY,
-    }));
-  }
-
-  function finishMapDrag(event: React.PointerEvent<HTMLDivElement>) {
-    if (dragRef.current?.pointerId !== event.pointerId) return;
-    dragRef.current = null;
-    setIsDraggingMap(false);
-    if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
+    mapHandlers.onPointerDown(event);
   }
 
   function rawPointFromPointer(clientX: number, clientY: number) {
@@ -363,8 +300,8 @@ export default function App() {
   }
 
   function handlePinPointerDown(event: React.PointerEvent<HTMLButtonElement>, group: (typeof groups)[number]) {
-    selectGroup(group);
     if (!isEditMode) return;
+    selectGroup(group);
     event.preventDefault();
     event.stopPropagation();
     event.currentTarget.setPointerCapture(event.pointerId);
@@ -600,9 +537,6 @@ export default function App() {
   return (
     <main
       className={`app-shell ${isEditMode ? 'is-editing' : ''}`}
-      onKeyDown={(event) => {
-        if (event.key === 'Escape' && lightboxItem) setLightboxItem(null);
-      }}
       onPaste={handlePaste}
     >
       <aside className="map-rail" aria-label="地图选择">
@@ -695,19 +629,18 @@ export default function App() {
             </div>
 
             <div
+              ref={mapStageRef}
+              {...mapHandlers}
+              aria-busy={mapImage.status === 'loading'}
               className={`map-stage ${mapViewport.zoom > MIN_ZOOM ? 'is-zoomed' : ''} ${mapViewport.zoom >= 4 ? 'is-detail-zoom' : ''} ${isDraggingMap ? 'is-dragging' : ''} ${isEditMode && newLineupPlacement ? 'is-placing' : ''}`}
               onDoubleClick={(event) => {
-                if ((event.target as HTMLElement).closest('button')) return;
-                setZoom(mapViewport.zoom + ZOOM_STEP, event.clientX, event.clientY);
+                if ((event.target as HTMLElement).closest('button, input, [data-zoom-controls]') || mapImage.status !== 'ready') return;
+                setZoom(mapViewport.zoom * 1.5, event.clientX, event.clientY);
               }}
-              onPointerCancel={finishMapDrag}
               onPointerDown={handleMapPointerDown}
-              onPointerMove={handleMapPointerMove}
-              onPointerUp={finishMapDrag}
-              onWheel={handleMapWheel}
             >
               <div className="map-grid" />
-              <div className="perspective-controls" aria-label="地图视角">
+              <div className="perspective-controls" data-zoom-controls aria-label="地图视角">
                 {(['attack', 'defense'] as const).map((side) => (
                   <button
                     aria-pressed={perspective === side}
@@ -720,12 +653,11 @@ export default function App() {
                   </button>
                 ))}
               </div>
-              <div className="zoom-controls" aria-label="地图缩放">
-                <button aria-label="缩小地图" disabled={mapViewport.zoom === MIN_ZOOM} onClick={() => setZoom(mapViewport.zoom - ZOOM_STEP)} type="button">−</button>
-                <button className="zoom-value" aria-label="重置地图缩放" disabled={mapViewport.zoom === MIN_ZOOM} onClick={resetMapViewport} type="button">{Math.round(mapViewport.zoom * 100)}%</button>
-                <button aria-label="放大地图" disabled={mapViewport.zoom === MAX_ZOOM} onClick={() => setZoom(mapViewport.zoom + ZOOM_STEP)} type="button">＋</button>
+              <div className="map-zoom-controls">
+                <ZoomControls label="地图" zoom={mapViewport.zoom} onZoom={setZoom} onReset={resetMapViewport} />
               </div>
-              <div className="map-gesture-hint">{isEditMode ? '拖动 Lineup 标记修改落点 · 地图放大后可拖拽移动' : isMobileView ? '当前阵营位于地图下侧 · 使用 ＋ 放大 · 放大后拖动地图' : '当前阵营位于地图下侧 · 最高 800% · 放大后拖拽移动'}</div>
+              <div className="map-gesture-hint">{isEditMode ? '拖动标记修改落点 · 滚轮缩放地图' : '滚轮 / 双指缩放 · 放大后拖动地图 · 100%–800%'}</div>
+              {mapImage.status !== 'ready' ? <div className="canvas-status" role="status">{mapImage.status === 'error' ? <>地图加载失败<button type="button" onClick={mapImage.retry}>重试</button></> : `正在加载${activeMap.name}…`}</div> : null}
               {isEditMode && newLineupPlacement ? (
                 <div className="placement-banner" role="status">
                   <span><b>放置新点位</b>点击地图上的技能最终落点</span>
@@ -738,12 +670,12 @@ export default function App() {
                   >取消</button>
                 </div>
               ) : null}
-              <div className="map-canvas" ref={mapCanvasRef}>
+              <div className="map-canvas" ref={mapCanvasRef} style={{ visibility: mapImage.status === 'ready' ? 'visible' : 'hidden' }}>
                 <div
                   className="map-transform-layer"
                   style={{ transform: `translate3d(${mapViewport.x}px, ${mapViewport.y}px, 0) scale(${mapViewport.zoom}) rotate(${perspectiveRotation}deg)` }}
                 >
-                  <img className="map-image" alt={`${activeMap.name}俯视地图`} draggable="false" src={assetUrl(activeMap.imageHiRes)} />
+                  <img key={activeMap.id} className="map-image" alt={`${activeMap.name}俯视地图`} draggable="false" src={assetUrl(activeMap.imageHiRes)} />
                 </div>
                 {activeMap.sites.map((site) => (
                   <div aria-hidden="true" className="map-region map-site-region" key={`site-region-${site.label}`} style={regionStyle(site.region)} />
@@ -907,7 +839,7 @@ export default function App() {
                 {!sectionItems('effect').length ? (
                   <section className="effect-preview">
                     <p><span>03</span>效果落点</p>
-                    <div>
+                    <div style={{ visibility: mapImage.status === 'ready' ? 'visible' : 'hidden' }}>
                       <img alt="" className="effect-map" src={assetUrl(activeMap.imageHiRes)} style={{ transform: `rotate(${perspectiveRotation}deg)` }} />
                       {activeTargetPoint ? <i style={{ left: `${21.875 + activeTargetPoint.x * 56.25}%`, top: `${activeTargetPoint.y * 100}%` }} /> : null}
                       <strong>当前资料未包含游戏内效果截图</strong>
@@ -935,18 +867,7 @@ export default function App() {
         />
       ) : null}
       {lightboxItem ? (
-        <div
-          className="lightbox-backdrop"
-          onClick={(event) => {
-            if (event.target === event.currentTarget) setLightboxItem(null);
-          }}
-          role="presentation"
-        >
-          <section aria-label={`图片预览：${lightboxItem.alt}`} aria-modal="true" className="lightbox-dialog" role="dialog">
-            <header><p>{lightboxItem.alt}</p><button autoFocus aria-label="关闭图片预览" onClick={() => setLightboxItem(null)} type="button">×</button></header>
-            <img alt={lightboxItem.alt} src={lightboxItem.src} />
-          </section>
-        </div>
+        <ImageLightbox key={lightboxItem.src} {...lightboxItem} onClose={() => setLightboxItem(null)} />
       ) : null}
     </main>
   );
