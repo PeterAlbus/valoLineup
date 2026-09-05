@@ -20,18 +20,19 @@ type Props = {
   initialMapId: string;
   initialAgentId: string;
   initialAbilityId?: string;
+  initialSide: 'attack' | 'defense';
   onCancel: () => void;
   onPlace: (input: NewLineupInput) => void;
 };
 
-export default function NewLineupDialog({ maps, agents, initialMapId, initialAgentId, initialAbilityId, onCancel, onPlace }: Props) {
+export default function NewLineupDialog({ maps, agents, initialMapId, initialAgentId, initialAbilityId, initialSide, onCancel, onPlace }: Props) {
   const firstAgent = agents.find((agent) => agent.id === initialAgentId) ?? agents[0];
   const [mapId, setMapId] = useState(initialMapId);
   const [agentId, setAgentId] = useState(firstAgent.id);
   const [abilityId, setAbilityId] = useState(
     firstAgent.abilities.some((ability) => ability.id === initialAbilityId) ? initialAbilityId! : firstAgent.abilities[0].id,
   );
-  const [side, setSide] = useState<'attack' | 'defense'>('attack');
+  const [side, setSide] = useState<'attack' | 'defense'>(initialSide);
   const [area, setArea] = useState(`${maps.find((map) => map.id === initialMapId)?.sites[0]?.label ?? 'A'}点`);
   const [title, setTitle] = useState('');
   const [videoBvid, setVideoBvid] = useState('');
@@ -125,6 +126,7 @@ export default function NewLineupDialog({ maps, agents, initialMapId, initialAge
             <label>
               <span>区域</span>
               <input maxLength={40} onChange={(event) => setArea(event.target.value)} placeholder="例如：A点、B大、中路" required value={area} />
+              <span className="area-shortcuts">{['A点', 'B点', ...(maps.find((map) => map.id === mapId)?.sites.some((site) => site.label === 'C') ? ['C点'] : [])].map((value) => <button key={value} type="button" aria-pressed={area === value} onClick={() => setArea(value)}>{value}</button>)}</span>
             </label>
             <label>
               <span>点位标题</span>

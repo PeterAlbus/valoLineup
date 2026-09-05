@@ -6,6 +6,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { promisify } from 'node:util';
 import JSZip from 'jszip';
+import sharp from 'sharp';
 import { parse } from 'yaml';
 import { allMedia } from '../src/package-model.mjs';
 
@@ -30,7 +31,7 @@ async function createPackage(name, changes, assets = []) {
   for (const asset of assets) zip.file(asset.key, asset.bytes);
   zip.file('manifest.json', `${JSON.stringify({
     format: 'valo-lineup-edit-package',
-    version: 4,
+    version: changes.deleted?.length ? 5 : 4,
     packageId: randomUUID(), revision: 1,
     author: { name: 'SDK Test User', source: 'toy', toyOpenId: 'test-only-open-id' },
     createdAt: new Date().toISOString(),
@@ -57,6 +58,7 @@ async function importPackage(packagePath) {
 
 try {
   await cp(path.join(root, 'content'), path.join(temporaryRoot, 'content'), { recursive: true });
+  await writeFile(path.join(temporaryRoot, 'content', 'history.json'), '[]');
   await mkdir(path.join(temporaryRoot, 'public', 'lineups'), { recursive: true });
   await symlink(path.join(root, 'public', 'maps'), path.join(temporaryRoot, 'public', 'maps'), 'dir');
   await symlink(path.join(root, 'public', 'agents'), path.join(temporaryRoot, 'public', 'agents'), 'dir');
@@ -94,7 +96,7 @@ try {
     target: { groupId: 'parallel-add-test-target', x: 0.61, y: 0.62 },
     media: { stance: [], aim: [], effect: [addedImage] },
   };
-  const addedImageBytes = await readFile(path.join(root, 'public', 'lineups', 'ascent-sova-01', 'aim-01.png'));
+  const addedImageBytes = await sharp({ create: { width: 10, height: 10, channels: 3, background: '#ec8044' } }).png().toBuffer();
   const addedAsset = {
     ...addedImage,
     lineupId: added.id,
@@ -140,7 +142,10 @@ try {
   assert.equal(finalLineups.find((lineup) => lineup.id === firstBefore.id).videoBvid, firstAfter.videoBvid);
   assert.equal(finalLineups.find((lineup) => lineup.id === secondBefore.id).videoBvid, secondAfter.videoBvid);
   assert.ok(finalLineups.some((lineup) => lineup.id === added.id), 'A stale addition package must still merge');
-  await access(path.join(temporaryRoot, 'public', addedImage.key));
+  const convertedImage = finalLineups.find((lineup) => lineup.id === added.id).media.effect[0];
+  assert.ok(convertedImage.key.endsWith('.webp'));
+  await access(path.join(temporaryRoot, 'public', convertedImage.key));
+  await assert.rejects(access(path.join(temporaryRoot, 'public', addedImage.key)), 'The original PNG is not stored');
   assert.match(repeated.stdout, /Already applied:/, 'Repeated imports must be idempotent');
   assert.match(mixed.stdout, /Imported 0 new and 1 updated/, 'A non-conflicting sibling update must still apply');
   assert.match(mixed.stderr, new RegExp(`Skipped 1 conflicting lineups:[\\s\\S]*${firstBefore.id}`));
@@ -154,8 +159,20 @@ try {
   assert.equal(history.length, 3, 'Only successful nonempty imports add history entries');
   assert.ok(history.every((entry) => entry.author.name === 'SDK Test User' && entry.mapIds.length === 1 && entry.lineupIds.length === 1));
   assert.deepEqual(history.map((entry) => [entry.added, entry.updated]), [[0, 1], [0, 1], [1, 0]]);
-  const historyBeforeRepeat = JSON.stringify(history);
+  let historyBeforeRepeat = JSON.stringify(history);
   await importPackage(additionPackage);
+  assert.equal(JSON.stringify(JSON.parse(await readFile(path.join(temporaryRoot, 'content', 'history.json'), 'utf8'))), historyBeforeRepeat);
+
+  const deletedRecord = finalLineups.find((lineup) => lineup.id === added.id);
+  const deletePackage = await createPackage('delete', { added: [], updated: [], deleted: [{ id: added.id, before: deletedRecord }] });
+  await importPackage(deletePackage);
+  const afterDelete = parse(await readFile(path.join(temporaryRoot, 'content', 'lineups.yaml'), 'utf8'));
+  assert(!afterDelete.some((lineup) => lineup.id === added.id));
+  const deletionHistory = JSON.parse(await readFile(path.join(temporaryRoot, 'content', 'history.json'), 'utf8'));
+  assert.equal(deletionHistory.at(-1).deleted, 1);
+  assert.equal(deletionHistory.at(-1).added, 0);
+  historyBeforeRepeat = JSON.stringify(deletionHistory);
+  await importPackage(deletePackage);
   assert.equal(JSON.stringify(JSON.parse(await readFile(path.join(temporaryRoot, 'content', 'history.json'), 'utf8'))), historyBeforeRepeat);
 
   // Force the final build to fail after images, YAML and history were written, using only the isolated fixture tree.

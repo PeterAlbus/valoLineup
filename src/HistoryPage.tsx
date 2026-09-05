@@ -1,6 +1,7 @@
 import { packageStats, type Manifest, type Uploader } from './package-model.mjs';
+import { formatBytes } from './image-compression';
 
-export type HistoryEntry = { id: string; packageId: string; revision: number; appliedAt: string; author: { name: string }; mapIds: string[]; lineupIds: string[]; added: number; updated: number };
+export type HistoryEntry = { id: string; packageId: string; revision: number; appliedAt: string; author: { name: string }; mapIds: string[]; lineupIds: string[]; added: number; updated: number; deleted?: number };
 export function UploaderLabel({ uploader, onOpen }: { uploader: Uploader; onOpen: (uid: string) => void }) {
   return uploader.bilibiliUid ? <button className="uploader-link" onClick={() => onOpen(uploader.bilibiliUid!)} type="button">{uploader.name} ↗</button>
     : <span title="Toy SDK 不提供 B站 UID，无法跳转主页">{uploader.name}{uploader.source === 'local' ? '（未认证）' : ''}</span>;
@@ -29,7 +30,8 @@ export default function HistoryPage({ packages, manual, dirty, entries, maps, bu
         const stats = packageStats(manifest);
         return <li className="history-card" key={manifest.packageId} data-package-id={manifest.packageId}>
           <h3>{index + 1}. {manifest.author.name} · {stats.maps} 个地图 / {stats.lineups} 个点位</h3>
-          <p>{date(manifest.updatedAt)} · 新增 {stats.added} / 修改 {stats.updated}</p>
+          <p>{date(manifest.updatedAt)} · 新增 {stats.added} / 修改 {stats.updated} / 删除 {stats.deleted}</p>
+          <p>图片 {formatBytes(manifest.uploadedAssets.reduce((sum, asset) => sum + asset.size, 0))} / 128.00 MiB</p>
           <small>{manifest.packageId} · r{manifest.revision}</small>
           <div className="history-actions"><button aria-label={`上移第 ${index + 1} 个更新包`} disabled={busy || editing || index === 0} onClick={() => onMove(index, -1)} type="button">↑ 上移</button><button aria-label={`下移第 ${index + 1} 个更新包`} disabled={busy || editing || index === packages.length - 1} onClick={() => onMove(index, 1)} type="button">↓ 下移</button><button disabled={busy || editing} onClick={() => onRemove(index)} type="button">删除更新包</button></div>
         </li>;
@@ -40,7 +42,7 @@ export default function HistoryPage({ packages, manual, dirty, entries, maps, bu
       {!entries.length ? <p className="history-empty">历史功能启用后，还没有新的仓库更新记录。</p> : null}
       {[...entries].reverse().map((entry) => <article className="history-card" key={entry.id}>
         <h3>{entry.author.name} · {entry.mapIds.length} 个地图 / {entry.lineupIds.length} 个点位</h3>
-        <p>{date(entry.appliedAt)} · 新增 {entry.added} / 修改 {entry.updated}</p>
+        <p>{date(entry.appliedAt)} · 新增 {entry.added} / 修改 {entry.updated} / 删除 {entry.deleted ?? 0}</p>
         <p>{entry.mapIds.map((id) => maps.find((map) => map.id === id)?.name ?? id).join('、')}</p>
         <small>{entry.packageId} · r{entry.revision}</small>
       </article>)}

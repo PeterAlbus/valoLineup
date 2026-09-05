@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import JSZip from 'jszip';
 
-export const PACKAGE_VERSION = 4;
+export const PACKAGE_VERSION = 5;
 export const MAX_IMAGE_BYTES = 12 * 1024 * 1024;
 export const MAX_PACKAGE_BYTES = 128 * 1024 * 1024;
 const id = z.string().regex(/^[a-z0-9-]+$/).max(160);
@@ -14,6 +14,7 @@ export const uploaderSchema = z.object({
 export const mediaItemSchema = z.object({
   key: z.string().regex(/^lineups\/[a-z0-9-]+\/[a-zA-Z0-9_-][a-zA-Z0-9._-]*\.(png|jpe?g|webp)$/).refine((key) => !key.includes('..')),
   alt: z.string().min(1).max(500),
+  original: z.object({ key: z.string().regex(/^lineups\/[a-z0-9-]+\/[a-zA-Z0-9_-][a-zA-Z0-9._-]*\.(png|jpe?g|webp)$/).refine((key) => !key.includes('..')), sha256: z.string().regex(/^[a-f0-9]{64}$/) }).optional(),
 }).passthrough();
 export const lineupSchema = z.object({
   id, mapId: id, agentId: id, abilityId: id,
@@ -28,12 +29,13 @@ export const lineupSchema = z.object({
 });
 export const lineupsSchema = z.array(lineupSchema);
 export const manifestSchema = z.object({
-  format: z.literal('valo-lineup-edit-package'), version: z.literal(PACKAGE_VERSION),
+  format: z.literal('valo-lineup-edit-package'), version: z.union([z.literal(4), z.literal(5)]),
   packageId: z.string().uuid(), revision: z.number().int().positive(),
   createdAt: z.string().datetime(), updatedAt: z.string().datetime(), author: uploaderSchema,
   changes: z.object({
     added: lineupsSchema.max(10000),
     updated: z.array(z.object({ id, before: lineupSchema, after: lineupSchema }).passthrough()).max(10000),
+    deleted: z.array(z.object({ id, before: lineupSchema }).passthrough()).max(10000).optional(),
   }).passthrough(),
   uploadedAssets: z.array(z.object({
     key: mediaItemSchema.shape.key, lineupId: id, kind: z.enum(['stance', 'aim', 'effect']),
@@ -43,7 +45,11 @@ export const manifestSchema = z.object({
 }).passthrough().superRefine((manifest, ctx) => {
   const fail = (message) => ctx.addIssue({ code: 'custom', message });
   const records = changedLineups(manifest);
-  if (new Set(records.map((record) => record.id)).size !== records.length) fail('包内点位操作 ID 重复');
+  const deleted = manifest.changes.deleted ?? [];
+  const operationIds = [...records.map((record) => record.id), ...deleted.map((item) => item.id)];
+  if (new Set(operationIds).size !== operationIds.length) fail('包内点位操作 ID 重复');
+  if (deleted.some((item) => item.id !== item.before.id)) fail('删除记录的 ID 不一致');
+  if (manifest.version === 4 && deleted.length) fail('删除操作需要 v5 格式，不能被旧客户端静默忽略');
   if (manifest.changes.updated.some((update) => update.id !== update.before.id || update.id !== update.after.id)) fail('编辑不能改变点位 ID');
   const media = allMedia(records);
   const assets = new Map(manifest.uploadedAssets.map((asset) => [asset.key, asset]));
@@ -68,13 +74,14 @@ export function applyLayers(base, packages, manual = null) {
   const records = new Map(base.map((record) => [record.id, record]));
   const sources = new Map();
   for (const manifest of [...packages, ...(manual ? [manual] : [])]) {
+    for (const item of manifest.changes.deleted ?? []) { records.delete(item.id); sources.delete(item.id); }
     for (const record of changedLineups(manifest)) { records.set(record.id, record); sources.set(record.id, manifest); }
   }
   return { lineups: [...records.values()], sources };
 }
 export function packageStats(manifest) {
-  const records = changedLineups(manifest);
-  return { maps: new Set(records.map((record) => record.mapId)).size, lineups: records.length, added: manifest.changes.added.length, updated: manifest.changes.updated.length };
+  const records = [...changedLineups(manifest), ...(manifest.changes.deleted ?? []).map((item) => item.before)];
+  return { maps: new Set(records.map((record) => record.mapId)).size, lineups: records.length, added: manifest.changes.added.length, updated: manifest.changes.updated.length, deleted: manifest.changes.deleted?.length ?? 0 };
 }
 export function validateReferences(manifest, maps, agents) {
   for (const record of changedLineups(manifest)) {
@@ -98,7 +105,7 @@ export async function readPackage(bytes) {
   const entry = zip.file('manifest.json');
   if (!entry || entry._data.uncompressedSize > 8 * 1024 * 1024) throw new Error('缺少 manifest.json 或清单超过 8 MB');
   const raw = JSON.parse(await entry.async('string'));
-  if (raw.version !== PACKAGE_VERSION) throw new Error(`仅支持 v${PACKAGE_VERSION} 更新包，本次格式升级不兼容旧包`);
+  if (![4, 5].includes(raw.version)) throw new Error('仅支持 v4 / v5 更新包，未知格式未被应用');
   const manifest = manifestSchema.parse(raw);
   const blobs = new Map();
   for (const asset of manifest.uploadedAssets) {
@@ -110,4 +117,65 @@ export async function readPackage(bytes) {
     blobs.set(asset.sha256, new Blob([data], { type: asset.mimeType }));
   }
   return { manifest, blobs };
+}
+
+export function collectChanges(previous, startLineups, lineups) {
+  const added = new Map(previous?.changes.added.map((record) => [record.id, record]) ?? []);
+  const updated = new Map(previous?.changes.updated.map((change) => [change.id, change]) ?? []);
+  const deleted = new Map((previous?.changes.deleted ?? []).map((change) => [change.id, change]));
+  const start = new Map(startLineups.map((record) => [record.id, record]));
+  const currentIds = new Set(lineups.map((record) => record.id));
+  for (const before of startLineups) if (!currentIds.has(before.id)) {
+    if (added.has(before.id)) added.delete(before.id);
+    else deleted.set(before.id, { id: before.id, before: updated.get(before.id)?.before ?? before });
+    updated.delete(before.id);
+  }
+  for (const record of lineups) {
+    const before = start.get(record.id);
+    if (same(before, record)) continue;
+    if (deleted.has(record.id)) {
+      const original = deleted.get(record.id).before; deleted.delete(record.id);
+      if (!same(original, record)) updated.set(record.id, { id: record.id, before: original, after: record });
+    } else if (added.has(record.id) || !before) added.set(record.id, record);
+    else {
+      const original = updated.get(record.id)?.before ?? before;
+      if (same(original, record)) updated.delete(record.id);
+      else updated.set(record.id, { id: record.id, before: original, after: record });
+    }
+  }
+  return { added: [...added.values()], updated: [...updated.values()], ...(deleted.size ? { deleted: [...deleted.values()] } : {}) };
+}
+
+// Compare visual asset identity, not encoder-specific filenames, across the WebP migration.
+export function sameLineup(left, right, migrations = {}) {
+  const normalize = (record) => record && ({ ...record, media: Object.fromEntries(['stance', 'aim', 'effect'].map((kind) => [kind, record.media[kind].map((item) => {
+    const original = item.original ?? (migrations[item.key] ? { key: item.key, sha256: migrations[item.key].sourceSha256 } : null);
+    if (!original) return item;
+    const rest = { ...item }; delete rest.original;
+    return { ...rest, key: original.key, imageIdentity: original.sha256 };
+  })])) });
+  return same(normalize(left), normalize(right));
+}
+
+export async function compressPackage(data, encode) {
+  const manifest = structuredClone(data.manifest);
+  const blobs = new Map();
+  for (const asset of manifest.uploadedAssets) {
+    const originalBlob = data.blobs.get(asset.sha256);
+    if (!originalBlob) throw new Error(`缺少图片：${asset.key}`);
+    if (asset.mimeType === 'image/webp') { blobs.set(asset.sha256, originalBlob); continue; }
+    const blob = await encode(originalBlob);
+    const bytes = new Uint8Array(await blob.arrayBuffer());
+    const digest = await sha256(bytes);
+    const oldKey = asset.key;
+    const newKey = oldKey.replace(/\.[^.]+$/, `-${digest.slice(0, 16)}.webp`);
+    for (const record of changedLineups(manifest)) for (const kind of ['stance', 'aim', 'effect']) for (const item of record.media[kind]) {
+      if (item.key !== oldKey) continue;
+      item.original ??= { key: oldKey, sha256: asset.sha256 };
+      item.key = newKey;
+    }
+    Object.assign(asset, { key: newKey, mimeType: 'image/webp', size: blob.size, sha256: digest });
+    verifyImage(bytes, asset); blobs.set(digest, blob);
+  }
+  return { manifest: manifestSchema.parse(manifest), blobs };
 }

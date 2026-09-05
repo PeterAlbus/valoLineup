@@ -1,4 +1,6 @@
-import { access, copyFile, mkdir, readFile } from 'node:fs/promises';
+import { access, mkdir, readFile, writeFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
+import { encodeWebp } from './webp.mjs';
 import path from 'node:path';
 import { parse } from 'yaml';
 import { buildContent, stringifyLineups, writeTextAtomic } from './content-model.mjs';
@@ -147,11 +149,12 @@ for (const [index, draft] of drafts.entries()) {
 
   for (const [imageIndex, reference] of draft.images.entries()) {
     const source = await resolveImage(reference);
-    const extension = path.extname(source).toLowerCase() || '.png';
+    const inputBytes = await readFile(source);
+    const webp = new Uint8Array(await (await encodeWebp(new Blob([inputBytes], { type: source.endsWith('.webp') ? 'image/webp' : source.endsWith('.png') ? 'image/png' : 'image/jpeg' }))).arrayBuffer());
     const kind = draft.images.length > 1 && imageIndex === 0 ? 'stance' : 'aim';
     const ordinal = media[kind].length + 1;
-    const outputName = `${kind}-${String(ordinal).padStart(2, '0')}${extension}`;
-    await copyFile(source, path.join(destination, outputName));
+    const outputName = `${kind}-${String(ordinal).padStart(2, '0')}-${createHash('sha256').update(webp).digest('hex').slice(0, 16)}.webp`;
+    await writeFile(path.join(destination, outputName), webp);
     media[kind].push({
       key: `lineups/${id}/${outputName}`,
       alt: `${draft.title}${kind === 'stance' ? '站位' : '瞄点'}图 ${ordinal}`,

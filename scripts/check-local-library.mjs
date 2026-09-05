@@ -22,7 +22,7 @@ async function fixture(label, color, packageId = randomUUID()) {
   });
   const zip = new JSZip(); zip.file('manifest.json', JSON.stringify(manifest)); zip.file(key, bytes);
   const buffer = await zip.generateAsync({ type: 'nodebuffer' });
-  return { manifest, base64: buffer.toString('base64'), buffer };
+  return { manifest, base64: buffer.toString('base64'), imageBase64: bytes.toString('base64'), buffer };
 }
 const a = await fixture('Overlay A', '#ff0000');
 const b = await fixture('Overlay B', '#0000ff');
@@ -71,7 +71,14 @@ async function waitFor(expression) {
   for (let attempt = 0; attempt < 100; attempt++) { if (await evaluate(`Boolean(${expression})`)) return; await delay(100); }
   throw new Error(`Condition failed: ${expression}\n${await evaluate("document.querySelector('.editor-notice')?.textContent")}`);
 }
-const click = (selector) => evaluate(`document.querySelector(${JSON.stringify(selector)}).click()`);
+async function click(selector) {
+  await evaluate(`document.querySelector(${JSON.stringify(selector)}).click()`);
+  if (selector === '.editor-cancel') {
+    await waitFor(`document.querySelector('.exit-edit-dialog')?.open`);
+    await evaluate(`document.querySelector('.exit-edit-confirm').click()`);
+    await waitFor(`!document.querySelector('.exit-edit-dialog')`);
+  }
+}
 const storage = `JSON.parse(localStorage.getItem('valo-lineup:v4:/'))`;
 async function navigate() {
   await send('Page.navigate', { url: appUrl });
@@ -110,24 +117,34 @@ try {
   assert.equal(await evaluate(`${storage}.packages.length`), 2);
   await click('.history-toggle'); await waitFor(`document.querySelector('.detail-lead').textContent === 'Overlay B'`);
   assert.equal(await evaluate(`!!document.querySelector('.method-picker')`), false, 'A partially moved shared group must display its independent destination without conflicts');
-  assert.equal(await imageDigest(), b.manifest.uploadedAssets[0].sha256, 'Same logical image keys must resolve to the winning layer');
+  assert.equal(await imageDigest(), await evaluate(`${storage}.packages[1].uploadedAssets[0].sha256`), 'Same logical image keys must resolve to the winning layer');
+  assert.equal(await evaluate(`${storage}.packages[1].uploadedAssets[0].mimeType`), 'image/webp');
+  assert.equal(await evaluate(`${storage}.packages[1].changes.updated[0].after.media.aim[0].original.sha256`), b.manifest.uploadedAssets[0].sha256);
   await click('.history-toggle'); await waitFor(`document.querySelector('.package-list')`);
   await click('.package-list li:nth-child(2) button:first-child');
   await waitFor(`${storage}.packages[1].packageId === '${a.manifest.packageId}'`);
   await click('.history-toggle'); await waitFor(`document.querySelector('.detail-lead').textContent === 'Overlay A'`);
-  assert.equal(await imageDigest(), a.manifest.uploadedAssets[0].sha256);
+  assert.equal(await imageDigest(), await evaluate(`${storage}.packages[1].uploadedAssets[0].sha256`));
   console.log('PASS browser unconditional overlays, reorder, image isolation, Bilibili space navigation');
 
   await click('.editor-enter'); await waitFor(`document.querySelector('.instructions-editor')`);
   await instructions('Manual first save');
-  await evaluate(`(() => {const bytes=Uint8Array.from(atob('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aQ1sAAAAASUVORK5CYII='),c=>c.charCodeAt(0));const input=document.querySelector('.media-add input');const dt=new DataTransfer();dt.items.add(new File([bytes],'upload.png',{type:'image/png'}));input.files=dt.files;input.dispatchEvent(new Event('change',{bubbles:true}));})()`);
+  await click('.media-paste');
+  await evaluate(`(() => {const bytes=Uint8Array.from(atob('${a.imageBase64}'),c=>c.charCodeAt(0));const dt=new DataTransfer();dt.items.add(new File([bytes],'upload.png',{type:'image/png'}));document.querySelector('.media-paste').dispatchEvent(new ClipboardEvent('paste',{bubbles:true,clipboardData:dt}));})()`);
+  await waitFor(`!document.querySelector('.editor-save').disabled && document.querySelector('.media-item.is-pending')`);
   await click('.editor-save'); await waitFor(`${storage}.manual?.changes.updated[0].after.instructions === 'Manual first save' && document.querySelector('.editor-save').disabled`);
   const manualId = await evaluate(`${storage}.manual.packageId`);
   assert.equal(await evaluate(`${storage}.manual.author.toyOpenId`), 'test-private-id');
   assert.equal(await evaluate(`${storage}.manual.changes.updated[0].after.uploader.bilibiliUid`), '2003822', 'Editing keeps original uploader');
   assert.equal(await evaluate(`${storage}.manual.uploadedAssets.length`), 2);
+  assert(await evaluate(`${storage}.manual.uploadedAssets.every(asset=>asset.mimeType==='image/webp' && asset.key.endsWith('.webp'))`));
+  assert.equal(await evaluate(`Number(document.querySelector('.package-size progress').value)`), await evaluate(`${storage}.manual.uploadedAssets.reduce((sum,asset)=>sum+asset.size,0)`));
+  await evaluate(`document.querySelector('.media-add-actions').scrollIntoView({block:'center'})`);
+  await screenshot('webp-editor');
   await instructions('Unsaved throwaway');
-  await evaluate('window.confirm=()=>false'); await click('.editor-cancel');
+  await evaluate("window.confirm=()=>false; document.querySelector('.editor-cancel').click()");
+  await waitFor(`document.querySelector('.exit-edit-dialog')?.open`);
+  await click('.exit-edit-continue');
   assert(await evaluate(`!!document.querySelector('.instructions-editor')`));
   await evaluate('window.confirm=()=>true'); await click('.editor-cancel');
   await waitFor(`document.querySelector('.detail-lead')?.textContent === 'Manual first save'`);
@@ -173,19 +190,28 @@ try {
   assert.equal(await evaluate(`${storage}.token`), goodToken, 'Invalid imports do not mutate the library');
   await click('.history-toggle'); await waitFor(`!document.querySelector('.history-page')`);
   await click('.editor-enter'); await waitFor(`document.querySelector('.editor-new')`);
+  await click('.perspective-controls button:nth-child(2)');
   await click('.editor-new'); await waitFor(`document.querySelector('.new-lineup-dialog')`);
+  assert.equal(await evaluate(`document.querySelector('.new-lineup-dialog .form-grid select:nth-of-type(1)')?.value`), 'ascent');
+  assert.equal(await evaluate(`[...document.querySelectorAll('.new-lineup-dialog select')][1].value`), 'defense');
+  await click('.area-shortcuts button:nth-child(2)');
+  assert.equal(await evaluate(`document.querySelector('.new-lineup-dialog input[maxlength="40"]').value`), 'B点');
+  await evaluate(`(() => {const input=document.querySelector('.new-lineup-dialog input[maxlength="40"]');Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set.call(input,'自定义区域');input.dispatchEvent(new Event('input',{bubbles:true}));})()`);
   await evaluate(`(() => {const input=document.querySelector('.new-lineup-dialog input[maxlength="100"]');Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set.call(input,'SDK 新点位');input.dispatchEvent(new Event('input',{bubbles:true}));})()`);
   await click('.dialog-next'); await waitFor(`!document.querySelector('.new-lineup-dialog') && document.querySelector('.map-stage').getAttribute('aria-busy') === 'false'`);
-  await evaluate(`(() => {const canvas=document.querySelector('.map-canvas');const r=canvas.getBoundingClientRect();canvas.dispatchEvent(new PointerEvent('pointerdown',{bubbles:true,clientX:r.x+r.width/2,clientY:r.y+r.height/2,pointerId:1,pointerType:'mouse',button:0}));})()`);
+  await evaluate(`(() => {const canvas=document.querySelector('.map-canvas');const r=canvas.getBoundingClientRect();canvas.dispatchEvent(new PointerEvent('pointerdown',{bubbles:true,clientX:r.x+r.width*0.78,clientY:r.y+r.height/2,pointerId:1,pointerType:'mouse',button:0}));})()`);
   await waitFor(`document.querySelector('.detail-panel h2').textContent === 'SDK 新点位'`);
   const pin = await evaluate(`(() => {const r=document.querySelector('.lineup-pin.is-active').getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2}})()`);
   await send('Input.dispatchMouseEvent', { type: 'mousePressed', x: pin.x, y: pin.y, button: 'left', clickCount: 1 });
   for (let step = 1; step <= 4; step++) { await send('Input.dispatchMouseEvent', { type: 'mouseMoved', x: pin.x + 10 * step, y: pin.y, button: 'left', buttons: 1 }); await delay(25); }
   await send('Input.dispatchMouseEvent', { type: 'mouseReleased', x: pin.x + 40, y: pin.y, button: 'left', clickCount: 1 });
+  assert.equal(await evaluate(`window.getSelection().toString()`), '', 'Dragging right side must not select text');
+  assert(await evaluate(`(() => {const img=document.querySelector('.lineup-pin.is-active img');const event=new DragEvent('dragstart',{bubbles:true,cancelable:true});img.dispatchEvent(event);return event.defaultPrevented})()`), 'Native image dragging is suppressed');
   await click('.editor-save'); await waitFor(`${storage}.manual?.changes.added.length === 1 && document.querySelector('.editor-save').disabled`);
   const created = await evaluate(`${storage}.manual.changes.added[0]`);
-  assert(Math.hypot(created.target.x - 0.5, created.target.y - 0.5) > 0.04, `Dragging must preserve pointer capture across coordinate updates: ${JSON.stringify(created.target)}`);
+  assert(Math.hypot(created.target.x - 0.5, created.target.y - 0.78) > 0.04, `Dragging right-side pin must preserve pointer capture across coordinate updates: ${JSON.stringify(created.target)}`);
   assert.equal(created.uploader.name, 'Browser Tester');
+  assert.equal(created.side, 'defense'); assert.equal(created.area, '自定义区域');
   assert.equal(created.uploader.toyOpenId, 'test-private-id');
   assert(!('bilibiliUid' in created.uploader), 'SDK identities must never invent a UID');
   const createdPackageId = await evaluate(`${storage}.manual.packageId`);
@@ -194,13 +220,39 @@ try {
   assert.equal(await evaluate(`${storage}.manual.packageId`), createdPackageId);
   assert.equal(await evaluate(`${storage}.manual.changes.added[0].id`), created.id);
   assert.equal(await evaluate(`${storage}.manual.changes.updated.length`), 0);
-  await click('.editor-cancel'); await click('.history-toggle'); await waitFor(`document.querySelector('.local-edit-card')`);
+  await evaluate(`(() => {const input=document.querySelector('input[aria-label="点位名称"]');Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set.call(input,'改名后的点位');input.dispatchEvent(new Event('input',{bubbles:true})); const side=document.querySelector('select[aria-label="点位阵营"]');Object.getOwnPropertyDescriptor(HTMLSelectElement.prototype,'value').set.call(side,'attack');side.dispatchEvent(new Event('change',{bubbles:true}));})()`);
+  await click('.editor-save'); await waitFor(`${storage}.manual.revision === 3 && document.querySelector('.editor-save').disabled`);
+  assert.equal(await evaluate(`${storage}.manual.changes.added[0].title`), '改名后的点位');
+  assert.equal(await evaluate(`${storage}.manual.changes.added[0].side`), 'attack');
+  await click('.lineup-delete'); await click('.editor-save'); await waitFor(`${storage}.manual === null && document.querySelector('.editor-save').disabled`);
+  await click('.map-card:first-child');
+  await click('.side-filter button:last-child');
+  await click('.lineup-delete'); await click('.editor-save');
+  await waitFor(`${storage}.manual?.changes.deleted?.length === 1 && document.querySelector('.editor-save').disabled`);
+  const deletedId = await evaluate(`${storage}.manual.changes.deleted[0].id`);
+  assert.equal(await evaluate(`${storage}.manual.version`), 5);
+  assert.equal(await evaluate(`${storage}.manual.uploadedAssets.length`), 0);
+  await click('.editor-cancel'); await navigate();
+  assert(await evaluate(`!document.querySelector('.detail-panel h2').textContent.includes('改名后的点位')`));
+  assert.equal(await evaluate(`(async()=>{const {applyLayers}=await import('/src/package-model.mjs');const c=await(await fetch('/src/data/content.json')).json();const l=${storage};return applyLayers(c.lineups,l.packages,l.manual).lineups.some(item=>item.id==='${deletedId}')})()`), false);
+  await click('.history-toggle'); await waitFor(`document.querySelector('.local-edit-card')`);
   await click('.local-edit-card button:last-child'); await waitFor(`${storage}.manual === null`);
   console.log('PASS denied SDK authorization, authenticated new uploader, stable new lineup/package IDs, invalid ZIP atomic rejection');
   await send('Emulation.setDeviceMetricsOverride', { width: 390, height: 844, deviceScaleFactor: 1, mobile: true });
   await delay(250);
   assert(await evaluate('document.documentElement.scrollWidth <= innerWidth'), 'Mobile history must not overflow');
   await click('.history-toggle'); await waitFor(`document.querySelector('.detail-lead').textContent === 'Overlay B'`);
+  await evaluate(`localStorage.removeItem('valo-lineup:v4:/')`);
+  await send('Emulation.setDeviceMetricsOverride', { width: 1440, height: 900, deviceScaleFactor: 1, mobile: false });
+  await navigate();
+  // Seed the exact storage shape used by the previous release, including original PNG blobs.
+  await evaluate(`(async()=>{const lib=await import('/src/local-library.ts');const {readPackage}=await import('/src/package-model.mjs');const bytes=Uint8Array.from(atob('${a.base64}'),c=>c.charCodeAt(0));const data=await readPackage(bytes);const old=lib.readLibrary();await lib.persistLibrary(old,{...old,packages:[data.manifest],manual:null},data)})()`);
+  await navigate();
+  assert.equal(await evaluate(`${storage}.packages[0].uploadedAssets[0].mimeType`), 'image/webp', 'Previous release localStorage/IndexedDB data migrates on startup');
+  assert.equal(await evaluate(`${storage}.packages[0].packageId`), a.manifest.packageId);
+  assert.equal(await evaluate(`${storage}.packages[0].revision`), 1);
+  assert.equal(await evaluate(`document.querySelector('.detail-lead').textContent`), 'Overlay A');
+  assert(await evaluate(`document.querySelector('.media-preview-button img').src.startsWith('blob:')`));
   await evaluate(`localStorage.removeItem('valo-lineup:v4:/')`);
   assert.equal(exceptions.length, 0, JSON.stringify(exceptions));
   console.log('PASS quota rollback, cumulative export, package removal/reimport, local edit priority, mobile history');

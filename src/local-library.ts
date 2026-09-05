@@ -1,4 +1,5 @@
-import { manifestSchema, type Manifest, type PackageData, type Asset } from './package-model.mjs';
+import { compressPackage, manifestSchema, type Manifest, type PackageData, type Asset } from './package-model.mjs';
+import { encodeWebp } from './image-compression';
 
 export const STORAGE_KEY = `valo-lineup:v4:${new URL(import.meta.env.BASE_URL, location.href).pathname}`;
 export type LocalLibrary = { version: 1; token: string; packages: Manifest[]; manual: Manifest | null };
@@ -35,6 +36,29 @@ export async function readImage(asset: Asset): Promise<Blob> {
   });
 }
 function assetsOf(library: LocalLibrary) { return [...library.packages, ...(library.manual ? [library.manual] : [])].flatMap((item) => item.uploadedAssets); }
+const migrations = new Map<string, Promise<LocalLibrary>>();
+export async function migrateLegacyImages(library: LocalLibrary): Promise<LocalLibrary> {
+  if (!assetsOf(library).some((asset) => asset.mimeType !== 'image/webp')) return library;
+  const pending = migrations.get(library.token);
+  if (pending) return pending;
+  const work = convertLegacyImages(library);
+  migrations.set(library.token, work);
+  try { return await work; } finally { migrations.delete(library.token); }
+}
+async function convertLegacyImages(library: LocalLibrary) {
+  const incoming = new Map<string, Blob>();
+  const convert = async (manifest: Manifest) => {
+    const blobs = new Map<string, Blob>();
+    for (const asset of manifest.uploadedAssets) blobs.set(asset.sha256, await readImage(asset));
+    const data = await compressPackage({ manifest, blobs }, encodeWebp);
+    data.blobs.forEach((blob, key) => incoming.set(key, blob));
+    return data.manifest;
+  };
+  const packages: Manifest[] = [];
+  for (const manifest of library.packages) packages.push(await convert(manifest));
+  const manual = library.manual ? await convert(library.manual) : null;
+  return persistLibrary(library, { ...library, packages, manual }, { manifest: manual ?? packages[0], blobs: incoming });
+}
 export async function libraryUrls(library: LocalLibrary, incoming = new Map<string, Blob>()) {
   const result = new Map<string, string>();
   try {

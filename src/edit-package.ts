@@ -1,5 +1,6 @@
 import JSZip from 'jszip';
-import { allMedia, changedLineups, manifestSchema, same, sha256, verifyImage, type Lineup, type Manifest, type Uploader, type PackageData, type MediaKind } from './package-model.mjs';
+import { allMedia, changedLineups, collectChanges, compressPackage, manifestSchema, sha256, verifyImage, type Lineup, type Manifest, type Uploader, type PackageData, type MediaKind } from './package-model.mjs';
+import { encodeWebp } from './image-compression';
 
 export type PackageUpload = { key: string; lineupId: string; kind: MediaKind; alt: string; file: File };
 
@@ -10,24 +11,12 @@ export async function buildManualPackage(options: {
   image: (lineupId: string, key: string) => Promise<Blob>;
 }): Promise<PackageData> {
   const { previous, packageId, author, startLineups, lineups, image } = options;
-  const added = new Map(previous?.changes.added.map((record) => [record.id, record]) ?? []);
-  const updated = new Map(previous?.changes.updated.map((change) => [change.id, change]) ?? []);
-  const start = new Map(startLineups.map((record) => [record.id, record]));
-  for (const record of lineups) {
-    const before = start.get(record.id);
-    if (same(before, record)) continue;
-    if (added.has(record.id) || !before) added.set(record.id, record);
-    else {
-      const original = updated.get(record.id)?.before ?? before;
-      if (same(original, record)) updated.delete(record.id);
-      else updated.set(record.id, { id: record.id, before: original, after: record });
-    }
-  }
+  const changes = collectChanges(previous, startLineups, lineups);
   const now = new Date().toISOString();
   const manifest: Manifest = {
-    format: 'valo-lineup-edit-package', version: 4, packageId,
+    format: 'valo-lineup-edit-package', version: changes.deleted?.length ? 5 : 4, packageId,
     revision: (previous?.revision ?? 0) + 1, createdAt: previous?.createdAt ?? now, updatedAt: now, author,
-    changes: { added: [...added.values()], updated: [...updated.values()] }, uploadedAssets: [],
+    changes, uploadedAssets: [],
   };
   const blobs = new Map<string, Blob>();
   for (const item of allMedia(changedLineups(manifest))) {
@@ -37,7 +26,7 @@ export async function buildManualPackage(options: {
     verifyImage(bytes, asset);
     manifest.uploadedAssets.push(asset); blobs.set(asset.sha256, blob);
   }
-  return { manifest: manifestSchema.parse(manifest), blobs };
+  return compressPackage({ manifest: manifestSchema.parse(manifest), blobs }, encodeWebp);
 }
 
 export async function downloadEditPackage({ manifest, blobs }: PackageData) {
@@ -55,5 +44,5 @@ export async function downloadEditPackage({ manifest, blobs }: PackageData) {
   anchor.download = `valo-lineup-edits-${manifest.packageId}-r${manifest.revision}.zip`;
   document.body.append(anchor); anchor.click(); anchor.remove();
   window.setTimeout(() => URL.revokeObjectURL(href), 1000);
-  return { added: manifest.changes.added.length, updated: manifest.changes.updated.length, uploads: manifest.uploadedAssets.length };
+  return { added: manifest.changes.added.length, updated: manifest.changes.updated.length, deleted: manifest.changes.deleted?.length ?? 0, uploads: manifest.uploadedAssets.length };
 }

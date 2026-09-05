@@ -3,7 +3,8 @@ import { constants } from 'node:fs';
 import { copyFile, mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
-import { readPackage, same, allMedia, validateReferences } from '../src/package-model.mjs';
+import { readPackage, sameLineup, compressPackage, allMedia, validateReferences } from '../src/package-model.mjs';
+import { encodeWebp } from './webp.mjs';
 import { buildContent, readSourceContent, stringifyLineups, validateContent, writeTextAtomic } from './content-model.mjs';
 
 const packageArgument = process.argv.slice(2).find((arg) => arg !== '--');
@@ -14,10 +15,11 @@ if (!packageArgument || ['-h', '--help'].includes(packageArgument)) {
 const root = process.cwd();
 const lineupsPath = path.join(root, 'content', 'lineups.yaml');
 const historyPath = path.join(root, 'content', 'history.json');
-const { manifest, blobs } = await readPackage(await readFile(path.resolve(packageArgument)));
+const { manifest, blobs } = await compressPackage(await readPackage(await readFile(path.resolve(packageArgument))), encodeWebp);
 const current = await validateContent(await readSourceContent(root), { root, verifyAssets: true });
 validateReferences(manifest, current.maps, current.agents);
 const currentById = new Map(current.lineups.map((lineup) => [lineup.id, lineup]));
+const same = (left, right) => sameLineup(left, right, current.imageMigrations);
 const accepted = new Map();
 const alreadyApplied = [];
 const conflicts = [];
@@ -34,6 +36,12 @@ for (const update of manifest.changes.updated) {
   else if (same(existing, update.before)) accepted.set(update.id, { kind: 'updated', record: update.after });
   else conflicts.push({ id: update.id, title: update.after.title, reason: '仓库中的点位已被其他编辑修改' });
 }
+for (const deletion of manifest.changes.deleted ?? []) {
+  const existing = currentById.get(deletion.id);
+  if (!existing) alreadyApplied.push(deletion.id);
+  else if (same(existing, deletion.before)) accepted.set(deletion.id, { kind: 'deleted', record: deletion.before });
+  else conflicts.push({ id: deletion.id, title: deletion.before.title, reason: '待删除点位已被其他编辑修改' });
+}
 
 // Self-contained packages may include existing images, but may never overwrite different repository bytes.
 const newAssets = new Set();
@@ -49,7 +57,7 @@ for (const asset of manifest.uploadedAssets) {
   } catch (error) { if (error.code !== 'ENOENT') throw error; newAssets.add(asset.key); }
 }
 function candidateLineups() {
-  const merged = current.lineups.map((lineup) => accepted.get(lineup.id)?.record ?? lineup);
+  const merged = current.lineups.filter((lineup) => accepted.get(lineup.id)?.kind !== 'deleted').map((lineup) => accepted.get(lineup.id)?.record ?? lineup);
   for (const operation of accepted.values()) if (operation.kind === 'added') merged.push(operation.record);
   return merged;
 }
@@ -71,10 +79,11 @@ for (;;) {
 }
 const mergedLineups = candidateLineups();
 await validateContent({ ...current, lineups: mergedLineups }, { root, verifyAssets: false });
-const requiredKeys = new Set(allMedia([...accepted.values()].map((operation) => operation.record)).map((item) => item.key));
+const requiredKeys = new Set(allMedia([...accepted.values()].filter((operation) => operation.kind !== 'deleted').map((operation) => operation.record)).map((item) => item.key));
 const requiredAssets = manifest.uploadedAssets.filter((asset) => newAssets.has(asset.key) && requiredKeys.has(asset.key));
 const addedCount = [...accepted.values()].filter((operation) => operation.kind === 'added').length;
-const updatedCount = accepted.size - addedCount;
+const deletedCount = [...accepted.values()].filter((operation) => operation.kind === 'deleted').length;
+const updatedCount = accepted.size - addedCount - deletedCount;
 
 if (accepted.size) {
   const stagingRoot = await mkdtemp(path.join(os.tmpdir(), 'valo-lineup-import-'));
@@ -103,7 +112,7 @@ if (accepted.size) {
       id: randomUUID(), packageId: manifest.packageId, revision: manifest.revision,
       appliedAt: new Date().toISOString(), author: manifest.author,
       mapIds: [...new Set(records.map((record) => record.mapId))], lineupIds: records.map((record) => record.id),
-      added: addedCount, updated: updatedCount,
+      added: addedCount, updated: updatedCount, deleted: deletedCount,
     }];
     await writeTextAtomic(historyPath, `${JSON.stringify(history, null, 2)}\n`);
     historyWritten = true;
@@ -120,6 +129,7 @@ if (accepted.size) {
   } finally { await rm(stagingRoot, { recursive: true, force: true }); }
 }
 console.log(`Imported ${addedCount} new and ${updatedCount} updated lineups with ${requiredAssets.length} images.`);
+if (deletedCount) console.log(`Deleted ${deletedCount} lineups.`);
 if (alreadyApplied.length) console.log(`Already applied: ${alreadyApplied.join(', ')}`);
 if (conflicts.length) {
   console.warn(`Skipped ${conflicts.length} conflicting lineups:`);

@@ -3,8 +3,8 @@
     {
       "id": "ascent",
       "name": "亚海悬城",
-      "image": "maps/ascent.png",
-      "imageHiRes": "maps/hires/ascent.png",
+      "image": "maps/ascent-d4dd735a655e54fe.webp",
+      "imageHiRes": "maps/hires/ascent-ee3b5bf57eee4409.webp",
       "width": 1024,
       "height": 1024,
       "sites": [
@@ -55,8 +55,8 @@
     {
       "id": "bind",
       "name": "源工重镇",
-      "image": "maps/bind.png",
-      "imageHiRes": "maps/hires/bind.png",
+      "image": "maps/bind-0c3ebd8cc674f916.webp",
+      "imageHiRes": "maps/hires/bind-2736411cf24cc308.webp",
       "width": 1024,
       "height": 1024,
       "sites": [
@@ -107,8 +107,8 @@
     {
       "id": "haven",
       "name": "隐世修所",
-      "image": "maps/haven.png",
-      "imageHiRes": "maps/hires/haven.png",
+      "image": "maps/haven-44ae675a76b2ca14.webp",
+      "imageHiRes": "maps/hires/haven-382d80f193a631f2.webp",
       "width": 1024,
       "height": 1024,
       "sites": [
@@ -169,8 +169,8 @@
     {
       "id": "split",
       "name": "霓虹町",
-      "image": "maps/split.png",
-      "imageHiRes": "maps/hires/split.png",
+      "image": "maps/split-33cbbf10abeb7efb.webp",
+      "imageHiRes": "maps/hires/split-7873efcc5991a551.webp",
       "width": 1024,
       "height": 1024,
       "sites": [
@@ -221,8 +221,8 @@
     {
       "id": "icebox",
       "name": "森寒冬港",
-      "image": "maps/icebox.png",
-      "imageHiRes": "maps/hires/icebox.png",
+      "image": "maps/icebox-147ccdf024c99309.webp",
+      "imageHiRes": "maps/hires/icebox-0cf89da11f930c95.webp",
       "width": 1024,
       "height": 1024,
       "sites": [
@@ -273,8 +273,8 @@
     {
       "id": "breeze",
       "name": "微风岛屿",
-      "image": "maps/breeze.png",
-      "imageHiRes": "maps/hires/breeze.png",
+      "image": "maps/breeze-8c793d454dd317c6.webp",
+      "imageHiRes": "maps/hires/breeze-d7184e574c47f415.webp",
       "width": 1024,
       "height": 1024,
       "sites": [
@@ -325,8 +325,8 @@
     {
       "id": "fracture",
       "name": "裂变峡谷",
-      "image": "maps/fracture.png",
-      "imageHiRes": "maps/hires/fracture.png",
+      "image": "maps/fracture-96aff21ef33867dd.webp",
+      "imageHiRes": "maps/hires/fracture-ef9773edd84d06bc.webp",
       "width": 1024,
       "height": 1024,
       "sites": [
@@ -377,8 +377,8 @@
     {
       "id": "pearl",
       "name": "深海明珠",
-      "image": "maps/pearl.png",
-      "imageHiRes": "maps/hires/pearl.png",
+      "image": "maps/pearl-711750095f465baa.webp",
+      "imageHiRes": "maps/hires/pearl-1deebffd1e514631.webp",
       "width": 1024,
       "height": 1024,
       "sites": [
@@ -429,8 +429,8 @@
     {
       "id": "lotus",
       "name": "莲华古城",
-      "image": "maps/lotus.png",
-      "imageHiRes": "maps/hires/lotus.png",
+      "image": "maps/lotus-13d625660b94de78.webp",
+      "imageHiRes": "maps/hires/lotus-f3a1ef3e3b89a022.webp",
       "width": 1024,
       "height": 1024,
       "sites": [
@@ -491,8 +491,8 @@
     {
       "id": "sunset",
       "name": "日落之城",
-      "image": "maps/sunset.png",
-      "imageHiRes": "maps/hires/sunset.png",
+      "image": "maps/sunset-5ababed69c3fd8f1.webp",
+      "imageHiRes": "maps/hires/sunset-4919f96bf40e2223.webp",
       "width": 1024,
       "height": 1024,
       "sites": [
@@ -543,8 +543,8 @@
     {
       "id": "abyss",
       "name": "幽邃地窟",
-      "image": "maps/abyss.png",
-      "imageHiRes": "maps/hires/abyss.png",
+      "image": "maps/abyss-a29023d3ed5d8ee2.webp",
+      "imageHiRes": "maps/hires/abyss-93ad7e8d54861f7b.webp",
       "width": 1024,
       "height": 1024,
       "sites": [
@@ -595,8 +595,8 @@
     {
       "id": "corrode",
       "name": "盐海矿镇",
-      "image": "maps/corrode.png",
-      "imageHiRes": "maps/hires/corrode.png",
+      "image": "maps/corrode-66907e238171173c.webp",
+      "imageHiRes": "maps/hires/corrode-1fd596b91c4a8190.webp",
       "width": 1024,
       "height": 1024,
       "sites": [
@@ -647,8 +647,8 @@
     {
       "id": "summit",
       "name": "天枢云阙",
-      "image": "maps/summit.png",
-      "imageHiRes": "maps/hires/summit.png",
+      "image": "maps/summit-2bd974227c47841a.webp",
+      "imageHiRes": "maps/hires/summit-adb0eafc80be16f2.webp",
       "width": 1024,
       "height": 1024,
       "sites": [
@@ -1506,27 +1506,44 @@
       "title": "A包点全扫，射到第二个高处炮管上",
       "side": "attack",
       "area": "A点",
-      "videoBvid": "",
+      "videoBvid": "BV1dDLV6zE15",
       "target": {
         "groupId": "a-site-scan",
-        "x": 0.29,
-        "y": 0.21333333333333335
+        "x": 0.29186,
+        "y": 0.2166
       },
       "instructions": "两格蓄力无反弹",
       "media": {
         "stance": [
           {
-            "key": "lineups/ascent-sova-01/stance-01.png",
-            "alt": "A包点全扫，射到第二个高处炮管上站位图 1"
+            "key": "lineups/ascent-sova-01/stance-01-37db7c34d5327278.webp",
+            "alt": "A包点全扫，射到第二个高处炮管上站位图 1",
+            "original": {
+              "key": "lineups/ascent-sova-01/stance-01.png",
+              "sha256": "76441feef5f111cd9aabfe1389a12286da695e6f34af6db1ffaea06d16f903b3"
+            }
           }
         ],
         "aim": [
           {
-            "key": "lineups/ascent-sova-01/aim-01.png",
-            "alt": "A包点全扫，射到第二个高处炮管上瞄点图 1"
+            "key": "lineups/ascent-sova-01/aim-01-6c44cd2738a7c63e.webp",
+            "alt": "A包点全扫，射到第二个高处炮管上瞄点图 1",
+            "original": {
+              "key": "lineups/ascent-sova-01/aim-01.png",
+              "sha256": "2293e06a010d560a242c8bca34a1b021411ea11549eec3651056043a5867b2f6"
+            }
           }
         ],
-        "effect": []
+        "effect": [
+          {
+            "key": "lineups/ascent-sova-01/effect-b9eed742-9e9e-49b5-a450-91d8560246d7-9beae1a744a30792.webp",
+            "alt": "A包点全扫，射到第二个高处炮管上道具效果图 1",
+            "original": {
+              "key": "lineups/ascent-sova-01/effect-b9eed742-9e9e-49b5-a450-91d8560246d7.png",
+              "sha256": "f4eb0c6f89b2d7de130be8445f8102df627001a9ae8485f0269f5b28b8b1c7e3"
+            }
+          }
+        ]
       }
     },
     {
@@ -1542,27 +1559,44 @@
       "title": "A包点全扫，射到第二个高处炮管上",
       "side": "attack",
       "area": "A点",
-      "videoBvid": "",
+      "videoBvid": "BV1dDLV6zE15",
       "target": {
         "groupId": "a-site-scan",
-        "x": 0.29,
-        "y": 0.21333333333333335
+        "x": 0.29186,
+        "y": 0.2166
       },
       "instructions": "一次反弹满格蓄力",
       "media": {
         "stance": [
           {
-            "key": "lineups/ascent-sova-02/stance-01.png",
-            "alt": "A包点全扫，射到第二个高处炮管上站位图 1"
+            "key": "lineups/ascent-sova-02/stance-01-1c3559ea0640c7c6.webp",
+            "alt": "A包点全扫，射到第二个高处炮管上站位图 1",
+            "original": {
+              "key": "lineups/ascent-sova-02/stance-01.png",
+              "sha256": "db3312cbe1e842029d5c00349827878468740a25639844ba5e6fe4cff54582dc"
+            }
           }
         ],
         "aim": [
           {
-            "key": "lineups/ascent-sova-02/aim-01.png",
-            "alt": "A包点全扫，射到第二个高处炮管上瞄点图 1"
+            "key": "lineups/ascent-sova-02/aim-01-2886f9c55ea3cd8c.webp",
+            "alt": "A包点全扫，射到第二个高处炮管上瞄点图 1",
+            "original": {
+              "key": "lineups/ascent-sova-02/aim-01.png",
+              "sha256": "3c68be36c6e860071b1f53db945cb63b2404c42b23ef75e58ee4ba6776329f78"
+            }
           }
         ],
-        "effect": []
+        "effect": [
+          {
+            "key": "lineups/ascent-sova-02/effect-bd6284a3-eb36-4bcb-be30-a14c3b9ded00-9beae1a744a30792.webp",
+            "alt": "A包点全扫，射到第二个高处炮管上道具效果图 1",
+            "original": {
+              "key": "lineups/ascent-sova-02/effect-bd6284a3-eb36-4bcb-be30-a14c3b9ded00.png",
+              "sha256": "f4eb0c6f89b2d7de130be8445f8102df627001a9ae8485f0269f5b28b8b1c7e3"
+            }
+          }
+        ]
       }
     },
     {
@@ -1578,27 +1612,44 @@
       "title": "A包点快攻，射到第二个高处炮管上",
       "side": "attack",
       "area": "A点",
-      "videoBvid": "",
+      "videoBvid": "BV1dDLV6zE15",
       "target": {
         "groupId": "a-site-scan",
-        "x": 0.29,
-        "y": 0.21333333333333335
+        "x": 0.29186,
+        "y": 0.2166
       },
       "instructions": "建筑物边缘转角，一格蓄力",
       "media": {
         "stance": [
           {
-            "key": "lineups/ascent-sova-03/stance-01.png",
-            "alt": "A包点快攻，射到第二个高处炮管上站位图 1"
+            "key": "lineups/ascent-sova-03/stance-01-4a8a74de25da09ad.webp",
+            "alt": "A包点快攻，射到第二个高处炮管上站位图 1",
+            "original": {
+              "key": "lineups/ascent-sova-03/stance-01.png",
+              "sha256": "eb1a31e398886d07c337466e76902030b7729c8aa8c057d95f0df8e888d32e70"
+            }
           }
         ],
         "aim": [
           {
-            "key": "lineups/ascent-sova-03/aim-01.png",
-            "alt": "A包点快攻，射到第二个高处炮管上瞄点图 1"
+            "key": "lineups/ascent-sova-03/aim-01-e37f83d71e37f97f.webp",
+            "alt": "A包点快攻，射到第二个高处炮管上瞄点图 1",
+            "original": {
+              "key": "lineups/ascent-sova-03/aim-01.png",
+              "sha256": "584f0ef5a30f27578d4b0399d3bc8ba5c0d5131cc31d7b3e57d4c1f22c3bf167"
+            }
           }
         ],
-        "effect": []
+        "effect": [
+          {
+            "key": "lineups/ascent-sova-03/effect-6073d9fb-3a8a-4b2c-b69d-2dca2bb50d66-9beae1a744a30792.webp",
+            "alt": "A包点快攻，射到第二个高处炮管上道具效果图 1",
+            "original": {
+              "key": "lineups/ascent-sova-03/effect-6073d9fb-3a8a-4b2c-b69d-2dca2bb50d66.png",
+              "sha256": "f4eb0c6f89b2d7de130be8445f8102df627001a9ae8485f0269f5b28b8b1c7e3"
+            }
+          }
+        ]
       }
     },
     {
@@ -1614,22 +1665,35 @@
       "title": "A包快攻，第一个高处炮管",
       "side": "attack",
       "area": "A点",
-      "videoBvid": "",
+      "videoBvid": "BV1dDLV6zE15",
       "target": {
         "groupId": "a-site-fast",
-        "x": 0.28072,
-        "y": 0.209
+        "x": 0.32099,
+        "y": 0.21682
       },
-      "instructions": "一格蓄力",
+      "instructions": "顶住木箱，一格蓄力",
       "media": {
         "stance": [],
         "aim": [
           {
-            "key": "lineups/ascent-sova-04/aim-01.png",
-            "alt": "A包快攻，第一个高处炮管瞄点图 1"
+            "key": "lineups/ascent-sova-04/aim-01-89e2e6696bafaa92.webp",
+            "alt": "A包快攻，第一个高处炮管瞄点图 1",
+            "original": {
+              "key": "lineups/ascent-sova-04/aim-01.png",
+              "sha256": "192983b2788ee84a4a85e4de1c15cdf2c4c6a6a90c88c3cd4ca99942999016d0"
+            }
           }
         ],
-        "effect": []
+        "effect": [
+          {
+            "key": "lineups/ascent-sova-04/effect-86b742a6-f72c-4efa-9299-010057997674-7dfb0168a8d41152.webp",
+            "alt": "A包快攻，第一个高处炮管道具效果图 1",
+            "original": {
+              "key": "lineups/ascent-sova-04/effect-86b742a6-f72c-4efa-9299-010057997674.png",
+              "sha256": "8bf6cf6dc9338e299bdc2972b3c570332b017d09a85c09fe92c10dfb288b50ea"
+            }
+          }
+        ]
       }
     },
     {
@@ -1648,24 +1712,41 @@
       "videoBvid": "",
       "target": {
         "groupId": "a-site-upper",
-        "x": 0.28761,
-        "y": 0.10734
+        "x": 0.25584,
+        "y": 0.08337
       },
       "instructions": "天空图形尖端，一格蓄力",
       "media": {
         "stance": [
           {
-            "key": "lineups/ascent-sova-05/stance-01.png",
-            "alt": "A包快攻，二楼掩体上方的墙面上站位图 1"
+            "key": "lineups/ascent-sova-05/stance-01-369606672dad12e9.webp",
+            "alt": "A包快攻，二楼掩体上方的墙面上站位图 1",
+            "original": {
+              "key": "lineups/ascent-sova-05/stance-01.png",
+              "sha256": "b7c5029378a0bce2c8c77b635dea9b7d198266e1a9f77267468939e4a76f16cd"
+            }
           }
         ],
         "aim": [
           {
-            "key": "lineups/ascent-sova-05/aim-01.png",
-            "alt": "A包快攻，二楼掩体上方的墙面上瞄点图 1"
+            "key": "lineups/ascent-sova-05/aim-01-d23b3b4d189c5fa5.webp",
+            "alt": "A包快攻，二楼掩体上方的墙面上瞄点图 1",
+            "original": {
+              "key": "lineups/ascent-sova-05/aim-01.png",
+              "sha256": "88c8e8fbfc937b8b201765d144089174a1dfdbfa6751750659dbfeb6f98ca131"
+            }
           }
         ],
-        "effect": []
+        "effect": [
+          {
+            "key": "lineups/ascent-sova-05/effect-77416093-9cbd-4083-b8d9-fb1a16642c09-88c05353ddc4478b.webp",
+            "alt": "A包快攻，二楼掩体上方的墙面上道具效果图 1",
+            "original": {
+              "key": "lineups/ascent-sova-05/effect-77416093-9cbd-4083-b8d9-fb1a16642c09.png",
+              "sha256": "8fb3edd3df646320fd8fedd1c226457dbbd654c63b3e3b88baac06ba88e1ee42"
+            }
+          }
+        ]
       }
     },
     {
@@ -1681,27 +1762,44 @@
       "title": "中路屋檐",
       "side": "attack",
       "area": "中路",
-      "videoBvid": "",
+      "videoBvid": "BV1dDLV6zE15",
       "target": {
         "groupId": "mid-eaves",
-        "x": 0.49,
-        "y": 0.54
+        "x": 0.43889,
+        "y": 0.43387
       },
       "instructions": "一次反弹满格蓄力，中路右侧死角可以藏人",
       "media": {
         "stance": [
           {
-            "key": "lineups/ascent-sova-06/stance-01.png",
-            "alt": "中路屋檐站位图 1"
+            "key": "lineups/ascent-sova-06/stance-01-4464d7646c3a299a.webp",
+            "alt": "中路屋檐站位图 1",
+            "original": {
+              "key": "lineups/ascent-sova-06/stance-01.png",
+              "sha256": "0ce499287fd9db6789f8d2e49dda9f32f41103bec75f9f76dcb3f82281a4616b"
+            }
           }
         ],
         "aim": [
           {
-            "key": "lineups/ascent-sova-06/aim-01.png",
-            "alt": "中路屋檐瞄点图 1"
+            "key": "lineups/ascent-sova-06/aim-01-d108071afd31f305.webp",
+            "alt": "中路屋檐瞄点图 1",
+            "original": {
+              "key": "lineups/ascent-sova-06/aim-01.png",
+              "sha256": "faa7c89e04b89c80502e0d2125092f866e8d3c74053c48518dbe754404cb2804"
+            }
           }
         ],
-        "effect": []
+        "effect": [
+          {
+            "key": "lineups/ascent-sova-06/effect-91c38ab9-a6ce-4fcb-b64d-0400047daa8a-00e66fb6d264fd0d.webp",
+            "alt": "中路屋檐道具效果图 1",
+            "original": {
+              "key": "lineups/ascent-sova-06/effect-91c38ab9-a6ce-4fcb-b64d-0400047daa8a.png",
+              "sha256": "b6577f780dca4592195f1a18073992564b57f4c706bc82834dad77c7addadf51"
+            }
+          }
+        ]
       }
     },
     {
@@ -1717,27 +1815,44 @@
       "title": "射到中路拱门内侧",
       "side": "attack",
       "area": "中路",
-      "videoBvid": "",
+      "videoBvid": "BV1dDLV6zE15",
       "target": {
         "groupId": "mid-arch",
-        "x": 0.5,
-        "y": 0.49
+        "x": 0.42571,
+        "y": 0.49514
       },
       "instructions": "L型电线下方，两次反弹满格蓄力",
       "media": {
         "stance": [
           {
-            "key": "lineups/ascent-sova-07/stance-01.png",
-            "alt": "射到中路拱门内侧站位图 1"
+            "key": "lineups/ascent-sova-07/stance-01-a497d83bfabfbfe9.webp",
+            "alt": "射到中路拱门内侧站位图 1",
+            "original": {
+              "key": "lineups/ascent-sova-07/stance-01.png",
+              "sha256": "825bc504c9dae01a79a90fd0a3d369fd7b070a8c15ba30aad1d732b2e5d9a783"
+            }
           }
         ],
         "aim": [
           {
-            "key": "lineups/ascent-sova-07/aim-01.png",
-            "alt": "射到中路拱门内侧瞄点图 1"
+            "key": "lineups/ascent-sova-07/aim-01-90607ca0b41a2fb9.webp",
+            "alt": "射到中路拱门内侧瞄点图 1",
+            "original": {
+              "key": "lineups/ascent-sova-07/aim-01.png",
+              "sha256": "546a71f549485cfcdf39e38459ccf6ea597ed80088f8aa8250a8ea5842873ea0"
+            }
           }
         ],
-        "effect": []
+        "effect": [
+          {
+            "key": "lineups/ascent-sova-07/effect-dd6edfa0-adc0-462a-9b21-760fed72c0a4-7b888f7076dfdaa1.webp",
+            "alt": "射到中路拱门内侧道具效果图 1",
+            "original": {
+              "key": "lineups/ascent-sova-07/effect-dd6edfa0-adc0-462a-9b21-760fed72c0a4.png",
+              "sha256": "574f714b2c2b001c77b6a7400b47ff65346fd2fc66f7c624a6f3c87a6217c888"
+            }
+          }
+        ]
       }
     },
     {
@@ -1753,27 +1868,44 @@
       "title": "拱门内墙角",
       "side": "attack",
       "area": "中路",
-      "videoBvid": "",
+      "videoBvid": "BV1dDLV6zE15",
       "target": {
         "groupId": "mid-arch-inner",
-        "x": 0.535,
-        "y": 0.5
+        "x": 0.3717,
+        "y": 0.47114
       },
       "instructions": "路灯下方，一次反弹满格蓄力",
       "media": {
         "stance": [
           {
-            "key": "lineups/ascent-sova-08/stance-01.png",
-            "alt": "拱门内墙角站位图 1"
+            "key": "lineups/ascent-sova-08/stance-01-4787bc461e3a711a.webp",
+            "alt": "拱门内墙角站位图 1",
+            "original": {
+              "key": "lineups/ascent-sova-08/stance-01.png",
+              "sha256": "8b89ef2a420b8d4bd316fb3992ac5df2ffc6f9f0535e3fc61838a62e998cf07e"
+            }
           }
         ],
         "aim": [
           {
-            "key": "lineups/ascent-sova-08/aim-01.png",
-            "alt": "拱门内墙角瞄点图 1"
+            "key": "lineups/ascent-sova-08/aim-01-e02a5f4ab20f212d.webp",
+            "alt": "拱门内墙角瞄点图 1",
+            "original": {
+              "key": "lineups/ascent-sova-08/aim-01.png",
+              "sha256": "38f511fa2236bd39993673684b5f675121f83925851bdaf4b74b9b686beabe14"
+            }
           }
         ],
-        "effect": []
+        "effect": [
+          {
+            "key": "lineups/ascent-sova-08/effect-9041f835-1d33-4e67-a117-af01f86571fa-b3a2f6c46d8a10f8.webp",
+            "alt": "拱门内墙角道具效果图 1",
+            "original": {
+              "key": "lineups/ascent-sova-08/effect-9041f835-1d33-4e67-a117-af01f86571fa.png",
+              "sha256": "bb0e02ab9f493adeccd851ef37eb6fa30a0a5c51161858e4bec46957ae0e5b95"
+            }
+          }
+        ]
       }
     },
     {
@@ -1789,22 +1921,35 @@
       "title": "开大箭",
       "side": "attack",
       "area": "中路",
-      "videoBvid": "",
+      "videoBvid": "BV1dDLV6zE15",
       "target": {
         "groupId": "mid-ult-setup",
-        "x": 0.48,
-        "y": 0.5449999999999999
+        "x": 0.29303,
+        "y": 0.51981
       },
       "instructions": "背靠墙，满格蓄力",
       "media": {
         "stance": [],
         "aim": [
           {
-            "key": "lineups/ascent-sova-09/aim-01.png",
-            "alt": "开大箭瞄点图 1"
+            "key": "lineups/ascent-sova-09/aim-01-b3375afdfaddaf73.webp",
+            "alt": "开大箭瞄点图 1",
+            "original": {
+              "key": "lineups/ascent-sova-09/aim-01.png",
+              "sha256": "8637fa4725d4bbe854923d665f412bb60c6fff8352c266867b0bd3ce91c79c39"
+            }
           }
         ],
-        "effect": []
+        "effect": [
+          {
+            "key": "lineups/ascent-sova-09/effect-9a73a6d1-f21a-43d3-8b89-c2f060b6bd5e-eeccee38e9997fd1.webp",
+            "alt": "开大箭道具效果图 1",
+            "original": {
+              "key": "lineups/ascent-sova-09/effect-9a73a6d1-f21a-43d3-8b89-c2f060b6bd5e.png",
+              "sha256": "3471106d70da8ffb64d4c1e24b12c7e275a3410a490a1d881a7a586d005f6d58"
+            }
+          }
+        ]
       }
     },
     {
@@ -1820,19 +1965,23 @@
       "title": "清道具雷击箭",
       "side": "attack",
       "area": "中路",
-      "videoBvid": "",
+      "videoBvid": "BV1dDLV6zE15",
       "target": {
         "groupId": "mid-utility",
-        "x": 0.52,
-        "y": 0.46499999999999997
+        "x": 0.3503,
+        "y": 0.51439
       },
       "instructions": "",
       "media": {
         "stance": [],
         "aim": [
           {
-            "key": "lineups/ascent-sova-10/aim-01.png",
-            "alt": "清道具雷击箭瞄点图 1"
+            "key": "lineups/ascent-sova-10/aim-01-4894b5c8b7c616d1.webp",
+            "alt": "清道具雷击箭瞄点图 1",
+            "original": {
+              "key": "lineups/ascent-sova-10/aim-01.png",
+              "sha256": "926f6a0f6c5606b8f3786e82678b960e6b1276a501b5c65815cf5e507ffb9f8b"
+            }
           }
         ],
         "effect": []
@@ -1851,22 +2000,35 @@
       "title": "射中路窗户上",
       "side": "attack",
       "area": "B点",
-      "videoBvid": "",
+      "videoBvid": "BV1dDLV6zE15",
       "target": {
         "groupId": "b-window",
-        "x": 0.355,
-        "y": 0.74
+        "x": 0.39603,
+        "y": 0.43736
       },
       "instructions": "满格蓄力",
       "media": {
         "stance": [],
         "aim": [
           {
-            "key": "lineups/ascent-sova-11/aim-01.png",
-            "alt": "射中路窗户上瞄点图 1"
+            "key": "lineups/ascent-sova-11/aim-01-c6f41dd5af781248.webp",
+            "alt": "射中路窗户上瞄点图 1",
+            "original": {
+              "key": "lineups/ascent-sova-11/aim-01.png",
+              "sha256": "333424c677f21b179189843cbdabfd07552db8fd9638f8b73a785872bb351770"
+            }
           }
         ],
-        "effect": []
+        "effect": [
+          {
+            "key": "lineups/ascent-sova-11/effect-88908f6a-dffe-4f3e-b04f-b512e0e06ad8-2f7fb6c29b832a31.webp",
+            "alt": "射中路窗户上道具效果图 1",
+            "original": {
+              "key": "lineups/ascent-sova-11/effect-88908f6a-dffe-4f3e-b04f-b512e0e06ad8.png",
+              "sha256": "a5c9ae177f5bf6fdaa3bc4346cf2a4f5bdc93e86ccba96b04b28a05c15a6950d"
+            }
+          }
+        ]
       }
     },
     {
@@ -1882,27 +2044,44 @@
       "title": "全扫，B点屋檐",
       "side": "attack",
       "area": "B点",
-      "videoBvid": "",
+      "videoBvid": "BV1dDLV6zE15",
       "target": {
         "groupId": "b-eaves",
-        "x": 0.32,
-        "y": 0.825
+        "x": 0.21416,
+        "y": 0.68492
       },
-      "instructions": "一次反弹满格蓄力",
+      "instructions": "一次反弹满格蓄力，16:9UI描点（蓄力条左侧）",
       "media": {
         "stance": [
           {
-            "key": "lineups/ascent-sova-12/stance-01.png",
-            "alt": "全扫，B点屋檐站位图 1"
+            "key": "lineups/ascent-sova-12/stance-01-bbd522fd3f58127a.webp",
+            "alt": "全扫，B点屋檐站位图 1",
+            "original": {
+              "key": "lineups/ascent-sova-12/stance-01.png",
+              "sha256": "ac8462148e8bd5c967a3248e8757a3f04e3e6a335f8a88a77a1e82e19bdf3705"
+            }
           }
         ],
         "aim": [
           {
-            "key": "lineups/ascent-sova-12/aim-01.png",
-            "alt": "全扫，B点屋檐瞄点图 1"
+            "key": "lineups/ascent-sova-12/aim-01-df0f0fc31b0b63f8.webp",
+            "alt": "全扫，B点屋檐瞄点图 1",
+            "original": {
+              "key": "lineups/ascent-sova-12/aim-01.png",
+              "sha256": "0bc915f02513df154acb9f406252a96eb656ba4298cecc314f65625497af6d1b"
+            }
           }
         ],
-        "effect": []
+        "effect": [
+          {
+            "key": "lineups/ascent-sova-12/effect-89f99a53-f278-4ffc-ad8c-dcb28ff09aa8-d7a7f191f9dd2d7c.webp",
+            "alt": "全扫，B点屋檐道具效果图 1",
+            "original": {
+              "key": "lineups/ascent-sova-12/effect-89f99a53-f278-4ffc-ad8c-dcb28ff09aa8.png",
+              "sha256": "0ce82be42f668dd1f9b79e8f352562061983942c762d38912a7f2282b724d81f"
+            }
+          }
+        ]
       }
     },
     {
@@ -1918,22 +2097,35 @@
       "title": "包点箭射树上",
       "side": "attack",
       "area": "B点",
-      "videoBvid": "",
+      "videoBvid": "BV1dDLV6zE15",
       "target": {
         "groupId": "b-tree",
-        "x": 0.285,
-        "y": 0.85
+        "x": 0.20631,
+        "y": 0.82126
       },
       "instructions": "",
       "media": {
         "stance": [],
         "aim": [
           {
-            "key": "lineups/ascent-sova-13/aim-01.png",
-            "alt": "包点箭射树上瞄点图 1"
+            "key": "lineups/ascent-sova-13/aim-01-f2cc590c39c17d35.webp",
+            "alt": "包点箭射树上瞄点图 1",
+            "original": {
+              "key": "lineups/ascent-sova-13/aim-01.png",
+              "sha256": "0622cfacce5235ad22a15196bb99a4ce3bf81b4b1a528f58933795973c5aca88"
+            }
           }
         ],
-        "effect": []
+        "effect": [
+          {
+            "key": "lineups/ascent-sova-13/effect-644cd1f3-5807-45e9-ba05-bc61a8760ccf-533c7ee423e62ee3.webp",
+            "alt": "包点箭射树上道具效果图 1",
+            "original": {
+              "key": "lineups/ascent-sova-13/effect-644cd1f3-5807-45e9-ba05-bc61a8760ccf.png",
+              "sha256": "80c3aa40655afa390100714c56764582797daef004bd7b36d3bd661ef3323055"
+            }
+          }
+        ]
       }
     },
     {
@@ -1949,22 +2141,35 @@
       "title": "台上箭",
       "side": "attack",
       "area": "B点",
-      "videoBvid": "",
+      "videoBvid": "BV1dDLV6zE15",
       "target": {
         "groupId": "b-platform",
-        "x": 0.34,
-        "y": 0.8
+        "x": 0.24947,
+        "y": 0.61768
       },
       "instructions": "满格蓄力",
       "media": {
         "stance": [],
         "aim": [
           {
-            "key": "lineups/ascent-sova-14/aim-01.png",
-            "alt": "台上箭瞄点图 1"
+            "key": "lineups/ascent-sova-14/aim-01-cf6bcbc1cee00d6f.webp",
+            "alt": "台上箭瞄点图 1",
+            "original": {
+              "key": "lineups/ascent-sova-14/aim-01.png",
+              "sha256": "80513d6bd6ac943162c784c2f1b6c1576074dd37b84a75688d428e8521849a97"
+            }
           }
         ],
-        "effect": []
+        "effect": [
+          {
+            "key": "lineups/ascent-sova-14/effect-9583a87f-d745-4fc3-94f7-94d2d5dfd1db-00aed3479dd59c24.webp",
+            "alt": "台上箭道具效果图 1",
+            "original": {
+              "key": "lineups/ascent-sova-14/effect-9583a87f-d745-4fc3-94f7-94d2d5dfd1db.png",
+              "sha256": "5a6df08e65941dd61b4a2294d20ae557320f019505a31b48b105373c863876a4"
+            }
+          }
+        ]
       }
     },
     {
@@ -1980,28 +2185,40 @@
       "title": "回防",
       "side": "defense",
       "area": "A点",
-      "videoBvid": "",
+      "videoBvid": "BV1dDLV6zE15",
       "target": {
         "groupId": "a-retake",
-        "x": 0.285,
-        "y": 0.21666666666666667
+        "x": 0.30546,
+        "y": 0.21684
       },
       "instructions": "满格蓄力跳射",
       "media": {
         "stance": [
           {
-            "key": "lineups/ascent-sova-15/stance-01.png",
-            "alt": "回防站位图 1"
+            "key": "lineups/ascent-sova-15/stance-01-2fd3e18d0531c687.webp",
+            "alt": "回防站位图 1",
+            "original": {
+              "key": "lineups/ascent-sova-15/stance-01.png",
+              "sha256": "253798ff1da043c044882bc6bfa56bf7e790b587202c7f6109ad4b0754ec3ca8"
+            }
           }
         ],
         "aim": [
           {
-            "key": "lineups/ascent-sova-15/aim-01.png",
-            "alt": "回防瞄点图 1"
+            "key": "lineups/ascent-sova-15/aim-01-91c5e7dc9b4972f7.webp",
+            "alt": "回防瞄点图 1",
+            "original": {
+              "key": "lineups/ascent-sova-15/aim-01.png",
+              "sha256": "7a8da4aa0f364198a6e71460787a3d258ed2cb3fd259091a0ac3610bb27cfa1e"
+            }
           },
           {
-            "key": "lineups/ascent-sova-15/aim-02.png",
-            "alt": "回防瞄点图 2"
+            "key": "lineups/ascent-sova-15/aim-02-21fbdce1a0d1536b.webp",
+            "alt": "回防瞄点图 2",
+            "original": {
+              "key": "lineups/ascent-sova-15/aim-02.png",
+              "sha256": "1fba9913a1fec77054f5afde7c6467b7db29d7c0938c82518d644c5458e6a51d"
+            }
           }
         ],
         "effect": []
@@ -2023,24 +2240,41 @@
       "videoBvid": "",
       "target": {
         "groupId": "a-outside",
-        "x": 0.3,
-        "y": 0.31000000000000005
+        "x": 0.54665,
+        "y": 0.30061
       },
       "instructions": "一格蓄力",
       "media": {
         "stance": [
           {
-            "key": "lineups/ascent-sova-16/stance-01.png",
-            "alt": "A外探测站位图 1"
+            "key": "lineups/ascent-sova-16/stance-01-6ab7cd0599c0a3ca.webp",
+            "alt": "A外探测站位图 1",
+            "original": {
+              "key": "lineups/ascent-sova-16/stance-01.png",
+              "sha256": "8a9f504467c101129cb8d6a01dbc1db9c94de19e972c40f935aa725d3e20741c"
+            }
           }
         ],
         "aim": [
           {
-            "key": "lineups/ascent-sova-16/aim-01.png",
-            "alt": "A外探测瞄点图 1"
+            "key": "lineups/ascent-sova-16/aim-01-3f178e967389c672.webp",
+            "alt": "A外探测瞄点图 1",
+            "original": {
+              "key": "lineups/ascent-sova-16/aim-01.png",
+              "sha256": "be8f0f57d043a73cdeb50456cea917828134d90aba6d56a6ac82f6787f166a46"
+            }
           }
         ],
-        "effect": []
+        "effect": [
+          {
+            "key": "lineups/ascent-sova-16/effect-430468ad-dc09-49eb-adb7-4f3610e99f64-1b8e71735ea71466.webp",
+            "alt": "A外探测道具效果图 1",
+            "original": {
+              "key": "lineups/ascent-sova-16/effect-430468ad-dc09-49eb-adb7-4f3610e99f64.png",
+              "sha256": "e03bf1ad64096146286af6a039991d577ed3724cb23c74d0f755d16de1a550e8"
+            }
+          }
+        ]
       }
     },
     {
@@ -2056,19 +2290,23 @@
       "title": "开大箭",
       "side": "defense",
       "area": "A点",
-      "videoBvid": "",
+      "videoBvid": "BV1dDLV6zE15",
       "target": {
         "groupId": "a-retake",
-        "x": 0.285,
-        "y": 0.21666666666666667
+        "x": 0.30546,
+        "y": 0.21684
       },
       "instructions": "",
       "media": {
         "stance": [],
         "aim": [
           {
-            "key": "lineups/ascent-sova-17/aim-01.png",
-            "alt": "开大箭瞄点图 1"
+            "key": "lineups/ascent-sova-17/aim-01-290c7982350e3786.webp",
+            "alt": "开大箭瞄点图 1",
+            "original": {
+              "key": "lineups/ascent-sova-17/aim-01.png",
+              "sha256": "4e0c01058c281f2f47d3f77b3831aa3c13e42cdf65a6e6939c297223d0983503"
+            }
           }
         ],
         "effect": []
@@ -2090,24 +2328,41 @@
       "videoBvid": "",
       "target": {
         "groupId": "b-support",
-        "x": 0.32,
-        "y": 0.8200000000000001
+        "x": 0.27541,
+        "y": 0.85299
       },
       "instructions": "",
       "media": {
         "stance": [
           {
-            "key": "lineups/ascent-sova-18/stance-01.png",
-            "alt": "支援B站位图 1"
+            "key": "lineups/ascent-sova-18/stance-01-19b0a212d2932609.webp",
+            "alt": "支援B站位图 1",
+            "original": {
+              "key": "lineups/ascent-sova-18/stance-01.png",
+              "sha256": "ec419fd5962ac2838946796223f75c36cdadfdf37277b5807b2b3edab5f1ef77"
+            }
           }
         ],
         "aim": [
           {
-            "key": "lineups/ascent-sova-18/aim-01.png",
-            "alt": "支援B瞄点图 1"
+            "key": "lineups/ascent-sova-18/aim-01-f34b92de04f9f5ae.webp",
+            "alt": "支援B瞄点图 1",
+            "original": {
+              "key": "lineups/ascent-sova-18/aim-01.png",
+              "sha256": "fdd3791e9f7a68c5cee14a842854dd504aff0d7c0cc6ddbeee65431700611d6a"
+            }
           }
         ],
-        "effect": []
+        "effect": [
+          {
+            "key": "lineups/ascent-sova-18/effect-5a3f4ae7-983c-4d89-92c2-a93323ad7e1b-3049da065b3c35e0.webp",
+            "alt": "支援B道具效果图 1",
+            "original": {
+              "key": "lineups/ascent-sova-18/effect-5a3f4ae7-983c-4d89-92c2-a93323ad7e1b.png",
+              "sha256": "9e7295fe6ef21cdff1475c6212a6b790738f3014daa5b56d26caeeae7d6f045e"
+            }
+          }
+        ]
       }
     },
     {
@@ -2126,16 +2381,20 @@
       "videoBvid": "",
       "target": {
         "groupId": "mid-water-tower",
-        "x": 0.5,
-        "y": 0.55
+        "x": 0.35935,
+        "y": 0.51797
       },
       "instructions": "跳射射到水塔上",
       "media": {
         "stance": [],
         "aim": [
           {
-            "key": "lineups/ascent-sova-19/aim-01.png",
-            "alt": "射到水塔上瞄点图 1"
+            "key": "lineups/ascent-sova-19/aim-01-a1b2bc7b599c8d11.webp",
+            "alt": "射到水塔上瞄点图 1",
+            "original": {
+              "key": "lineups/ascent-sova-19/aim-01.png",
+              "sha256": "b8bce8349dcd3bb94ccb92dc692a11af92d6e882ed817e701bb0eb9a18ff8efb"
+            }
           }
         ],
         "effect": []
@@ -2154,22 +2413,35 @@
       "title": "第二时间中路箭",
       "side": "defense",
       "area": "中路",
-      "videoBvid": "",
+      "videoBvid": "BV1dDLV6zE15",
       "target": {
         "groupId": "mid-second-timing",
-        "x": 0.52,
-        "y": 0.5
+        "x": 0.52281,
+        "y": 0.4015
       },
       "instructions": "瞄准45度斜的墙壁，一格反弹满格蓄力，跳射合适，站位随意",
       "media": {
         "stance": [],
         "aim": [
           {
-            "key": "lineups/ascent-sova-20/aim-01.png",
-            "alt": "第二时间中路箭瞄点图 1"
+            "key": "lineups/ascent-sova-20/aim-01-fecf1710fd14c985.webp",
+            "alt": "第二时间中路箭瞄点图 1",
+            "original": {
+              "key": "lineups/ascent-sova-20/aim-01.png",
+              "sha256": "de7aa03c032c8934e7e9309d96c0a1ed8eeb150b061aa927ff3d4c40bf93eea3"
+            }
           }
         ],
-        "effect": []
+        "effect": [
+          {
+            "key": "lineups/ascent-sova-20/effect-a28282f4-fd18-4074-97d9-55a746c58dc1-4193e350d8d40516.webp",
+            "alt": "第二时间中路箭道具效果图 1",
+            "original": {
+              "key": "lineups/ascent-sova-20/effect-a28282f4-fd18-4074-97d9-55a746c58dc1.png",
+              "sha256": "55eb46d1cb182561417811ec16abd758e84260463dd1710cda18d387481ee66d"
+            }
+          }
+        ]
       }
     },
     {
@@ -2188,16 +2460,20 @@
       "videoBvid": "",
       "target": {
         "groupId": "b-shock",
-        "x": 0.325,
-        "y": 0.825
+        "x": 0.45133,
+        "y": 0.75495
       },
       "instructions": "",
       "media": {
         "stance": [],
         "aim": [
           {
-            "key": "lineups/ascent-sova-21/aim-01.png",
-            "alt": "放血雷击瞄点图 1"
+            "key": "lineups/ascent-sova-21/aim-01-ba6dc8ce9a93727e.webp",
+            "alt": "放血雷击瞄点图 1",
+            "original": {
+              "key": "lineups/ascent-sova-21/aim-01.png",
+              "sha256": "174590cf628ea924db54335b033c7690c7b99c0f29db16f9d6d9cf60751f2ffe"
+            }
           }
         ],
         "effect": []
@@ -2219,24 +2495,41 @@
       "videoBvid": "",
       "target": {
         "groupId": "b-outside-platform",
-        "x": 0.35,
-        "y": 0.72
+        "x": 0.54029,
+        "y": 0.76692
       },
-      "instructions": "一格蓄力",
+      "instructions": "一格蓄力\n替换为雷击箭可处理kj小鸡",
       "media": {
         "stance": [
           {
-            "key": "lineups/ascent-sova-22/stance-01.png",
-            "alt": "B外箭，射外面台子上站位图 1"
+            "key": "lineups/ascent-sova-22/stance-01-bba126c32b5da5d2.webp",
+            "alt": "B外箭，射外面台子上站位图 1",
+            "original": {
+              "key": "lineups/ascent-sova-22/stance-01.png",
+              "sha256": "c12a13ba32df895499325173477217c03a1977ca6a2b991d609df5949f4bae10"
+            }
           }
         ],
         "aim": [
           {
-            "key": "lineups/ascent-sova-22/aim-01.png",
-            "alt": "B外箭，射外面台子上瞄点图 1"
+            "key": "lineups/ascent-sova-22/aim-01-2a33b1d4d6c84b49.webp",
+            "alt": "B外箭，射外面台子上瞄点图 1",
+            "original": {
+              "key": "lineups/ascent-sova-22/aim-01.png",
+              "sha256": "2a9adce99dc9d3cedebae6230f4c54dad7752b745b7fc95c5a1db2217ab066af"
+            }
           }
         ],
-        "effect": []
+        "effect": [
+          {
+            "key": "lineups/ascent-sova-22/effect-75516132-fb96-4cdf-93d4-390ecf45d0c0-d831cedad214e3bb.webp",
+            "alt": "B外箭，射外面台子上道具效果图 1",
+            "original": {
+              "key": "lineups/ascent-sova-22/effect-75516132-fb96-4cdf-93d4-390ecf45d0c0.png",
+              "sha256": "bd6d1f15966ac9fb63b67f74da456f4803c5d3a2fb7e63aeac1fa4ddd7db957c"
+            }
+          }
+        ]
       }
     },
     {
@@ -2255,16 +2548,20 @@
       "videoBvid": "",
       "target": {
         "groupId": "b-outside-roof",
-        "x": 0.36,
-        "y": 0.77
+        "x": 0.62189,
+        "y": 0.71251
       },
       "instructions": "两格蓄力一格反弹",
       "media": {
         "stance": [],
         "aim": [
           {
-            "key": "lineups/ascent-sova-23/aim-01.png",
-            "alt": "B外箭，射B外屋顶瞄点图 1"
+            "key": "lineups/ascent-sova-23/aim-01-aaafd02fb7248050.webp",
+            "alt": "B外箭，射B外屋顶瞄点图 1",
+            "original": {
+              "key": "lineups/ascent-sova-23/aim-01.png",
+              "sha256": "12a1951d840813bce1089223492b994c6d4ab84af1c46f50113fbd5852edd87b"
+            }
           }
         ],
         "effect": []
@@ -2286,19 +2583,32 @@
       "videoBvid": "",
       "target": {
         "groupId": "b-anti-rush",
-        "x": 0.345,
-        "y": 0.74
+        "x": 0.28863,
+        "y": 0.696
       },
       "instructions": "站警家角落，一次反弹满格蓄力，射关门按钮的屋檐上",
       "media": {
         "stance": [],
         "aim": [
           {
-            "key": "lineups/ascent-sova-24/aim-01.png",
-            "alt": "反刷箭瞄点图 1"
+            "key": "lineups/ascent-sova-24/aim-01-eb90cbac79ec7dd8.webp",
+            "alt": "反刷箭瞄点图 1",
+            "original": {
+              "key": "lineups/ascent-sova-24/aim-01.png",
+              "sha256": "d2deaa9b26c8cc3dae1424f2868c606b167417d27d373b64787c7a8110c24888"
+            }
           }
         ],
-        "effect": []
+        "effect": [
+          {
+            "key": "lineups/ascent-sova-24/effect-4e619dc9-b4b7-4f45-b610-360696830b34-15af6afdf7941e29.webp",
+            "alt": "反刷箭道具效果图 1",
+            "original": {
+              "key": "lineups/ascent-sova-24/effect-4e619dc9-b4b7-4f45-b610-360696830b34.png",
+              "sha256": "dac3d0bf7f3210f5938422ffe4a579fcbe1f11b9a7d4742be8938e7b30c74133"
+            }
+          }
+        ]
       }
     },
     {
@@ -2317,16 +2627,20 @@
       "videoBvid": "",
       "target": {
         "groupId": "b-boathouse",
-        "x": 0.3,
-        "y": 0.8200000000000001
+        "x": 0.22169,
+        "y": 0.78035
       },
       "instructions": "满格蓄力",
       "media": {
         "stance": [],
         "aim": [
           {
-            "key": "lineups/ascent-sova-25/aim-01.png",
-            "alt": "船坞箭，射墙上瞄点图 1"
+            "key": "lineups/ascent-sova-25/aim-01-ef7f3ce041e020c6.webp",
+            "alt": "船坞箭，射墙上瞄点图 1",
+            "original": {
+              "key": "lineups/ascent-sova-25/aim-01.png",
+              "sha256": "5f9eeeb5e62d7ad019a08f9bba202974bb2e053d547120f7d69fca939d8db066"
+            }
           }
         ],
         "effect": []
@@ -2345,24 +2659,877 @@
       "title": "支援A，射进点墙上",
       "side": "defense",
       "area": "B点",
-      "videoBvid": "",
+      "videoBvid": "BV1dDLV6zE15",
       "target": {
         "groupId": "a-retake",
-        "x": 0.285,
-        "y": 0.21666666666666667
+        "x": 0.30546,
+        "y": 0.21684
       },
       "instructions": "站绿箱房檐边角向上移动少许",
       "media": {
         "stance": [],
         "aim": [
           {
-            "key": "lineups/ascent-sova-26/aim-01.png",
-            "alt": "支援A，射进点墙上瞄点图 1"
+            "key": "lineups/ascent-sova-26/aim-01-13c7337ab86daaaf.webp",
+            "alt": "支援A，射进点墙上瞄点图 1",
+            "original": {
+              "key": "lineups/ascent-sova-26/aim-01.png",
+              "sha256": "98d2f26f028f8964d13097333dfacf6e6e73361739f5272ced504705a4626f53"
+            }
           }
         ],
         "effect": []
       }
+    },
+    {
+      "id": "bind-fade-8cd238d1-19b1-4faf-88c1-860f81ab6196",
+      "mapId": "bind",
+      "agentId": "fade",
+      "abilityId": "haunt",
+      "uploader": {
+        "name": "PeterAlbus",
+        "source": "toy",
+        "toyOpenId": "toid_v1_k01_JZ_p5JVd_Vj1Qw8HfyAGfgs3Ya26Y3BH5Bx3OIM3NR_a"
+      },
+      "title": "B2楼眼",
+      "side": "defense",
+      "area": "B点",
+      "videoBvid": "BV1PTgoz3EMv",
+      "target": {
+        "groupId": "bind-fade-8cd238d1-19b1-4faf-88c1-860f81ab6196-target",
+        "x": 0.33477,
+        "y": 0.60367
+      },
+      "instructions": "站位瞄准地砖，描点瞄棱往下拉，跑到准星和黑色方块对齐跳投",
+      "media": {
+        "stance": [
+          {
+            "key": "lineups/bind-fade-8cd238d1-19b1-4faf-88c1-860f81ab6196/stance-de944a08-e07f-4d2a-bfd7-460d79d1792a-3b3f82871afe1b3d.webp",
+            "alt": "B2楼眼站位图 1",
+            "original": {
+              "key": "lineups/bind-fade-8cd238d1-19b1-4faf-88c1-860f81ab6196/stance-de944a08-e07f-4d2a-bfd7-460d79d1792a.png",
+              "sha256": "36715769d6a179b9bfc475990e332b9c38168c15a08fb4a856bd90fec75e5be3"
+            }
+          }
+        ],
+        "aim": [
+          {
+            "key": "lineups/bind-fade-8cd238d1-19b1-4faf-88c1-860f81ab6196/aim-c65b672f-07a0-4114-aa3e-9d4bc91fd16d-303cd6b363641e04.webp",
+            "alt": "B2楼眼瞄点图 1",
+            "original": {
+              "key": "lineups/bind-fade-8cd238d1-19b1-4faf-88c1-860f81ab6196/aim-c65b672f-07a0-4114-aa3e-9d4bc91fd16d.png",
+              "sha256": "600dc497db3a459da9697eb5dab9ddc5885cc491d5d71a70f0c5e369f325475e"
+            }
+          }
+        ],
+        "effect": [
+          {
+            "key": "lineups/bind-fade-8cd238d1-19b1-4faf-88c1-860f81ab6196/effect-564dbd69-012b-42df-b0a3-83bc3d62803e-301961c14a80f291.webp",
+            "alt": "B2楼眼道具效果图 1",
+            "original": {
+              "key": "lineups/bind-fade-8cd238d1-19b1-4faf-88c1-860f81ab6196/effect-564dbd69-012b-42df-b0a3-83bc3d62803e.png",
+              "sha256": "be2df9af11912befd41af528fee7cb54aaf9758747a235233bd6335524009f87"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "bind-fade-254c2450-47ad-447e-b353-18e3f2d05332",
+      "mapId": "bind",
+      "agentId": "fade",
+      "abilityId": "haunt",
+      "uploader": {
+        "name": "PeterAlbus",
+        "source": "toy",
+        "toyOpenId": "toid_v1_k01_JZ_p5JVd_Vj1Qw8HfyAGfgs3Ya26Y3BH5Bx3OIM3NR_a"
+      },
+      "title": "B长眼",
+      "side": "defense",
+      "area": "B点",
+      "videoBvid": "",
+      "target": {
+        "groupId": "bind-fade-254c2450-47ad-447e-b353-18e3f2d05332-target",
+        "x": 0.17434,
+        "y": 0.56447
+      },
+      "instructions": "顶住光幕，跳投",
+      "media": {
+        "stance": [],
+        "aim": [
+          {
+            "key": "lineups/bind-fade-254c2450-47ad-447e-b353-18e3f2d05332/aim-538ed6e9-bc69-4c07-be5c-9e3a57aae4cf-3933939b28343f4e.webp",
+            "alt": "B长眼瞄点图 1",
+            "original": {
+              "key": "lineups/bind-fade-254c2450-47ad-447e-b353-18e3f2d05332/aim-538ed6e9-bc69-4c07-be5c-9e3a57aae4cf.png",
+              "sha256": "a6ed573c30990c1e561e12cbd6e19309b94ef291659339ee9dcd80c1d9ee5c05"
+            }
+          }
+        ],
+        "effect": [
+          {
+            "key": "lineups/bind-fade-254c2450-47ad-447e-b353-18e3f2d05332/effect-b359002e-3aaf-4adf-b46e-713ffd0cc49f-acae6f5ac3bcf5a3.webp",
+            "alt": "B长眼道具效果图 1",
+            "original": {
+              "key": "lineups/bind-fade-254c2450-47ad-447e-b353-18e3f2d05332/effect-b359002e-3aaf-4adf-b46e-713ffd0cc49f.png",
+              "sha256": "41ff24502a388325f1e35c2822306bb2a0a0b3fe9f9924677a37762701ce13ba"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "bind-fade-5987e0fa-b998-4d34-96f6-982b8e10f036",
+      "mapId": "bind",
+      "agentId": "fade",
+      "abilityId": "haunt",
+      "uploader": {
+        "name": "PeterAlbus",
+        "source": "toy",
+        "toyOpenId": "toid_v1_k01_JZ_p5JVd_Vj1Qw8HfyAGfgs3Ya26Y3BH5Bx3OIM3NR_a"
+      },
+      "title": "对方进点后防守眼",
+      "side": "defense",
+      "area": "B点",
+      "videoBvid": "",
+      "target": {
+        "groupId": "bind-fade-5987e0fa-b998-4d34-96f6-982b8e10f036-target",
+        "x": 0.22566,
+        "y": 0.27368
+      },
+      "instructions": "右边建筑上随手丢",
+      "media": {
+        "stance": [],
+        "aim": [],
+        "effect": [
+          {
+            "key": "lineups/bind-fade-5987e0fa-b998-4d34-96f6-982b8e10f036/effect-859f8ffb-912f-40c7-9075-96e5f7b05fb2-a97761caffe69f26.webp",
+            "alt": "对方进点后防守眼道具效果图 1",
+            "original": {
+              "key": "lineups/bind-fade-5987e0fa-b998-4d34-96f6-982b8e10f036/effect-859f8ffb-912f-40c7-9075-96e5f7b05fb2.png",
+              "sha256": "cc4250aa90f130c86c1399da3883d9de2fdfa758feaed6d262b777ac287d21bf"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "bind-fade-486250fe-4807-4b6d-898b-dc01284f5bf4",
+      "mapId": "bind",
+      "agentId": "fade",
+      "abilityId": "haunt",
+      "uploader": {
+        "name": "PeterAlbus",
+        "source": "toy",
+        "toyOpenId": "toid_v1_k01_JZ_p5JVd_Vj1Qw8HfyAGfgs3Ya26Y3BH5Bx3OIM3NR_a"
+      },
+      "title": "浴室眼",
+      "side": "defense",
+      "area": "A点",
+      "videoBvid": "BV1PTgoz3EMv",
+      "target": {
+        "groupId": "bind-fade-486250fe-4807-4b6d-898b-dc01284f5bf4-target",
+        "x": 0.86119,
+        "y": 0.48017
+      },
+      "instructions": "瞄准交点，跑一步跳投",
+      "media": {
+        "stance": [
+          {
+            "key": "lineups/bind-fade-486250fe-4807-4b6d-898b-dc01284f5bf4/stance-e4c89b29-c736-41ff-907b-f368d9299869-db499754aeb6fd08.webp",
+            "alt": "浴室眼站位图 1",
+            "original": {
+              "key": "lineups/bind-fade-486250fe-4807-4b6d-898b-dc01284f5bf4/stance-e4c89b29-c736-41ff-907b-f368d9299869.png",
+              "sha256": "68d55432ae9709664f399d7780bd71f1fb172fa59a52b4d3b4e12fd494839f8b"
+            }
+          }
+        ],
+        "aim": [
+          {
+            "key": "lineups/bind-fade-486250fe-4807-4b6d-898b-dc01284f5bf4/aim-1c45ca7e-5589-4d7a-a09a-d42f81f20d72-e03c00c8886eded1.webp",
+            "alt": "浴室眼瞄点图 1",
+            "original": {
+              "key": "lineups/bind-fade-486250fe-4807-4b6d-898b-dc01284f5bf4/aim-1c45ca7e-5589-4d7a-a09a-d42f81f20d72.png",
+              "sha256": "642a51cf5ac73de667cd0894cb5a45d9e43a3a59973eb46e8cae6344914d32f2"
+            }
+          }
+        ],
+        "effect": [
+          {
+            "key": "lineups/bind-fade-486250fe-4807-4b6d-898b-dc01284f5bf4/effect-bccc7499-410b-4dc9-b376-eb1c07a69c45-cccbf29fbe0610cc.webp",
+            "alt": "浴室眼道具效果图 1",
+            "original": {
+              "key": "lineups/bind-fade-486250fe-4807-4b6d-898b-dc01284f5bf4/effect-bccc7499-410b-4dc9-b376-eb1c07a69c45.png",
+              "sha256": "5c027427c6627963edac5e67b0bee91cd1a10be982c3ed7da9d0c012abbcc33c"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "bind-fade-428b9bdd-5961-4a5a-9243-00c863829166",
+      "mapId": "bind",
+      "agentId": "fade",
+      "abilityId": "haunt",
+      "uploader": {
+        "name": "PeterAlbus",
+        "source": "toy",
+        "toyOpenId": "toid_v1_k01_JZ_p5JVd_Vj1Qw8HfyAGfgs3Ya26Y3BH5Bx3OIM3NR_a"
+      },
+      "title": "回放眼",
+      "side": "defense",
+      "area": "A点",
+      "videoBvid": "BV1PTgoz3EMv",
+      "target": {
+        "groupId": "bind-fade-428b9bdd-5961-4a5a-9243-00c863829166-target",
+        "x": 0.6335,
+        "y": 0.30161
+      },
+      "instructions": "跑到人走到阴阳分界线处跳投，容错较大",
+      "media": {
+        "stance": [],
+        "aim": [
+          {
+            "key": "lineups/bind-fade-428b9bdd-5961-4a5a-9243-00c863829166/aim-658526ea-30d5-4d1b-a03f-425039fc813d-92d376c00413f086.webp",
+            "alt": "回放眼瞄点图 1",
+            "original": {
+              "key": "lineups/bind-fade-428b9bdd-5961-4a5a-9243-00c863829166/aim-658526ea-30d5-4d1b-a03f-425039fc813d.png",
+              "sha256": "cc0ba126143d5ec0888c76d3b00ee99f77e8a80671697007f869fb79ab38d5df"
+            }
+          }
+        ],
+        "effect": [
+          {
+            "key": "lineups/bind-fade-428b9bdd-5961-4a5a-9243-00c863829166/effect-84fe2761-11fd-445a-b759-e46a90004ac2-b77d28a003e091b6.webp",
+            "alt": "回放眼道具效果图 1",
+            "original": {
+              "key": "lineups/bind-fade-428b9bdd-5961-4a5a-9243-00c863829166/effect-84fe2761-11fd-445a-b759-e46a90004ac2.png",
+              "sha256": "5aa245f0c815e18abf47659650452627384b81f6ca38d6c1da706c099ad93673"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "bind-fade-6cb958ca-6b8a-41d2-aa68-53fcc4cde3e4",
+      "mapId": "bind",
+      "agentId": "fade",
+      "abilityId": "haunt",
+      "uploader": {
+        "name": "PeterAlbus",
+        "source": "toy",
+        "toyOpenId": "toid_v1_k01_JZ_p5JVd_Vj1Qw8HfyAGfgs3Ya26Y3BH5Bx3OIM3NR_a"
+      },
+      "title": "回放B",
+      "side": "attack",
+      "area": "B点",
+      "videoBvid": "BV1PTgoz3EMv",
+      "target": {
+        "groupId": "bind-fade-6cb958ca-6b8a-41d2-aa68-53fcc4cde3e4-target",
+        "x": 0.97145,
+        "y": 0.17358
+      },
+      "instructions": "错误点位，忽略",
+      "media": {
+        "stance": [],
+        "aim": [],
+        "effect": []
+      }
     }
   ],
-  "history": []
+  "history": [
+    {
+      "id": "e05ee92e-fbf8-486f-8a73-39d0a6f6d79b",
+      "packageId": "b74baf8a-b4e3-4a7c-b8b1-f5c843aef254",
+      "revision": 6,
+      "appliedAt": "2026-09-05T15:04:18.351Z",
+      "author": {
+        "name": "PeterAlbus",
+        "source": "toy",
+        "toyOpenId": "toid_v1_k01_JZ_p5JVd_Vj1Qw8HfyAGfgs3Ya26Y3BH5Bx3OIM3NR_a"
+      },
+      "mapIds": [
+        "bind",
+        "ascent"
+      ],
+      "lineupIds": [
+        "bind-fade-8cd238d1-19b1-4faf-88c1-860f81ab6196",
+        "bind-fade-254c2450-47ad-447e-b353-18e3f2d05332",
+        "bind-fade-5987e0fa-b998-4d34-96f6-982b8e10f036",
+        "bind-fade-486250fe-4807-4b6d-898b-dc01284f5bf4",
+        "bind-fade-428b9bdd-5961-4a5a-9243-00c863829166",
+        "bind-fade-6cb958ca-6b8a-41d2-aa68-53fcc4cde3e4",
+        "ascent-sova-01",
+        "ascent-sova-02",
+        "ascent-sova-03",
+        "ascent-sova-04",
+        "ascent-sova-05",
+        "ascent-sova-06",
+        "ascent-sova-07",
+        "ascent-sova-08",
+        "ascent-sova-09",
+        "ascent-sova-10",
+        "ascent-sova-11",
+        "ascent-sova-12",
+        "ascent-sova-13",
+        "ascent-sova-14",
+        "ascent-sova-15",
+        "ascent-sova-16",
+        "ascent-sova-17",
+        "ascent-sova-18",
+        "ascent-sova-19",
+        "ascent-sova-20",
+        "ascent-sova-21",
+        "ascent-sova-22",
+        "ascent-sova-23",
+        "ascent-sova-24",
+        "ascent-sova-25",
+        "ascent-sova-26"
+      ],
+      "added": 6,
+      "updated": 26
+    }
+  ],
+  "mediaBytes": {
+    "lineups/ascent-sova-01/stance-01-37db7c34d5327278.webp": 112064,
+    "lineups/ascent-sova-01/aim-01-6c44cd2738a7c63e.webp": 121126,
+    "lineups/ascent-sova-01/effect-b9eed742-9e9e-49b5-a450-91d8560246d7-9beae1a744a30792.webp": 88934,
+    "lineups/ascent-sova-02/stance-01-1c3559ea0640c7c6.webp": 101210,
+    "lineups/ascent-sova-02/aim-01-2886f9c55ea3cd8c.webp": 115608,
+    "lineups/ascent-sova-02/effect-bd6284a3-eb36-4bcb-be30-a14c3b9ded00-9beae1a744a30792.webp": 88934,
+    "lineups/ascent-sova-03/stance-01-4a8a74de25da09ad.webp": 125026,
+    "lineups/ascent-sova-03/aim-01-e37f83d71e37f97f.webp": 145074,
+    "lineups/ascent-sova-03/effect-6073d9fb-3a8a-4b2c-b69d-2dca2bb50d66-9beae1a744a30792.webp": 88934,
+    "lineups/ascent-sova-04/aim-01-89e2e6696bafaa92.webp": 155734,
+    "lineups/ascent-sova-04/effect-86b742a6-f72c-4efa-9299-010057997674-7dfb0168a8d41152.webp": 76442,
+    "lineups/ascent-sova-05/stance-01-369606672dad12e9.webp": 100126,
+    "lineups/ascent-sova-05/aim-01-d23b3b4d189c5fa5.webp": 134324,
+    "lineups/ascent-sova-05/effect-77416093-9cbd-4083-b8d9-fb1a16642c09-88c05353ddc4478b.webp": 73712,
+    "lineups/ascent-sova-06/stance-01-4464d7646c3a299a.webp": 88410,
+    "lineups/ascent-sova-06/aim-01-d108071afd31f305.webp": 98350,
+    "lineups/ascent-sova-06/effect-91c38ab9-a6ce-4fcb-b64d-0400047daa8a-00e66fb6d264fd0d.webp": 49544,
+    "lineups/ascent-sova-07/stance-01-a497d83bfabfbfe9.webp": 110710,
+    "lineups/ascent-sova-07/aim-01-90607ca0b41a2fb9.webp": 144422,
+    "lineups/ascent-sova-07/effect-dd6edfa0-adc0-462a-9b21-760fed72c0a4-7b888f7076dfdaa1.webp": 56974,
+    "lineups/ascent-sova-08/stance-01-4787bc461e3a711a.webp": 106138,
+    "lineups/ascent-sova-08/aim-01-e02a5f4ab20f212d.webp": 141854,
+    "lineups/ascent-sova-08/effect-9041f835-1d33-4e67-a117-af01f86571fa-b3a2f6c46d8a10f8.webp": 53744,
+    "lineups/ascent-sova-09/aim-01-b3375afdfaddaf73.webp": 106054,
+    "lineups/ascent-sova-09/effect-9a73a6d1-f21a-43d3-8b89-c2f060b6bd5e-eeccee38e9997fd1.webp": 47288,
+    "lineups/ascent-sova-10/aim-01-4894b5c8b7c616d1.webp": 128108,
+    "lineups/ascent-sova-11/aim-01-c6f41dd5af781248.webp": 158534,
+    "lineups/ascent-sova-11/effect-88908f6a-dffe-4f3e-b04f-b512e0e06ad8-2f7fb6c29b832a31.webp": 52976,
+    "lineups/ascent-sova-12/stance-01-bbd522fd3f58127a.webp": 109874,
+    "lineups/ascent-sova-12/aim-01-df0f0fc31b0b63f8.webp": 165724,
+    "lineups/ascent-sova-12/effect-89f99a53-f278-4ffc-ad8c-dcb28ff09aa8-d7a7f191f9dd2d7c.webp": 80566,
+    "lineups/ascent-sova-13/aim-01-f2cc590c39c17d35.webp": 140160,
+    "lineups/ascent-sova-13/effect-644cd1f3-5807-45e9-ba05-bc61a8760ccf-533c7ee423e62ee3.webp": 35608,
+    "lineups/ascent-sova-14/aim-01-cf6bcbc1cee00d6f.webp": 131316,
+    "lineups/ascent-sova-14/effect-9583a87f-d745-4fc3-94f7-94d2d5dfd1db-00aed3479dd59c24.webp": 63436,
+    "lineups/ascent-sova-15/stance-01-2fd3e18d0531c687.webp": 105848,
+    "lineups/ascent-sova-15/aim-01-91c5e7dc9b4972f7.webp": 111698,
+    "lineups/ascent-sova-15/aim-02-21fbdce1a0d1536b.webp": 130732,
+    "lineups/ascent-sova-16/stance-01-6ab7cd0599c0a3ca.webp": 90366,
+    "lineups/ascent-sova-16/aim-01-3f178e967389c672.webp": 151302,
+    "lineups/ascent-sova-16/effect-430468ad-dc09-49eb-adb7-4f3610e99f64-1b8e71735ea71466.webp": 67314,
+    "lineups/ascent-sova-17/aim-01-290c7982350e3786.webp": 133520,
+    "lineups/ascent-sova-18/stance-01-19b0a212d2932609.webp": 116216,
+    "lineups/ascent-sova-18/aim-01-f34b92de04f9f5ae.webp": 127658,
+    "lineups/ascent-sova-18/effect-5a3f4ae7-983c-4d89-92c2-a93323ad7e1b-3049da065b3c35e0.webp": 63798,
+    "lineups/ascent-sova-19/aim-01-a1b2bc7b599c8d11.webp": 123632,
+    "lineups/ascent-sova-20/aim-01-fecf1710fd14c985.webp": 127898,
+    "lineups/ascent-sova-20/effect-a28282f4-fd18-4074-97d9-55a746c58dc1-4193e350d8d40516.webp": 51622,
+    "lineups/ascent-sova-21/aim-01-ba6dc8ce9a93727e.webp": 123512,
+    "lineups/ascent-sova-22/stance-01-bba126c32b5da5d2.webp": 116492,
+    "lineups/ascent-sova-22/aim-01-2a33b1d4d6c84b49.webp": 146840,
+    "lineups/ascent-sova-22/effect-75516132-fb96-4cdf-93d4-390ecf45d0c0-d831cedad214e3bb.webp": 35158,
+    "lineups/ascent-sova-23/aim-01-aaafd02fb7248050.webp": 187012,
+    "lineups/ascent-sova-24/aim-01-eb90cbac79ec7dd8.webp": 93558,
+    "lineups/ascent-sova-24/effect-4e619dc9-b4b7-4f45-b610-360696830b34-15af6afdf7941e29.webp": 52576,
+    "lineups/ascent-sova-25/aim-01-ef7f3ce041e020c6.webp": 102256,
+    "lineups/ascent-sova-26/aim-01-13c7337ab86daaaf.webp": 115510,
+    "lineups/bind-fade-8cd238d1-19b1-4faf-88c1-860f81ab6196/stance-de944a08-e07f-4d2a-bfd7-460d79d1792a-3b3f82871afe1b3d.webp": 72666,
+    "lineups/bind-fade-8cd238d1-19b1-4faf-88c1-860f81ab6196/aim-c65b672f-07a0-4114-aa3e-9d4bc91fd16d-303cd6b363641e04.webp": 17942,
+    "lineups/bind-fade-8cd238d1-19b1-4faf-88c1-860f81ab6196/effect-564dbd69-012b-42df-b0a3-83bc3d62803e-301961c14a80f291.webp": 66684,
+    "lineups/bind-fade-254c2450-47ad-447e-b353-18e3f2d05332/aim-538ed6e9-bc69-4c07-be5c-9e3a57aae4cf-3933939b28343f4e.webp": 53966,
+    "lineups/bind-fade-254c2450-47ad-447e-b353-18e3f2d05332/effect-b359002e-3aaf-4adf-b46e-713ffd0cc49f-acae6f5ac3bcf5a3.webp": 45566,
+    "lineups/bind-fade-5987e0fa-b998-4d34-96f6-982b8e10f036/effect-859f8ffb-912f-40c7-9075-96e5f7b05fb2-a97761caffe69f26.webp": 54942,
+    "lineups/bind-fade-486250fe-4807-4b6d-898b-dc01284f5bf4/stance-e4c89b29-c736-41ff-907b-f368d9299869-db499754aeb6fd08.webp": 218012,
+    "lineups/bind-fade-486250fe-4807-4b6d-898b-dc01284f5bf4/aim-1c45ca7e-5589-4d7a-a09a-d42f81f20d72-e03c00c8886eded1.webp": 212266,
+    "lineups/bind-fade-486250fe-4807-4b6d-898b-dc01284f5bf4/effect-bccc7499-410b-4dc9-b376-eb1c07a69c45-cccbf29fbe0610cc.webp": 307282,
+    "lineups/bind-fade-428b9bdd-5961-4a5a-9243-00c863829166/aim-658526ea-30d5-4d1b-a03f-425039fc813d-92d376c00413f086.webp": 260058,
+    "lineups/bind-fade-428b9bdd-5961-4a5a-9243-00c863829166/effect-84fe2761-11fd-445a-b759-e46a90004ac2-b77d28a003e091b6.webp": 287424
+  },
+  "imageMigrations": {
+    "lineups/ascent-sova-01/aim-01.png": {
+      "key": "lineups/ascent-sova-01/aim-01-6c44cd2738a7c63e.webp",
+      "sourceSha256": "2293e06a010d560a242c8bca34a1b021411ea11549eec3651056043a5867b2f6",
+      "sha256": "6c44cd2738a7c63eba5623812d9c5195a8bae4b130b0baa695451d9b00c64544"
+    },
+    "lineups/ascent-sova-01/effect-b9eed742-9e9e-49b5-a450-91d8560246d7.png": {
+      "key": "lineups/ascent-sova-01/effect-b9eed742-9e9e-49b5-a450-91d8560246d7-9beae1a744a30792.webp",
+      "sourceSha256": "f4eb0c6f89b2d7de130be8445f8102df627001a9ae8485f0269f5b28b8b1c7e3",
+      "sha256": "9beae1a744a30792e385c113ee2248956fffeb2187b137bee72f1143a4df73ce"
+    },
+    "lineups/ascent-sova-01/stance-01.png": {
+      "key": "lineups/ascent-sova-01/stance-01-37db7c34d5327278.webp",
+      "sourceSha256": "76441feef5f111cd9aabfe1389a12286da695e6f34af6db1ffaea06d16f903b3",
+      "sha256": "37db7c34d5327278e84a467a450992af11840add7573e486b3a4a2be7bcb67cd"
+    },
+    "lineups/ascent-sova-02/aim-01.png": {
+      "key": "lineups/ascent-sova-02/aim-01-2886f9c55ea3cd8c.webp",
+      "sourceSha256": "3c68be36c6e860071b1f53db945cb63b2404c42b23ef75e58ee4ba6776329f78",
+      "sha256": "2886f9c55ea3cd8c99e1c542255af4e77a722eb3dd4acaeafa1de866bcea98b5"
+    },
+    "lineups/ascent-sova-02/effect-bd6284a3-eb36-4bcb-be30-a14c3b9ded00.png": {
+      "key": "lineups/ascent-sova-02/effect-bd6284a3-eb36-4bcb-be30-a14c3b9ded00-9beae1a744a30792.webp",
+      "sourceSha256": "f4eb0c6f89b2d7de130be8445f8102df627001a9ae8485f0269f5b28b8b1c7e3",
+      "sha256": "9beae1a744a30792e385c113ee2248956fffeb2187b137bee72f1143a4df73ce"
+    },
+    "lineups/ascent-sova-02/stance-01.png": {
+      "key": "lineups/ascent-sova-02/stance-01-1c3559ea0640c7c6.webp",
+      "sourceSha256": "db3312cbe1e842029d5c00349827878468740a25639844ba5e6fe4cff54582dc",
+      "sha256": "1c3559ea0640c7c64fe7a292f9a53ffbcd060675dc8a1e7418eda277718bb414"
+    },
+    "lineups/ascent-sova-03/aim-01.png": {
+      "key": "lineups/ascent-sova-03/aim-01-e37f83d71e37f97f.webp",
+      "sourceSha256": "584f0ef5a30f27578d4b0399d3bc8ba5c0d5131cc31d7b3e57d4c1f22c3bf167",
+      "sha256": "e37f83d71e37f97f4adade56c542e3b49f5e64b060d7e1ded90d72106696d16e"
+    },
+    "lineups/ascent-sova-03/effect-6073d9fb-3a8a-4b2c-b69d-2dca2bb50d66.png": {
+      "key": "lineups/ascent-sova-03/effect-6073d9fb-3a8a-4b2c-b69d-2dca2bb50d66-9beae1a744a30792.webp",
+      "sourceSha256": "f4eb0c6f89b2d7de130be8445f8102df627001a9ae8485f0269f5b28b8b1c7e3",
+      "sha256": "9beae1a744a30792e385c113ee2248956fffeb2187b137bee72f1143a4df73ce"
+    },
+    "lineups/ascent-sova-03/stance-01.png": {
+      "key": "lineups/ascent-sova-03/stance-01-4a8a74de25da09ad.webp",
+      "sourceSha256": "eb1a31e398886d07c337466e76902030b7729c8aa8c057d95f0df8e888d32e70",
+      "sha256": "4a8a74de25da09adaecef87b9d0760df356de84296629722a32be2bde1ce3c87"
+    },
+    "lineups/ascent-sova-04/aim-01.png": {
+      "key": "lineups/ascent-sova-04/aim-01-89e2e6696bafaa92.webp",
+      "sourceSha256": "192983b2788ee84a4a85e4de1c15cdf2c4c6a6a90c88c3cd4ca99942999016d0",
+      "sha256": "89e2e6696bafaa9295b616127ae2d8e36518932f837de7956974eb2f2bc5c2c1"
+    },
+    "lineups/ascent-sova-04/effect-86b742a6-f72c-4efa-9299-010057997674.png": {
+      "key": "lineups/ascent-sova-04/effect-86b742a6-f72c-4efa-9299-010057997674-7dfb0168a8d41152.webp",
+      "sourceSha256": "8bf6cf6dc9338e299bdc2972b3c570332b017d09a85c09fe92c10dfb288b50ea",
+      "sha256": "7dfb0168a8d41152c925042452d54cd10f2feca5a0f7693ebe4351736f32cbfd"
+    },
+    "lineups/ascent-sova-05/aim-01.png": {
+      "key": "lineups/ascent-sova-05/aim-01-d23b3b4d189c5fa5.webp",
+      "sourceSha256": "88c8e8fbfc937b8b201765d144089174a1dfdbfa6751750659dbfeb6f98ca131",
+      "sha256": "d23b3b4d189c5fa5b918c04883235f40e93107cd0fc0f10cc5a5701af2c1b569"
+    },
+    "lineups/ascent-sova-05/effect-77416093-9cbd-4083-b8d9-fb1a16642c09.png": {
+      "key": "lineups/ascent-sova-05/effect-77416093-9cbd-4083-b8d9-fb1a16642c09-88c05353ddc4478b.webp",
+      "sourceSha256": "8fb3edd3df646320fd8fedd1c226457dbbd654c63b3e3b88baac06ba88e1ee42",
+      "sha256": "88c05353ddc4478bb9459b9c3eeaa2304cf9e1b535e707fb137fa6db4d306097"
+    },
+    "lineups/ascent-sova-05/stance-01.png": {
+      "key": "lineups/ascent-sova-05/stance-01-369606672dad12e9.webp",
+      "sourceSha256": "b7c5029378a0bce2c8c77b635dea9b7d198266e1a9f77267468939e4a76f16cd",
+      "sha256": "369606672dad12e9e151a60b56d1231d8514386bd1abb616c35c1c891896f631"
+    },
+    "lineups/ascent-sova-06/aim-01.png": {
+      "key": "lineups/ascent-sova-06/aim-01-d108071afd31f305.webp",
+      "sourceSha256": "faa7c89e04b89c80502e0d2125092f866e8d3c74053c48518dbe754404cb2804",
+      "sha256": "d108071afd31f3057ab86dcfd6f8a6780a522cdfdc572e93ee088eb9b9461615"
+    },
+    "lineups/ascent-sova-06/effect-91c38ab9-a6ce-4fcb-b64d-0400047daa8a.png": {
+      "key": "lineups/ascent-sova-06/effect-91c38ab9-a6ce-4fcb-b64d-0400047daa8a-00e66fb6d264fd0d.webp",
+      "sourceSha256": "b6577f780dca4592195f1a18073992564b57f4c706bc82834dad77c7addadf51",
+      "sha256": "00e66fb6d264fd0d53bd0627c3dbcb8c3e561cedd9820a5ace52c8bf32fd6571"
+    },
+    "lineups/ascent-sova-06/stance-01.png": {
+      "key": "lineups/ascent-sova-06/stance-01-4464d7646c3a299a.webp",
+      "sourceSha256": "0ce499287fd9db6789f8d2e49dda9f32f41103bec75f9f76dcb3f82281a4616b",
+      "sha256": "4464d7646c3a299a3a91d595a24a8f8b3a35e1b43ce44ff512c06610bfaaba67"
+    },
+    "lineups/ascent-sova-07/aim-01.png": {
+      "key": "lineups/ascent-sova-07/aim-01-90607ca0b41a2fb9.webp",
+      "sourceSha256": "546a71f549485cfcdf39e38459ccf6ea597ed80088f8aa8250a8ea5842873ea0",
+      "sha256": "90607ca0b41a2fb95ea36b7af5ada9954bd45a1ced5b19cdfd44f7dc0ada7070"
+    },
+    "lineups/ascent-sova-07/effect-dd6edfa0-adc0-462a-9b21-760fed72c0a4.png": {
+      "key": "lineups/ascent-sova-07/effect-dd6edfa0-adc0-462a-9b21-760fed72c0a4-7b888f7076dfdaa1.webp",
+      "sourceSha256": "574f714b2c2b001c77b6a7400b47ff65346fd2fc66f7c624a6f3c87a6217c888",
+      "sha256": "7b888f7076dfdaa1fc318097a596d63f252a101cec0ca4315e993c6ddb0b925f"
+    },
+    "lineups/ascent-sova-07/stance-01.png": {
+      "key": "lineups/ascent-sova-07/stance-01-a497d83bfabfbfe9.webp",
+      "sourceSha256": "825bc504c9dae01a79a90fd0a3d369fd7b070a8c15ba30aad1d732b2e5d9a783",
+      "sha256": "a497d83bfabfbfe9f4279ed0329caded99775a26acceaeda0ed4710707a53c2d"
+    },
+    "lineups/ascent-sova-08/aim-01.png": {
+      "key": "lineups/ascent-sova-08/aim-01-e02a5f4ab20f212d.webp",
+      "sourceSha256": "38f511fa2236bd39993673684b5f675121f83925851bdaf4b74b9b686beabe14",
+      "sha256": "e02a5f4ab20f212d3f87fcd5e2a4b790ed77961b1ceb39b50affaf944c210b54"
+    },
+    "lineups/ascent-sova-08/effect-9041f835-1d33-4e67-a117-af01f86571fa.png": {
+      "key": "lineups/ascent-sova-08/effect-9041f835-1d33-4e67-a117-af01f86571fa-b3a2f6c46d8a10f8.webp",
+      "sourceSha256": "bb0e02ab9f493adeccd851ef37eb6fa30a0a5c51161858e4bec46957ae0e5b95",
+      "sha256": "b3a2f6c46d8a10f8c4435cc10090f0d43870eed6fb48f82ddc88174803ff09ad"
+    },
+    "lineups/ascent-sova-08/stance-01.png": {
+      "key": "lineups/ascent-sova-08/stance-01-4787bc461e3a711a.webp",
+      "sourceSha256": "8b89ef2a420b8d4bd316fb3992ac5df2ffc6f9f0535e3fc61838a62e998cf07e",
+      "sha256": "4787bc461e3a711a1a4b35d518add908c262f932de5c945fdcf6102faa5d47ce"
+    },
+    "lineups/ascent-sova-09/aim-01.png": {
+      "key": "lineups/ascent-sova-09/aim-01-b3375afdfaddaf73.webp",
+      "sourceSha256": "8637fa4725d4bbe854923d665f412bb60c6fff8352c266867b0bd3ce91c79c39",
+      "sha256": "b3375afdfaddaf73d3165d3d1f096c516d4c0b14551e07e8196f9267b61ac0e5"
+    },
+    "lineups/ascent-sova-09/effect-9a73a6d1-f21a-43d3-8b89-c2f060b6bd5e.png": {
+      "key": "lineups/ascent-sova-09/effect-9a73a6d1-f21a-43d3-8b89-c2f060b6bd5e-eeccee38e9997fd1.webp",
+      "sourceSha256": "3471106d70da8ffb64d4c1e24b12c7e275a3410a490a1d881a7a586d005f6d58",
+      "sha256": "eeccee38e9997fd1398827a24b8509699f77b95bafa5471fdb0c8a5c06c04261"
+    },
+    "lineups/ascent-sova-10/aim-01.png": {
+      "key": "lineups/ascent-sova-10/aim-01-4894b5c8b7c616d1.webp",
+      "sourceSha256": "926f6a0f6c5606b8f3786e82678b960e6b1276a501b5c65815cf5e507ffb9f8b",
+      "sha256": "4894b5c8b7c616d1fe5fde6794f84d07d27b278b4d9894eeeaf7f36c3ae72311"
+    },
+    "lineups/ascent-sova-11/aim-01.png": {
+      "key": "lineups/ascent-sova-11/aim-01-c6f41dd5af781248.webp",
+      "sourceSha256": "333424c677f21b179189843cbdabfd07552db8fd9638f8b73a785872bb351770",
+      "sha256": "c6f41dd5af78124846099a8e85f1d1ead7c359fbb360b26fc57434939e2533cd"
+    },
+    "lineups/ascent-sova-11/effect-88908f6a-dffe-4f3e-b04f-b512e0e06ad8.png": {
+      "key": "lineups/ascent-sova-11/effect-88908f6a-dffe-4f3e-b04f-b512e0e06ad8-2f7fb6c29b832a31.webp",
+      "sourceSha256": "a5c9ae177f5bf6fdaa3bc4346cf2a4f5bdc93e86ccba96b04b28a05c15a6950d",
+      "sha256": "2f7fb6c29b832a31b832990457b5479d0af4fd248834d48cfeb368f74f28a55e"
+    },
+    "lineups/ascent-sova-12/aim-01.png": {
+      "key": "lineups/ascent-sova-12/aim-01-df0f0fc31b0b63f8.webp",
+      "sourceSha256": "0bc915f02513df154acb9f406252a96eb656ba4298cecc314f65625497af6d1b",
+      "sha256": "df0f0fc31b0b63f8b6a6cbf8144da78321ed60f966acddef4268c4430bcb88ef"
+    },
+    "lineups/ascent-sova-12/effect-89f99a53-f278-4ffc-ad8c-dcb28ff09aa8.png": {
+      "key": "lineups/ascent-sova-12/effect-89f99a53-f278-4ffc-ad8c-dcb28ff09aa8-d7a7f191f9dd2d7c.webp",
+      "sourceSha256": "0ce82be42f668dd1f9b79e8f352562061983942c762d38912a7f2282b724d81f",
+      "sha256": "d7a7f191f9dd2d7cdad6232f52ffe8196723c68d2760c256d984e711662c94ba"
+    },
+    "lineups/ascent-sova-12/stance-01.png": {
+      "key": "lineups/ascent-sova-12/stance-01-bbd522fd3f58127a.webp",
+      "sourceSha256": "ac8462148e8bd5c967a3248e8757a3f04e3e6a335f8a88a77a1e82e19bdf3705",
+      "sha256": "bbd522fd3f58127adb366e9507449f0c2c5540f4eb6f272efc06eec0554d402a"
+    },
+    "lineups/ascent-sova-13/aim-01.png": {
+      "key": "lineups/ascent-sova-13/aim-01-f2cc590c39c17d35.webp",
+      "sourceSha256": "0622cfacce5235ad22a15196bb99a4ce3bf81b4b1a528f58933795973c5aca88",
+      "sha256": "f2cc590c39c17d355d2dbc9c1ecb33827440b869e6978b522671f10a53dc5d7a"
+    },
+    "lineups/ascent-sova-13/effect-644cd1f3-5807-45e9-ba05-bc61a8760ccf.png": {
+      "key": "lineups/ascent-sova-13/effect-644cd1f3-5807-45e9-ba05-bc61a8760ccf-533c7ee423e62ee3.webp",
+      "sourceSha256": "80c3aa40655afa390100714c56764582797daef004bd7b36d3bd661ef3323055",
+      "sha256": "533c7ee423e62ee3d9cff86f8645f1c41d0a20b0e8fd8b9fd4104cdfaf568753"
+    },
+    "lineups/ascent-sova-14/aim-01.png": {
+      "key": "lineups/ascent-sova-14/aim-01-cf6bcbc1cee00d6f.webp",
+      "sourceSha256": "80513d6bd6ac943162c784c2f1b6c1576074dd37b84a75688d428e8521849a97",
+      "sha256": "cf6bcbc1cee00d6f18c758848aee83dac812ae783d647dbe93de27301b2a2a36"
+    },
+    "lineups/ascent-sova-14/effect-9583a87f-d745-4fc3-94f7-94d2d5dfd1db.png": {
+      "key": "lineups/ascent-sova-14/effect-9583a87f-d745-4fc3-94f7-94d2d5dfd1db-00aed3479dd59c24.webp",
+      "sourceSha256": "5a6df08e65941dd61b4a2294d20ae557320f019505a31b48b105373c863876a4",
+      "sha256": "00aed3479dd59c24e66419c0ed0a02fb4ffdb7529f407e618fe61111c2345966"
+    },
+    "lineups/ascent-sova-15/aim-01.png": {
+      "key": "lineups/ascent-sova-15/aim-01-91c5e7dc9b4972f7.webp",
+      "sourceSha256": "7a8da4aa0f364198a6e71460787a3d258ed2cb3fd259091a0ac3610bb27cfa1e",
+      "sha256": "91c5e7dc9b4972f74d3db1c6763fa9f84f7f8ff9d6e3ddb683e5bf54a317e452"
+    },
+    "lineups/ascent-sova-15/aim-02.png": {
+      "key": "lineups/ascent-sova-15/aim-02-21fbdce1a0d1536b.webp",
+      "sourceSha256": "1fba9913a1fec77054f5afde7c6467b7db29d7c0938c82518d644c5458e6a51d",
+      "sha256": "21fbdce1a0d1536be5bd0a95fb587deb3aa3c6cce3ef081c51ff9e32774fe4b4"
+    },
+    "lineups/ascent-sova-15/stance-01.png": {
+      "key": "lineups/ascent-sova-15/stance-01-2fd3e18d0531c687.webp",
+      "sourceSha256": "253798ff1da043c044882bc6bfa56bf7e790b587202c7f6109ad4b0754ec3ca8",
+      "sha256": "2fd3e18d0531c687e5c896b64de1d5d4087ec63ce4a54a27ce45a9a15cb50c81"
+    },
+    "lineups/ascent-sova-16/aim-01.png": {
+      "key": "lineups/ascent-sova-16/aim-01-3f178e967389c672.webp",
+      "sourceSha256": "be8f0f57d043a73cdeb50456cea917828134d90aba6d56a6ac82f6787f166a46",
+      "sha256": "3f178e967389c6725d66cc90d42b5f63c572172af573317e77910406f0c2ea76"
+    },
+    "lineups/ascent-sova-16/effect-430468ad-dc09-49eb-adb7-4f3610e99f64.png": {
+      "key": "lineups/ascent-sova-16/effect-430468ad-dc09-49eb-adb7-4f3610e99f64-1b8e71735ea71466.webp",
+      "sourceSha256": "e03bf1ad64096146286af6a039991d577ed3724cb23c74d0f755d16de1a550e8",
+      "sha256": "1b8e71735ea714665e6e708c04d63b932c9af9c710c911caa65183faa9658154"
+    },
+    "lineups/ascent-sova-16/stance-01.png": {
+      "key": "lineups/ascent-sova-16/stance-01-6ab7cd0599c0a3ca.webp",
+      "sourceSha256": "8a9f504467c101129cb8d6a01dbc1db9c94de19e972c40f935aa725d3e20741c",
+      "sha256": "6ab7cd0599c0a3ca455d81f49c7ae28e10e8731f1afc4c168b592e047187127c"
+    },
+    "lineups/ascent-sova-17/aim-01.png": {
+      "key": "lineups/ascent-sova-17/aim-01-290c7982350e3786.webp",
+      "sourceSha256": "4e0c01058c281f2f47d3f77b3831aa3c13e42cdf65a6e6939c297223d0983503",
+      "sha256": "290c7982350e3786263fa55a7c5790ca5d7310a7a871decff85e7a93a3abd334"
+    },
+    "lineups/ascent-sova-18/aim-01.png": {
+      "key": "lineups/ascent-sova-18/aim-01-f34b92de04f9f5ae.webp",
+      "sourceSha256": "fdd3791e9f7a68c5cee14a842854dd504aff0d7c0cc6ddbeee65431700611d6a",
+      "sha256": "f34b92de04f9f5ae3b81cac19a310e6f25f9529d0277da42f619662b66d7d109"
+    },
+    "lineups/ascent-sova-18/effect-5a3f4ae7-983c-4d89-92c2-a93323ad7e1b.png": {
+      "key": "lineups/ascent-sova-18/effect-5a3f4ae7-983c-4d89-92c2-a93323ad7e1b-3049da065b3c35e0.webp",
+      "sourceSha256": "9e7295fe6ef21cdff1475c6212a6b790738f3014daa5b56d26caeeae7d6f045e",
+      "sha256": "3049da065b3c35e05b1963a9560cb994a5a0c1e7eb4a1638b53d3f754875796b"
+    },
+    "lineups/ascent-sova-18/stance-01.png": {
+      "key": "lineups/ascent-sova-18/stance-01-19b0a212d2932609.webp",
+      "sourceSha256": "ec419fd5962ac2838946796223f75c36cdadfdf37277b5807b2b3edab5f1ef77",
+      "sha256": "19b0a212d2932609c48686d5234f26cc5bf066d5f330178b50fb2e7a61ac8a10"
+    },
+    "lineups/ascent-sova-19/aim-01.png": {
+      "key": "lineups/ascent-sova-19/aim-01-a1b2bc7b599c8d11.webp",
+      "sourceSha256": "b8bce8349dcd3bb94ccb92dc692a11af92d6e882ed817e701bb0eb9a18ff8efb",
+      "sha256": "a1b2bc7b599c8d119f662053ed66f3d78a198c99e1e3c1a73d543ffd48cbddc5"
+    },
+    "lineups/ascent-sova-20/aim-01.png": {
+      "key": "lineups/ascent-sova-20/aim-01-fecf1710fd14c985.webp",
+      "sourceSha256": "de7aa03c032c8934e7e9309d96c0a1ed8eeb150b061aa927ff3d4c40bf93eea3",
+      "sha256": "fecf1710fd14c985a51266e2efb2040748ab838520de0c92cb67a0d7a2e0d824"
+    },
+    "lineups/ascent-sova-20/effect-a28282f4-fd18-4074-97d9-55a746c58dc1.png": {
+      "key": "lineups/ascent-sova-20/effect-a28282f4-fd18-4074-97d9-55a746c58dc1-4193e350d8d40516.webp",
+      "sourceSha256": "55eb46d1cb182561417811ec16abd758e84260463dd1710cda18d387481ee66d",
+      "sha256": "4193e350d8d40516cf7f0213860bfc32a7c105b36b8af4f9b518ebd9e738ce27"
+    },
+    "lineups/ascent-sova-21/aim-01.png": {
+      "key": "lineups/ascent-sova-21/aim-01-ba6dc8ce9a93727e.webp",
+      "sourceSha256": "174590cf628ea924db54335b033c7690c7b99c0f29db16f9d6d9cf60751f2ffe",
+      "sha256": "ba6dc8ce9a93727e2d3b70ebd09b789b1cdaad482b11fce5c8f42d4d4929eb08"
+    },
+    "lineups/ascent-sova-22/aim-01.png": {
+      "key": "lineups/ascent-sova-22/aim-01-2a33b1d4d6c84b49.webp",
+      "sourceSha256": "2a9adce99dc9d3cedebae6230f4c54dad7752b745b7fc95c5a1db2217ab066af",
+      "sha256": "2a33b1d4d6c84b49592e6404b23dae1509246f37654daf0656673c0e61021823"
+    },
+    "lineups/ascent-sova-22/effect-75516132-fb96-4cdf-93d4-390ecf45d0c0.png": {
+      "key": "lineups/ascent-sova-22/effect-75516132-fb96-4cdf-93d4-390ecf45d0c0-d831cedad214e3bb.webp",
+      "sourceSha256": "bd6d1f15966ac9fb63b67f74da456f4803c5d3a2fb7e63aeac1fa4ddd7db957c",
+      "sha256": "d831cedad214e3bb2ea07026e844471fd8bf6e3489d5c8aa89812cee6331f4b5"
+    },
+    "lineups/ascent-sova-22/stance-01.png": {
+      "key": "lineups/ascent-sova-22/stance-01-bba126c32b5da5d2.webp",
+      "sourceSha256": "c12a13ba32df895499325173477217c03a1977ca6a2b991d609df5949f4bae10",
+      "sha256": "bba126c32b5da5d2ba84d4298ffb446c53838ad671da1a20b6470b2cb1856cf0"
+    },
+    "lineups/ascent-sova-23/aim-01.png": {
+      "key": "lineups/ascent-sova-23/aim-01-aaafd02fb7248050.webp",
+      "sourceSha256": "12a1951d840813bce1089223492b994c6d4ab84af1c46f50113fbd5852edd87b",
+      "sha256": "aaafd02fb7248050fd290a3eefdd6a5066bbb4429fcacab1b14bf6139e1a37ed"
+    },
+    "lineups/ascent-sova-24/aim-01.png": {
+      "key": "lineups/ascent-sova-24/aim-01-eb90cbac79ec7dd8.webp",
+      "sourceSha256": "d2deaa9b26c8cc3dae1424f2868c606b167417d27d373b64787c7a8110c24888",
+      "sha256": "eb90cbac79ec7dd88a6f39c569511ba43f912b4676b15e1448f81b01a5406251"
+    },
+    "lineups/ascent-sova-24/effect-4e619dc9-b4b7-4f45-b610-360696830b34.png": {
+      "key": "lineups/ascent-sova-24/effect-4e619dc9-b4b7-4f45-b610-360696830b34-15af6afdf7941e29.webp",
+      "sourceSha256": "dac3d0bf7f3210f5938422ffe4a579fcbe1f11b9a7d4742be8938e7b30c74133",
+      "sha256": "15af6afdf7941e29845d79ca85cccc73aa697c1b5a6ba8d4c0d4a0ff3b33b62d"
+    },
+    "lineups/ascent-sova-25/aim-01.png": {
+      "key": "lineups/ascent-sova-25/aim-01-ef7f3ce041e020c6.webp",
+      "sourceSha256": "5f9eeeb5e62d7ad019a08f9bba202974bb2e053d547120f7d69fca939d8db066",
+      "sha256": "ef7f3ce041e020c6ec5ed80bb23a13d82aa43792b48967ce81bb864827aeda1a"
+    },
+    "lineups/ascent-sova-26/aim-01.png": {
+      "key": "lineups/ascent-sova-26/aim-01-13c7337ab86daaaf.webp",
+      "sourceSha256": "98d2f26f028f8964d13097333dfacf6e6e73361739f5272ced504705a4626f53",
+      "sha256": "13c7337ab86daaafe9f16095da0012f6f5b12780ae2cc0eee437fa72448eb0d7"
+    },
+    "lineups/bind-fade-254c2450-47ad-447e-b353-18e3f2d05332/aim-538ed6e9-bc69-4c07-be5c-9e3a57aae4cf.png": {
+      "key": "lineups/bind-fade-254c2450-47ad-447e-b353-18e3f2d05332/aim-538ed6e9-bc69-4c07-be5c-9e3a57aae4cf-3933939b28343f4e.webp",
+      "sourceSha256": "a6ed573c30990c1e561e12cbd6e19309b94ef291659339ee9dcd80c1d9ee5c05",
+      "sha256": "3933939b28343f4ede2ff220e3958194d26ae1f8948d0341ed558310b397cfa7"
+    },
+    "lineups/bind-fade-254c2450-47ad-447e-b353-18e3f2d05332/effect-b359002e-3aaf-4adf-b46e-713ffd0cc49f.png": {
+      "key": "lineups/bind-fade-254c2450-47ad-447e-b353-18e3f2d05332/effect-b359002e-3aaf-4adf-b46e-713ffd0cc49f-acae6f5ac3bcf5a3.webp",
+      "sourceSha256": "41ff24502a388325f1e35c2822306bb2a0a0b3fe9f9924677a37762701ce13ba",
+      "sha256": "acae6f5ac3bcf5a39908c34124412528ae7c7f9b518cbb7e229d60ca36ccb902"
+    },
+    "lineups/bind-fade-428b9bdd-5961-4a5a-9243-00c863829166/aim-658526ea-30d5-4d1b-a03f-425039fc813d.png": {
+      "key": "lineups/bind-fade-428b9bdd-5961-4a5a-9243-00c863829166/aim-658526ea-30d5-4d1b-a03f-425039fc813d-92d376c00413f086.webp",
+      "sourceSha256": "cc0ba126143d5ec0888c76d3b00ee99f77e8a80671697007f869fb79ab38d5df",
+      "sha256": "92d376c00413f0869825660a03beaaf58e105d59cac9e846ce4bdc56ca445ffb"
+    },
+    "lineups/bind-fade-428b9bdd-5961-4a5a-9243-00c863829166/effect-84fe2761-11fd-445a-b759-e46a90004ac2.png": {
+      "key": "lineups/bind-fade-428b9bdd-5961-4a5a-9243-00c863829166/effect-84fe2761-11fd-445a-b759-e46a90004ac2-b77d28a003e091b6.webp",
+      "sourceSha256": "5aa245f0c815e18abf47659650452627384b81f6ca38d6c1da706c099ad93673",
+      "sha256": "b77d28a003e091b6288cccd77536d679a30ceb85795424f9a8115f81b4c44f52"
+    },
+    "lineups/bind-fade-486250fe-4807-4b6d-898b-dc01284f5bf4/aim-1c45ca7e-5589-4d7a-a09a-d42f81f20d72.png": {
+      "key": "lineups/bind-fade-486250fe-4807-4b6d-898b-dc01284f5bf4/aim-1c45ca7e-5589-4d7a-a09a-d42f81f20d72-e03c00c8886eded1.webp",
+      "sourceSha256": "642a51cf5ac73de667cd0894cb5a45d9e43a3a59973eb46e8cae6344914d32f2",
+      "sha256": "e03c00c8886eded1270280440bb8315f6ba6463f40a716e0b5bdbbcd53199390"
+    },
+    "lineups/bind-fade-486250fe-4807-4b6d-898b-dc01284f5bf4/effect-bccc7499-410b-4dc9-b376-eb1c07a69c45.png": {
+      "key": "lineups/bind-fade-486250fe-4807-4b6d-898b-dc01284f5bf4/effect-bccc7499-410b-4dc9-b376-eb1c07a69c45-cccbf29fbe0610cc.webp",
+      "sourceSha256": "5c027427c6627963edac5e67b0bee91cd1a10be982c3ed7da9d0c012abbcc33c",
+      "sha256": "cccbf29fbe0610cced1c1f32a5b99aa9ae4c088c7a26670ba67ad96be99db178"
+    },
+    "lineups/bind-fade-486250fe-4807-4b6d-898b-dc01284f5bf4/stance-e4c89b29-c736-41ff-907b-f368d9299869.png": {
+      "key": "lineups/bind-fade-486250fe-4807-4b6d-898b-dc01284f5bf4/stance-e4c89b29-c736-41ff-907b-f368d9299869-db499754aeb6fd08.webp",
+      "sourceSha256": "68d55432ae9709664f399d7780bd71f1fb172fa59a52b4d3b4e12fd494839f8b",
+      "sha256": "db499754aeb6fd0836048a6e232afdb3c2a267b01d8d93b3be944f9e1083742e"
+    },
+    "lineups/bind-fade-5987e0fa-b998-4d34-96f6-982b8e10f036/effect-859f8ffb-912f-40c7-9075-96e5f7b05fb2.png": {
+      "key": "lineups/bind-fade-5987e0fa-b998-4d34-96f6-982b8e10f036/effect-859f8ffb-912f-40c7-9075-96e5f7b05fb2-a97761caffe69f26.webp",
+      "sourceSha256": "cc4250aa90f130c86c1399da3883d9de2fdfa758feaed6d262b777ac287d21bf",
+      "sha256": "a97761caffe69f26f4c120a4a9a612ec8eccd0c73964edbc7316ba069f0aead9"
+    },
+    "lineups/bind-fade-8cd238d1-19b1-4faf-88c1-860f81ab6196/aim-c65b672f-07a0-4114-aa3e-9d4bc91fd16d.png": {
+      "key": "lineups/bind-fade-8cd238d1-19b1-4faf-88c1-860f81ab6196/aim-c65b672f-07a0-4114-aa3e-9d4bc91fd16d-303cd6b363641e04.webp",
+      "sourceSha256": "600dc497db3a459da9697eb5dab9ddc5885cc491d5d71a70f0c5e369f325475e",
+      "sha256": "303cd6b363641e0444abe6bb4c9c1cde3ec48a3927b1cb35807f3b12f4dca1ac"
+    },
+    "lineups/bind-fade-8cd238d1-19b1-4faf-88c1-860f81ab6196/effect-564dbd69-012b-42df-b0a3-83bc3d62803e.png": {
+      "key": "lineups/bind-fade-8cd238d1-19b1-4faf-88c1-860f81ab6196/effect-564dbd69-012b-42df-b0a3-83bc3d62803e-301961c14a80f291.webp",
+      "sourceSha256": "be2df9af11912befd41af528fee7cb54aaf9758747a235233bd6335524009f87",
+      "sha256": "301961c14a80f291d53bc87a0646c168889374575a93073ab3d0ff6ac388c592"
+    },
+    "lineups/bind-fade-8cd238d1-19b1-4faf-88c1-860f81ab6196/stance-de944a08-e07f-4d2a-bfd7-460d79d1792a.png": {
+      "key": "lineups/bind-fade-8cd238d1-19b1-4faf-88c1-860f81ab6196/stance-de944a08-e07f-4d2a-bfd7-460d79d1792a-3b3f82871afe1b3d.webp",
+      "sourceSha256": "36715769d6a179b9bfc475990e332b9c38168c15a08fb4a856bd90fec75e5be3",
+      "sha256": "3b3f82871afe1b3d4c0b895b2070dcfdff52ffb7d313723f58257459d72aacee"
+    },
+    "maps/abyss.png": {
+      "key": "maps/abyss-a29023d3ed5d8ee2.webp",
+      "sourceSha256": "466a3d18f78c251b416533959471bdef80b75e9dd3f8a89b1601e6c1ed4d299f",
+      "sha256": "a29023d3ed5d8ee26505b80031f7a45f67359860917443bada2fbecf5eb666dd"
+    },
+    "maps/ascent.png": {
+      "key": "maps/ascent-d4dd735a655e54fe.webp",
+      "sourceSha256": "287357fcfce230ecb67704cafdb519a5bdb91602ed30f897474a65e86469c550",
+      "sha256": "d4dd735a655e54fe14993f90e5a3ac7061a5cb2ee5c80fefb8453eb559681055"
+    },
+    "maps/bind.png": {
+      "key": "maps/bind-0c3ebd8cc674f916.webp",
+      "sourceSha256": "84f5ff72aa58bf677617ab5792def847c1c154b38f6e7458f7234121baa3507f",
+      "sha256": "0c3ebd8cc674f916fd48008b8f6489df0d2ec347d3eca3938d321828730b4e4d"
+    },
+    "maps/breeze.png": {
+      "key": "maps/breeze-8c793d454dd317c6.webp",
+      "sourceSha256": "82c6472afe6f34ac4c0d979fbf6df0a739c174292edf593f29b9495f3b3f84a2",
+      "sha256": "8c793d454dd317c680186a3b70827642a9b1deab42711201366f4fcc5423f29f"
+    },
+    "maps/corrode.png": {
+      "key": "maps/corrode-66907e238171173c.webp",
+      "sourceSha256": "9f9ed010f502a1146435e779ec2979ce2eb72f78559df19fb89d47e36c98a483",
+      "sha256": "66907e238171173ce8a3234e65cef8a7468b7adba525f0132e13484afa493d3c"
+    },
+    "maps/fracture.png": {
+      "key": "maps/fracture-96aff21ef33867dd.webp",
+      "sourceSha256": "d41e013eca94e680a61a4d4572929e46d818efce0fb3f065410d9d36399d1a6b",
+      "sha256": "96aff21ef33867dd375940c1c78d3fca069565a02d4b53376e855d90898b7727"
+    },
+    "maps/haven.png": {
+      "key": "maps/haven-44ae675a76b2ca14.webp",
+      "sourceSha256": "f8ccc9cfffaf3eeed0b735cf3ecffc1ce46f0fbb54bdb69d9ba72b63d32b4936",
+      "sha256": "44ae675a76b2ca149b70281bb4df70e8223d51d708d5b653be36ebe47482959c"
+    },
+    "maps/hires/abyss.png": {
+      "key": "maps/hires/abyss-93ad7e8d54861f7b.webp",
+      "sourceSha256": "3cf97fc9a08ddce061d5703e5c23b42f6c585c102e8692f0b087e79534ffdd30",
+      "sha256": "93ad7e8d54861f7b8ba82c938f91b1ceefec0728972a9c8c4b140ca3cfa1e180"
+    },
+    "maps/hires/ascent.png": {
+      "key": "maps/hires/ascent-ee3b5bf57eee4409.webp",
+      "sourceSha256": "e2bb398726ed238f35d7e8a32ee8130bb76ffee0d057ac432105370d2f3c1184",
+      "sha256": "ee3b5bf57eee44096144faa8f44cfaa7de21dc5ce22d8306ee1a9cc233fec08b"
+    },
+    "maps/hires/bind.png": {
+      "key": "maps/hires/bind-2736411cf24cc308.webp",
+      "sourceSha256": "6cb49e2a16dc4c77642188cb5037ba44d9b6c8e3d8e71f8a4cd54c94c118c778",
+      "sha256": "2736411cf24cc3082ada2511e9f26da1b4f86b00b203f30b88d604a3b95ab621"
+    },
+    "maps/hires/breeze.png": {
+      "key": "maps/hires/breeze-d7184e574c47f415.webp",
+      "sourceSha256": "1ff3bc496623ada78884c440aa30b6f6ee03ca583b7df26f718f726d44e10335",
+      "sha256": "d7184e574c47f4154615c2e7f4f6f14ba25671455b6c3e35d2cb6aaa37fadfe9"
+    },
+    "maps/hires/corrode.png": {
+      "key": "maps/hires/corrode-1fd596b91c4a8190.webp",
+      "sourceSha256": "0e301aa74edfaa4bc466bac3cd89f427c0a11ab4e0a435f8923694314b1fdc37",
+      "sha256": "1fd596b91c4a8190a4cd5fd5419c59b7d835598e4916a0a0e6cb2bacb50a33a3"
+    },
+    "maps/hires/fracture.png": {
+      "key": "maps/hires/fracture-ef9773edd84d06bc.webp",
+      "sourceSha256": "368c7150dd6fe93866e607c6bf7d24389b2cf9c7937aac50cb224b6ebdce00d6",
+      "sha256": "ef9773edd84d06bc0095545f18f46ffd00aa344bc8bfb0158c577d70d96ce7f1"
+    },
+    "maps/hires/haven.png": {
+      "key": "maps/hires/haven-382d80f193a631f2.webp",
+      "sourceSha256": "a9dc4e72dfff4a3c9f314368ea23e1579f751191e7bd022412162bfdc8044343",
+      "sha256": "382d80f193a631f291235c8832b5c530f1b464990f451f1612bb98cbdbb8a8c8"
+    },
+    "maps/hires/icebox.png": {
+      "key": "maps/hires/icebox-0cf89da11f930c95.webp",
+      "sourceSha256": "cfd2bc23df05548c1665252f9ffdaba23b96c4f385ba4d28eaeb7ce81c37b018",
+      "sha256": "0cf89da11f930c952c5f38122b12cb3c3e22492c1c2471b634bde088459b7984"
+    },
+    "maps/hires/lotus.png": {
+      "key": "maps/hires/lotus-f3a1ef3e3b89a022.webp",
+      "sourceSha256": "c6ab1f308fcc4654103f0866b9bfe931d45775298652b8e188ea6edf09a08d84",
+      "sha256": "f3a1ef3e3b89a02268a071cdc788731a29b24aaa169ad3592e683c5e55ab8f4b"
+    },
+    "maps/hires/pearl.png": {
+      "key": "maps/hires/pearl-1deebffd1e514631.webp",
+      "sourceSha256": "0a81714d66f1747b7db5e77199d32b5997576613ab7c564cb5e2fec94fbf34c8",
+      "sha256": "1deebffd1e5146319bcd62a99c165948bb9f0e280f0679c501d7033fc204048e"
+    },
+    "maps/hires/split.png": {
+      "key": "maps/hires/split-7873efcc5991a551.webp",
+      "sourceSha256": "bca43b3a10ce3807a80bcb8dfc3fd6002adcf298e8324a4da220998f935ed312",
+      "sha256": "7873efcc5991a551097bf9edb31e8df59d47e262547047c72d65ed8f28fa725a"
+    },
+    "maps/hires/summit.png": {
+      "key": "maps/hires/summit-adb0eafc80be16f2.webp",
+      "sourceSha256": "7470a0101e1cc86d019491765e7993e5fb113c59fd96a211d4446f41d7092322",
+      "sha256": "adb0eafc80be16f28a468a4ed35c49ca987171392db8af718fe0201402f35f20"
+    },
+    "maps/hires/sunset.png": {
+      "key": "maps/hires/sunset-4919f96bf40e2223.webp",
+      "sourceSha256": "bad6bf0d6de6628fa00e16ab9c3f756757696da9f33a3f43e533996d78250409",
+      "sha256": "4919f96bf40e222321494db98227230d0951b996c3d940225d0742b14972596d"
+    },
+    "maps/icebox.png": {
+      "key": "maps/icebox-147ccdf024c99309.webp",
+      "sourceSha256": "85b9cef2682985b2cf44f260d995d8123d40246f6d078dbf188fe27ed71723db",
+      "sha256": "147ccdf024c99309388f4cd24972c304e0265e6c3860bf19bf3f8d1a540c5d1c"
+    },
+    "maps/lotus.png": {
+      "key": "maps/lotus-13d625660b94de78.webp",
+      "sourceSha256": "d533af2a6fbc09f12579b2d33438a610d5846db61e56842ad3038087155851c2",
+      "sha256": "13d625660b94de7865358af870f8852146ce01b74279f166c4c1357a60fcc74c"
+    },
+    "maps/pearl.png": {
+      "key": "maps/pearl-711750095f465baa.webp",
+      "sourceSha256": "5e0e7d4a80d830d9b8bb0f265cb14245be583bce87a69d3f53a07e9083ca810c",
+      "sha256": "711750095f465baabf8f14ba1b1ec33b7c17d81833932d8de9d08aa5adc97cdd"
+    },
+    "maps/split.png": {
+      "key": "maps/split-33cbbf10abeb7efb.webp",
+      "sourceSha256": "cc102270353627dab124a7c4ecc429fa150982aa7f243b944ac15f8f83b5b7c8",
+      "sha256": "33cbbf10abeb7efba881e1365592e66c460efd693d9480ba50cdbf93019aa805"
+    },
+    "maps/summit.png": {
+      "key": "maps/summit-2bd974227c47841a.webp",
+      "sourceSha256": "e3ceb9a90958953933aa2e0a7821cb42eb80d622700be89c288d933ac855075f",
+      "sha256": "2bd974227c47841a56cb68dd09ec842492112fb355edf62c9328422ca93a756c"
+    },
+    "maps/sunset.png": {
+      "key": "maps/sunset-5ababed69c3fd8f1.webp",
+      "sourceSha256": "1188642e2f94f4fbb17d6c61feb9071d349dec21c9749349db710afbc1bbb228",
+      "sha256": "5ababed69c3fd8f1d4929694bb121bbf0e65d55a4a331c83bece2b06a299e492"
+    }
+  }
 }

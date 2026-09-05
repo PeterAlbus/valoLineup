@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import JSZip from 'jszip';
-import { manifestSchema, applyLayers, readPackage, validateReferences, same } from '../src/package-model.mjs';
+import { collectChanges, manifestSchema, applyLayers, readPackage, validateReferences, same, sameLineup } from '../src/package-model.mjs';
 
 // Do not rewrite the frozen fixture when evolving the format: retain a v4 reader/migration instead.
 const fixture = JSON.parse(await readFile(new URL('./fixtures/edit-package-v4.json', import.meta.url), 'utf8'));
@@ -24,3 +24,19 @@ assert.throws(() => manifestSchema.parse({ ...second, changes: { added: [], upda
 assert.throws(() => manifestSchema.parse({ ...fixture, changes: { added: [{ ...record, media: { ...record.media, aim: [{ key: `lineups/${record.id}/../bad.png`, alt: 'bad' }] } }], updated: [] } }));
 assert.throws(() => manifestSchema.parse({ ...fixture, changes: { added: [{ ...record, media: { ...record.media, aim: [{ key: `lineups/${record.id}/missing.png`, alt: 'missing' }] } }], updated: [] } }));
 console.log('Package model checks passed: frozen v4 fixture, layer semantics, IDs, paths and complete image declarations.');
+const deletion = { ...fixture, version: 5, changes: { added: [], updated: [], deleted: [{ id: record.id, before: record }] } };
+assert.doesNotThrow(() => manifestSchema.parse(deletion));
+assert.throws(() => manifestSchema.parse({ ...deletion, version: 4 }));
+assert.equal(applyLayers([record], [deletion]).lineups.length, 0);
+assert.equal(applyLayers([record], [deletion, fixture]).lineups.length, 1);
+assert.equal(collectChanges(fixture, [record], []).added.length, 0, 'Deleting a local addition cancels it');
+assert.equal(collectChanges(null, [record], []).deleted[0].id, record.id);
+assert.equal(collectChanges(deletion, [], []).deleted[0].id, record.id, 'Saved deletions survive continued editing');
+assert.equal(collectChanges(deletion, [], [record]).deleted, undefined, 'Restoring cancels the tombstone');
+const hash = 'a'.repeat(64);
+const oldKey = `lineups/${record.id}/legacy.png`;
+const oldRecord = { ...record, media: { ...record.media, aim: [{ key: oldKey, alt: 'aim' }] } };
+const converted = { ...record, media: { ...record.media, aim: [{ key: `lineups/${record.id}/compressed.webp`, alt: 'aim', original: { key: oldKey, sha256: hash } }] } };
+assert(sameLineup(oldRecord, converted, { [oldKey]: { sourceSha256: hash } }));
+assert(!sameLineup(oldRecord, { ...converted, title: 'concurrent edit' }, { [oldKey]: { sourceSha256: hash } }));
+console.log('Compatibility checks passed: v4 retained, v5 deletions, cumulative cancellation and WebP snapshot matching.');

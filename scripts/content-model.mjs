@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import { access, mkdir, readFile, rename, writeFile } from 'node:fs/promises';
+import { access, mkdir, readFile, rename, writeFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { parse, stringify } from 'yaml';
 import { z } from 'zod';
@@ -87,7 +87,10 @@ export async function readSourceContent(root = process.cwd()) {
   let history = [];
   try { history = JSON.parse(await readFile(path.join(root, 'content', 'history.json'), 'utf8')); }
   catch (error) { if (error.code !== 'ENOENT') throw error; }
-  return { maps, agents, lineups, history };
+  let imageMigrations = {};
+  try { imageMigrations = JSON.parse(await readFile(path.join(root, 'content', 'image-migrations.json'), 'utf8')); }
+  catch (error) { if (error.code !== 'ENOENT') throw error; }
+  return { maps, agents, lineups, history, imageMigrations };
 }
 
 export async function validateContent(content, { root = process.cwd(), verifyAssets = true } = {}) {
@@ -148,9 +151,11 @@ export async function validateContent(content, { root = process.cwd(), verifyAss
   const history = z.array(z.object({
     id: z.string(), packageId: z.string().uuid(), revision: z.number().int().positive(),
     appliedAt: z.string().datetime(), author: z.object({ name: z.string(), source: z.string() }).passthrough(),
-    mapIds: z.array(z.string()), lineupIds: z.array(z.string()), added: z.number().int().nonnegative(), updated: z.number().int().nonnegative(),
+    mapIds: z.array(z.string()), lineupIds: z.array(z.string()), added: z.number().int().nonnegative(), updated: z.number().int().nonnegative(), deleted: z.number().int().nonnegative().optional(),
   }).passthrough()).parse(content.history ?? []);
-  return { maps, agents, lineups, history };
+  const mediaBytes = {};
+  if (verifyAssets) for (const lineup of lineups) for (const item of [...lineup.media.stance, ...lineup.media.aim, ...lineup.media.effect]) mediaBytes[item.key] = (await stat(path.join(root, 'public', item.key))).size;
+  return { maps, agents, lineups, history, mediaBytes, imageMigrations: content.imageMigrations ?? {} };
 }
 
 export async function buildContent(root = process.cwd(), { quiet = false } = {}) {

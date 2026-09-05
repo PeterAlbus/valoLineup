@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import content from './data/content.json';
 import { buildManualPackage, downloadEditPackage } from './edit-package';
-import { applyLayers, readPackage, validateReferences, packageStats, MAX_PACKAGE_BYTES, type Lineup, type MediaKind, type Manifest, type Uploader, type PackageData } from './package-model.mjs';
-import { emptyLibrary, readLibrary, readImage, libraryUrls, persistLibrary, STORAGE_KEY, type LocalLibrary } from './local-library';
+import { allMedia, collectChanges, compressPackage, applyLayers, readPackage, validateReferences, packageStats, MAX_PACKAGE_BYTES, type Lineup, type MediaKind, type Manifest, type Uploader, type PackageData } from './package-model.mjs';
+import { encodeWebp, formatBytes } from './image-compression';
+import { emptyLibrary, readLibrary, readImage, libraryUrls, persistLibrary, migrateLegacyImages, STORAGE_KEY, type LocalLibrary } from './local-library';
 import HistoryPage, { UploaderLabel } from './HistoryPage';
 import NewLineupDialog, { type NewLineupInput } from './NewLineupDialog';
 import { getToyUploader, openBilibiliProfile, openBilibiliVideo } from './toy-sdk';
@@ -10,6 +11,7 @@ import { usePanZoom } from './usePanZoom';
 import { useDecodedImage } from './useDecodedImage';
 import ZoomControls from './ZoomControls';
 import ImageLightbox from './ImageLightbox';
+import ExitEditDialog from './ExitEditDialog';
 
 type PendingUpload = {
   key: string;
@@ -147,10 +149,12 @@ export default function App() {
   const [perspective, setPerspective] = useState<Perspective>('attack');
   const [sideFilter, setSideFilter] = useState<SideFilter>('attack');
   const [isEditing, setIsEditing] = useState(false);
+  const [isExitConfirmOpen, setIsExitConfirmOpen] = useState(false);
   const [isMobileView, setIsMobileView] = useState(false);
   const [isEditorBusy, setIsEditorBusy] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
   const [pendingUploads, setPendingUploads] = useState<PendingUpload[]>([]);
+  const compressionRef = useRef(false);
   const [pasteTargetKind, setPasteTargetKind] = useState<MediaKind>('stance');
   const [lightboxItem, setLightboxItem] = useState<LightboxItem | null>(null);
   const [editorNotice, setEditorNotice] = useState<EditorNotice | null>(null);
@@ -167,9 +171,11 @@ export default function App() {
     void (async () => {
       let metadataLoaded = false;
       try {
-        const value = readLibrary();
+        let value = readLibrary();
         for (const manifest of [...value.packages, ...(value.manual ? [value.manual] : [])]) validateReferences(manifest, maps, agents);
         metadataLoaded = true;
+        if (active) setLibrary(value);
+        value = await migrateLegacyImages(value);
         if (active) setLibrary(value);
         urls = await libraryUrls(value);
         if (active) setImageUrls(urls); else urls.forEach((url) => URL.revokeObjectURL(url));
@@ -215,6 +221,13 @@ export default function App() {
   const pointForView = (point: Point) => rotatePoint(point, perspectiveRotation);
   const activeTargetPoint = activeLineup ? pointForView(activeLineup.target) : null;
   const activePendingUploads = activeLineup ? pendingUploads.filter((upload) => upload.lineupId === activeLineup.id) : [];
+  const editChanges = useMemo(() => collectChanges(library.manual, savedLineups, isEditing ? draftLineups : savedLineups), [library.manual, savedLineups, draftLineups, isEditing]);
+  const packageImageBytes = allMedia([...editChanges.added, ...editChanges.updated.map((item) => item.after)]).reduce((sum, item) => {
+    const pending = pendingUploads.find((upload) => upload.key === item.key);
+    const local = sources.get(item.lineupId)?.uploadedAssets.find((asset) => asset.key === item.key);
+    return sum + (pending?.file.size ?? local?.size ?? (content.mediaBytes as Record<string, number>)[item.key] ?? 0);
+  }, 0);
+  const isPackageFull = packageImageBytes > MAX_PACKAGE_BYTES;
 
   function pointStyle(point: Point) {
     const viewPoint = pointForView(point);
@@ -322,7 +335,8 @@ export default function App() {
   }
 
   function handlePinPointerDown(event: React.PointerEvent<HTMLButtonElement>, group: (typeof groups)[number]) {
-    if (!isEditMode) return;
+    if (!isEditMode || event.button !== 0) return;
+    window.getSelection()?.removeAllRanges();
     selectGroup(group);
     event.preventDefault();
     event.stopPropagation();
@@ -376,14 +390,16 @@ export default function App() {
   }
 
   function exitEditMode() {
-    if (!window.confirm('退出后，当前未保存的变更不会被保存。已保存的本地编辑仍会保留。确定退出编辑吗？')) return;
+    if (isEditorBusy) return;
+    setIsExitConfirmOpen(false);
     clearPendingUploads();
     setDraftLineups(savedLineups);
     setIsDirty(false);
     setIsEditing(false);
     setIsNewLineupDialogOpen(false);
     setNewLineupPlacement(null);
-    setEditorNotice(null);
+    setLightboxItem(null);
+    setEditorNotice({ kind: 'info', text: '已退出编辑。此前已保存的本地编辑仍然保留。' });
   }
 
   function beginNewLineupPlacement(input: NewLineupInput) {
@@ -425,25 +441,36 @@ export default function App() {
     setEditorNotice({ kind: 'info', text: `已创建“${lineup.title}”草稿，可以继续拖动或添加图片` });
   }
 
-  function addImages(kind: MediaKind, files: FileList | File[] | null) {
-    if (!activeLineup || !files?.length) return;
+  async function addImages(kind: MediaKind, files: FileList | File[] | null) {
+    if (!activeLineup || !files?.length || isEditorBusy || compressionRef.current) return;
     const supported = Array.from(files).filter((file) => SUPPORTED_IMAGE_TYPES.includes(file.type as (typeof SUPPORTED_IMAGE_TYPES)[number]) && file.size <= MAX_IMAGE_BYTES);
     if (supported.length !== files.length) {
       setEditorNotice({ kind: 'error', text: '只支持小于 12 MB 的 PNG、JPG 或 WebP 图片' });
       return;
     }
+    compressionRef.current = true;
+    setIsEditorBusy(true);
+    setEditorNotice({ kind: 'info', text: '正在压缩为 WebP，原始图片不会保存…' });
+    try {
     const existingCount = activeLineup.media[kind].length;
-    const uploads = supported.map((file, index) => {
+    const uploads: PendingUpload[] = [];
+    for (const [index, original] of supported.entries()) {
+      const blob = await encodeWebp(original);
+      const file = new File([blob], `upload-${crypto.randomUUID()}.webp`, { type: 'image/webp' });
       const alt = `${activeLineup.title}${mediaLabels[kind]}图 ${existingCount + index + 1}`;
-      return {
+      uploads.push({
         key: nextMediaKey(activeLineup, kind, file),
         lineupId: activeLineup.id,
         kind,
         alt,
         file,
-        previewUrl: URL.createObjectURL(file),
-      };
-    });
+        previewUrl: '',
+      });
+    }
+    const existingKeys = new Set(allMedia([...editChanges.added, ...editChanges.updated.map((item) => item.after)]).map((item) => item.key));
+    const newlyIncluded = allMedia([activeLineup]).filter((item) => !existingKeys.has(item.key)).reduce((sum, item) => sum + (sources.get(item.lineupId)?.uploadedAssets.find((asset) => asset.key === item.key)?.size ?? (content.mediaBytes as Record<string, number>)[item.key] ?? 0), 0);
+    if (packageImageBytes + newlyIncluded + uploads.reduce((sum, upload) => sum + upload.file.size, 0) > MAX_PACKAGE_BYTES) throw new Error('本编辑包图片总量将超过 128 MiB，请删除不需要的图片或点位变更后再上传');
+    uploads.forEach((upload) => { upload.previewUrl = URL.createObjectURL(upload.file); });
     setDraftLineups((current) => current.map((lineup) => (
       lineup.id === activeLineup.id
         ? { ...lineup, media: { ...lineup.media, [kind]: [...lineup.media[kind], ...uploads.map(({ key, alt }) => ({ key, alt }))] } }
@@ -451,7 +478,9 @@ export default function App() {
     )));
     setPendingUploads((current) => [...current, ...uploads]);
     setIsDirty(true);
-    setEditorNotice({ kind: 'info', text: `已暂存 ${uploads.length} 张${mediaLabels[kind]}图 · 尚未导出` });
+    setEditorNotice({ kind: 'info', text: `已压缩并暂存 ${uploads.length} 张 WebP 图片（${formatBytes(uploads.reduce((sum, item) => sum + item.file.size, 0))}）· 尚未保存` });
+    } catch (error) { setEditorNotice({ kind: 'error', text: error instanceof Error ? error.message : '图片压缩失败，未添加原图' }); }
+    finally { compressionRef.current = false; setIsEditorBusy(false); }
   }
 
   function handlePaste(event: React.ClipboardEvent<HTMLElement>) {
@@ -461,33 +490,32 @@ export default function App() {
     const images = Array.from(event.clipboardData.files).filter((file) => file.type.startsWith('image/'));
     if (!images.length) return;
     event.preventDefault();
-    addImages(pasteTargetKind, images);
+    void addImages(pasteTargetKind, images);
   }
 
-  async function pasteImages(kind: MediaKind) {
-    setPasteTargetKind(kind);
-    if (!navigator.clipboard?.read) {
-      setEditorNotice({ kind: 'error', text: `当前浏览器无法主动读取剪贴板，请先选择“${mediaLabels[kind]}图”区域后按 Ctrl+V` });
-      return;
-    }
-    try {
-      const clipboardItems = await navigator.clipboard.read();
-      const files: File[] = [];
-      for (const item of clipboardItems) {
-        const imageType = item.types.find((type) => type.startsWith('image/'));
-        if (!imageType) continue;
-        const blob = await item.getType(imageType);
-        const extension = imageType === 'image/png' ? 'png' : imageType === 'image/webp' ? 'webp' : 'jpg';
-        files.push(new File([blob], `clipboard-${crypto.randomUUID()}.${extension}`, { type: imageType }));
-      }
-      if (!files.length) {
-        setEditorNotice({ kind: 'error', text: '剪贴板中没有可用的图片' });
-        return;
-      }
-      addImages(kind, files);
-    } catch (error) {
-      setEditorNotice({ kind: 'error', text: error instanceof Error ? `读取剪贴板失败：${error.message}` : '读取剪贴板失败，请改用 Ctrl+V' });
-    }
+  function updateActiveFields(fields: Partial<Pick<Lineup, 'title' | 'side' | 'area'>>) {
+    if (!activeLineup) return;
+    setDraftLineups((current) => current.map((item) => item.id === activeLineup.id ? { ...item, ...fields } : item));
+    if (fields.side && sideFilter !== 'all') setSideFilter('all');
+    setIsDirty(true);
+  }
+
+  function deleteActiveLineup() {
+    if (!activeLineup || !window.confirm(`删除“${activeLineup.title}”？保存后生效；退出而不保存可放弃本次删除。`)) return;
+    setDraftLineups((current) => current.filter((item) => item.id !== activeLineup.id));
+    const removed = pendingUploads.filter((upload) => upload.lineupId === activeLineup.id);
+    removed.forEach((upload) => URL.revokeObjectURL(upload.previewUrl));
+    setPendingUploads((current) => current.filter((upload) => upload.lineupId !== activeLineup.id));
+    setIsDirty(true);
+    setEditorNotice({ kind: 'info', text: '已标记删除点位，保存后生效。新建后又删除的点位不会产生删除记录。' });
+  }
+
+  function removeImage(kind: MediaKind, key: string) {
+    if (!activeLineup) return;
+    setDraftLineups((current) => current.map((item) => item.id === activeLineup.id ? { ...item, media: { ...item.media, [kind]: item.media[kind].filter((image) => image.key !== key) } } : item));
+    pendingUploads.filter((upload) => upload.key === key).forEach((upload) => URL.revokeObjectURL(upload.previewUrl));
+    setPendingUploads((current) => current.filter((upload) => upload.key !== key));
+    setIsDirty(true);
   }
 
   function updateActiveVideoBvid(videoBvid: string) {
@@ -552,13 +580,14 @@ export default function App() {
   }
 
   async function saveEdits() {
-    if (!isDirty || isEditorBusy) return;
+    if (!isDirty || isEditorBusy || isPackageFull) return;
     setIsEditorBusy(true);
     setEditorNotice({ kind: 'info', text: '正在保存本地编辑及图片…' });
     try {
       const data = await currentEdits();
       const manual = packageStats(data.manifest).lineups ? data.manifest : null;
       await commitLibrary({ ...library, manual }, data);
+      setDraftLineups(applyLayers(initialLineups, library.packages, manual).lineups);
       clearPendingUploads();
       setIsDirty(false);
       setEditorNotice({ kind: 'success', text: '已保存编辑：点位保存在 localStorage，图片保存在 IndexedDB。可继续编辑，或退出后查看。' });
@@ -568,11 +597,11 @@ export default function App() {
   }
 
   async function exportEdits() {
-    if (isEditorBusy || (!isDirty && !library.manual)) return;
+    if (isEditorBusy || isPackageFull || (!isDirty && !library.manual)) return;
     setIsEditorBusy(true);
     try {
       const result = await downloadEditPackage(await currentEdits());
-      setEditorNotice({ kind: 'success', text: `已下载一个完整编辑包：新增 ${result.added} / 修改 ${result.updated} 个点位，${result.uploads} 张图片。${isDirty ? '当前草稿仍未保存，请点击保存编辑。' : '本地编辑仍保留。'}` });
+      setEditorNotice({ kind: 'success', text: `已下载一个完整编辑包：新增 ${result.added} / 修改 ${result.updated} / 删除 ${result.deleted} 个点位，${result.uploads} 张 WebP 图片。${isDirty ? '当前草稿仍未保存，请点击保存编辑。' : '本地编辑仍保留。'}` });
     } catch (error) { setEditorNotice({ kind: 'error', text: error instanceof Error ? error.message : '导出失败' }); }
     finally { setIsEditorBusy(false); }
   }
@@ -590,7 +619,7 @@ export default function App() {
     setIsEditorBusy(true);
     try {
       if (file.size > MAX_PACKAGE_BYTES) throw new Error('ZIP 超过 128 MB');
-      const data = await readPackage(await file.arrayBuffer());
+      const data = await compressPackage(await readPackage(await file.arrayBuffer()), encodeWebp);
       validateReferences(data.manifest, maps, agents);
       const packages = [...library.packages];
       const index = packages.findIndex((item) => item.packageId === data.manifest.packageId);
@@ -681,9 +710,9 @@ export default function App() {
                 {isEditMode ? (
                   <>
                     <button className="editor-new" disabled={isEditorBusy || Boolean(newLineupPlacement)} onClick={() => setIsNewLineupDialogOpen(true)} type="button">＋ 新增点位</button>
-                    <button className="editor-cancel" disabled={isEditorBusy} onClick={exitEditMode} type="button">退出编辑</button>
-                    <button className="editor-save" disabled={!isDirty || isEditorBusy} onClick={() => void saveEdits()} type="button">保存编辑</button>
-                    <button className="editor-export" disabled={(!isDirty && !library.manual) || isEditorBusy} onClick={() => void exportEdits()} type="button">导出编辑包</button>
+                    <button className="editor-cancel" disabled={isEditorBusy} onClick={() => setIsExitConfirmOpen(true)} type="button">退出编辑</button>
+                    <button className="editor-save" disabled={!isDirty || isEditorBusy || isPackageFull} onClick={() => void saveEdits()} type="button">保存编辑</button>
+                    <button className="editor-export" disabled={(!isDirty && !library.manual) || isEditorBusy || isPackageFull} onClick={() => void exportEdits()} type="button">导出编辑包</button>
                   </>
                 ) : (
                   <>
@@ -697,6 +726,7 @@ export default function App() {
         </header>
 
         {editorNotice ? <div className={`editor-notice is-${editorNotice.kind}`} role="status">{editorNotice.text}</div> : null}
+        {isEditing || library.manual ? <div className={`package-size ${isPackageFull ? 'is-full' : ''}`} role="status"><span>编辑包图片：{formatBytes(packageImageBytes)} / {formatBytes(MAX_PACKAGE_BYTES)}</span><progress aria-label="编辑包图片容量" max={MAX_PACKAGE_BYTES} value={packageImageBytes} /><small>单张压缩后最多 12 MiB · 仅保存 WebP{isPackageFull ? ' · 已超限，请移除图片' : ''}</small></div> : null}
 
         {showHistory ? <HistoryPage packages={library.packages} manual={library.manual} dirty={isDirty} entries={content.history} maps={maps} busy={isEditorBusy || !storageReady} editing={isEditing}
           onImport={(file) => void importPackage(file)} onExport={() => void exportEdits()}
@@ -855,6 +885,12 @@ export default function App() {
                   <span>{activeAbility?.name} · {sideLabels[activeLineup.side]} · {activeLineup.area}</span>
                 </div>
                 <h2>{activeLineup.title}</h2>
+                {isEditMode ? <section className="lineup-fields">
+                  <label>点位名称<input aria-label="点位名称" maxLength={200} value={activeLineup.title} onChange={(event) => updateActiveFields({ title: event.target.value })} /></label>
+                  <label>阵营<select aria-label="点位阵营" value={activeLineup.side} onChange={(event) => updateActiveFields({ side: event.target.value as Perspective })}><option value="attack">进攻方</option><option value="defense">防守方</option></select></label>
+                  <label>区域<input aria-label="点位区域" maxLength={100} value={activeLineup.area} onChange={(event) => updateActiveFields({ area: event.target.value })} /></label>
+                  <button className="lineup-delete" onClick={deleteActiveLineup} type="button">删除此点位</button>
+                </section> : null}
                 <p className="uploader-line">上传者：<UploaderLabel uploader={activeLineup.uploader} onOpen={(uid) => void openUploader(uid)} /></p>
                 {isEditMode ? (
                   <label className="instructions-editor">
@@ -908,26 +944,27 @@ export default function App() {
                             <span aria-hidden="true">↗ 放大查看</span>
                           </button>
                           {item.pending ? <em>未保存</em> : !item.src ? <em>本地图片缺失，请重新导入原包</em> : null}
+                          {isEditMode ? <button className="image-remove" type="button" onClick={() => removeImage(kind, item.id)}>删除此图片</button> : null}
                         </div>
                       ))}
                       {isEditMode ? (
-                        <div className={`media-add-actions ${pasteTargetKind === kind ? 'is-paste-target' : ''}`} onClick={() => setPasteTargetKind(kind)}>
+                        <div className={`media-add-actions ${pasteTargetKind === kind ? 'is-paste-target' : ''}`}>
                           <label className="media-add">
                             <span>＋ 添加{mediaLabels[kind]}图</span>
-                            <small>PNG / JPG / WebP，单张不超过 12 MB</small>
+                            <small>PNG / JPG 自动转 WebP，单张不超过 12 MiB</small>
                             <input
                               accept="image/png,image/jpeg,image/webp"
                               multiple
                               onChange={(event) => {
                                 setPasteTargetKind(kind);
-                                addImages(kind, event.target.files);
+                                void addImages(kind, event.target.files);
                                 event.currentTarget.value = '';
                               }}
                               type="file"
                             />
                           </label>
-                          <button className="media-paste" onClick={() => void pasteImages(kind)} type="button">粘贴图片</button>
-                          <small className="paste-hint">{pasteTargetKind === kind ? '当前 Ctrl+V 粘贴目标' : '点击此区域后可按 Ctrl+V'}</small>
+                          <button className="media-paste" aria-pressed={pasteTargetKind === kind} onClick={(event) => { setPasteTargetKind(kind); event.currentTarget.focus(); }} type="button">{pasteTargetKind === kind ? `✓ 已选中${mediaLabels[kind]}区域 · 按 Ctrl+V` : `选中${mediaLabels[kind]}区域以粘贴`}</button>
+                          <small className="paste-hint">先复制图片，再选中区域，按 Ctrl+V / ⌘V；也可使用添加图片</small>
                         </div>
                       ) : null}
                     </section>
@@ -959,11 +996,13 @@ export default function App() {
           initialAbilityId={activeLineup?.abilityId}
           initialAgentId={selectedAgentId}
           initialMapId={selectedMapId}
+          initialSide={perspective}
           maps={maps}
           onCancel={() => setIsNewLineupDialogOpen(false)}
           onPlace={beginNewLineupPlacement}
         />
       ) : null}
+      {isEditing && isExitConfirmOpen ? <ExitEditDialog dirty={isDirty} onCancel={() => setIsExitConfirmOpen(false)} onConfirm={exitEditMode} /> : null}
       {lightboxItem ? (
         <ImageLightbox key={lightboxItem.src} {...lightboxItem} onClose={() => setLightboxItem(null)} />
       ) : null}

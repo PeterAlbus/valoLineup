@@ -106,6 +106,8 @@ export function usePanZoom(surfaceRef: RefObject<HTMLDivElement | null>, content
     if (event.button !== 0 || (event.target as HTMLElement).closest('[data-zoom-controls], input, select, textarea')) return;
     const button = (event.target as HTMLElement).closest('button');
     if (button && !(event.pointerType === 'touch' && button.classList.contains('lineup-pin'))) return;
+    if (!button) event.preventDefault();
+    window.getSelection()?.removeAllRanges();
     if (!pointers.current.size) {
       moved.current = false;
       start.current = { x: event.clientX, y: event.clientY };
@@ -119,6 +121,7 @@ export function usePanZoom(surfaceRef: RefObject<HTMLDivElement | null>, content
 
   function onPointerMove(event: PointerEvent<HTMLDivElement>) {
     if (!pointers.current.has(event.pointerId)) return;
+    event.preventDefault();
     const before = [...pointers.current.values()].slice(0, 2);
     pointers.current.set(event.pointerId, { x: event.clientX, y: event.clientY });
     const after = [...pointers.current.values()].slice(0, 2);
@@ -157,6 +160,7 @@ export function usePanZoom(surfaceRef: RefObject<HTMLDivElement | null>, content
   }
 
   return { viewport, isDragging, setZoom, reset, handlers: {
+    onDragStart: (event: React.DragEvent<HTMLDivElement>) => event.preventDefault(),
     onPointerDown, onPointerMove, onPointerUp, onPointerCancel: onPointerUp, onLostPointerCapture: onPointerUp, onClickCapture,
   } };
 }
