@@ -6,7 +6,7 @@ import { buildContent, stringifyLineups, writeTextAtomic } from './content-model
 const root = process.cwd();
 const input = process.argv[2];
 if (!input) {
-  throw new Error('请指定要导入的 Markdown：npm run content:import -- /absolute/path/to/file.md');
+  throw new Error('请指定要导入的 Markdown：pnpm run content:import -- /absolute/path/to/file.md');
 }
 
 const sourcePath = path.resolve(input);

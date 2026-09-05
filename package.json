@@ -2,6 +2,7 @@
   "name": "valo-lineup",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@11.10.0",
   "engines": {
     "node": ">=22.13.0"
   },
@@ -10,12 +11,12 @@
     "content:import-agents": "node scripts/import-riot-agents.mjs",
     "content:import-edits": "node scripts/import-edit-package.mjs",
     "content:build": "node scripts/build-content.mjs",
-    "predev": "npm run content:build",
+    "predev": "pnpm run content:build",
     "dev": "vite",
-    "prebuild": "npm run content:build",
+    "prebuild": "pnpm run content:build",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "test": "npm run content:build && node scripts/check-content.mjs && node scripts/check-edit-package.mjs",
+    "test": "pnpm run content:build && node scripts/check-content.mjs && node scripts/check-edit-package.mjs",
     "lint": "eslint . --ignore-pattern dist"
   },
   "dependencies": {

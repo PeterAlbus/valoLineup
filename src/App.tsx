@@ -28,12 +28,16 @@ type PendingUpload = {
   previewUrl: string;
 };
 type EditorNotice = { kind: 'info' | 'success' | 'error'; text: string };
+type LightboxItem = { src: string; alt: string };
 
 const maps = content.maps;
 const agents = content.agents;
 const initialLineups = content.lineups as Lineup[];
 const sideLabels = { attack: '进攻', defense: '防守' };
 const mediaLabels = { stance: '站位', aim: '瞄点', effect: '道具效果' };
+const sideFilterLabels = { attack: '进攻方道具', defense: '防守方道具', all: '全部道具' };
+const SUPPORTED_IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/webp'] as const;
+const MAX_IMAGE_BYTES = 12 * 1024 * 1024;
 const MIN_ZOOM = 1;
 const MAX_ZOOM = 8;
 const ZOOM_STEP = 0.5;
@@ -44,6 +48,7 @@ type Point = { x: number; y: number };
 type MapRegion = Point & { width: number; height: number; rotation: number };
 type MapViewport = { zoom: number; x: number; y: number };
 type Perspective = 'attack' | 'defense';
+type SideFilter = Perspective | 'all';
 
 function rotatePoint(point: Point, degrees: number) {
   const radians = degrees * Math.PI / 180;
@@ -147,6 +152,7 @@ export default function App() {
   const [selectedGroupId, setSelectedGroupId] = useState('a-site-scan');
   const [selectedLineupId, setSelectedLineupId] = useState('ascent-sova-01');
   const [perspective, setPerspective] = useState<Perspective>('attack');
+  const [sideFilter, setSideFilter] = useState<SideFilter>('attack');
   const [mapViewport, setMapViewport] = useState<MapViewport>({ zoom: MIN_ZOOM, x: 0, y: 0 });
   const [isDraggingMap, setIsDraggingMap] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -154,6 +160,8 @@ export default function App() {
   const [isEditorBusy, setIsEditorBusy] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
   const [pendingUploads, setPendingUploads] = useState<PendingUpload[]>([]);
+  const [pasteTargetKind, setPasteTargetKind] = useState<MediaKind>('stance');
+  const [lightboxItem, setLightboxItem] = useState<LightboxItem | null>(null);
   const [editorNotice, setEditorNotice] = useState<EditorNotice | null>(null);
   const [isNewLineupDialogOpen, setIsNewLineupDialogOpen] = useState(false);
   const [newLineupPlacement, setNewLineupPlacement] = useState<NewLineupInput | null>(null);
@@ -173,8 +181,9 @@ export default function App() {
   const lineups = isEditMode ? draftLineups : savedLineups;
   const activeMap = maps.find((map) => map.id === selectedMapId) ?? maps[0];
   const mapLineups = lineups.filter((lineup) => lineup.mapId === selectedMapId);
-  const agentLineups = mapLineups.filter((lineup) => lineup.agentId === selectedAgentId);
-  const availableAgents = agents.filter((agent) => mapLineups.some((lineup) => lineup.agentId === agent.id));
+  const filteredMapLineups = mapLineups.filter((lineup) => sideFilter === 'all' || lineup.side === sideFilter);
+  const agentLineups = filteredMapLineups.filter((lineup) => lineup.agentId === selectedAgentId);
+  const availableAgents = agents.filter((agent) => filteredMapLineups.some((lineup) => lineup.agentId === agent.id));
   const groups = clusterDestinations(agentLineups, !isEditMode);
   const activeGroup = groups.find((group) => group.memberIds.includes(selectedGroupId)) ?? groups[0];
   const activeLineup = activeGroup?.items.find((lineup) => lineup.id === selectedLineupId) ?? activeGroup?.items[0];
@@ -237,7 +246,7 @@ export default function App() {
 
   function selectMap(mapId: string) {
     const nextLineups = lineups.filter((lineup) => lineup.mapId === mapId);
-    const first = nextLineups[0];
+    const first = nextLineups.find((lineup) => sideFilter === 'all' || lineup.side === sideFilter);
     setSelectedMapId(mapId);
     resetMapViewport();
     if (first) {
@@ -251,7 +260,7 @@ export default function App() {
   }
 
   function selectAgent(agentId: string) {
-    const first = mapLineups.find((lineup) => lineup.agentId === agentId);
+    const first = filteredMapLineups.find((lineup) => lineup.agentId === agentId);
     setSelectedAgentId(agentId);
     if (first) {
       setSelectedGroupId(first.target.groupId);
@@ -266,7 +275,36 @@ export default function App() {
 
   function selectPerspective(nextPerspective: Perspective) {
     setPerspective(nextPerspective);
+    setSideFilter(nextPerspective);
+    const candidates = mapLineups.filter((lineup) => lineup.side === nextPerspective);
+    const first = candidates.find((lineup) => lineup.id === selectedLineupId)
+      ?? candidates.find((lineup) => lineup.agentId === selectedAgentId)
+      ?? candidates[0];
+    if (first) {
+      setSelectedAgentId(first.agentId);
+      setSelectedGroupId(first.target.groupId);
+      setSelectedLineupId(first.id);
+    } else {
+      setSelectedGroupId('');
+      setSelectedLineupId('');
+    }
     resetMapViewport();
+  }
+
+  function selectSideFilter(nextFilter: SideFilter) {
+    setSideFilter(nextFilter);
+    const candidates = mapLineups.filter((lineup) => nextFilter === 'all' || lineup.side === nextFilter);
+    const first = candidates.find((lineup) => lineup.id === selectedLineupId)
+      ?? candidates.find((lineup) => lineup.agentId === selectedAgentId)
+      ?? candidates[0];
+    if (first) {
+      setSelectedAgentId(first.agentId);
+      setSelectedGroupId(first.target.groupId);
+      setSelectedLineupId(first.id);
+    } else {
+      setSelectedGroupId('');
+      setSelectedLineupId('');
+    }
   }
 
   function handleMapWheel(event: React.WheelEvent<HTMLDivElement>) {
@@ -388,6 +426,7 @@ export default function App() {
     setSelectedGroupId('');
     setSelectedLineupId('');
     setPerspective(input.side);
+    setSideFilter(input.side);
     resetMapViewport();
     const mapName = maps.find((map) => map.id === input.mapId)?.name ?? input.mapId;
     setEditorNotice({ kind: 'info', text: `请在 ${mapName} 地图上点击技能最终落点，按当前${input.side === 'attack' ? '攻方' : '守方'}视角放置` });
@@ -417,9 +456,9 @@ export default function App() {
     setEditorNotice({ kind: 'info', text: `已创建“${lineup.title}”草稿，可以继续拖动或添加图片` });
   }
 
-  function addImages(kind: MediaKind, files: FileList | null) {
+  function addImages(kind: MediaKind, files: FileList | File[] | null) {
     if (!activeLineup || !files?.length) return;
-    const supported = Array.from(files).filter((file) => ['image/png', 'image/jpeg', 'image/webp'].includes(file.type) && file.size <= 12 * 1024 * 1024);
+    const supported = Array.from(files).filter((file) => SUPPORTED_IMAGE_TYPES.includes(file.type as (typeof SUPPORTED_IMAGE_TYPES)[number]) && file.size <= MAX_IMAGE_BYTES);
     if (supported.length !== files.length) {
       setEditorNotice({ kind: 'error', text: '只支持小于 12 MB 的 PNG、JPG 或 WebP 图片' });
       return;
@@ -445,6 +484,42 @@ export default function App() {
     setPendingUploads((current) => [...current, ...uploads]);
     setIsDirty(true);
     setEditorNotice({ kind: 'info', text: `已暂存 ${uploads.length} 张${mediaLabels[kind]}图 · 尚未导出` });
+  }
+
+  function handlePaste(event: React.ClipboardEvent<HTMLElement>) {
+    if (!isEditMode || !activeLineup) return;
+    const target = event.target as HTMLElement;
+    if (target.closest('input, textarea, [contenteditable="true"]')) return;
+    const images = Array.from(event.clipboardData.files).filter((file) => file.type.startsWith('image/'));
+    if (!images.length) return;
+    event.preventDefault();
+    addImages(pasteTargetKind, images);
+  }
+
+  async function pasteImages(kind: MediaKind) {
+    setPasteTargetKind(kind);
+    if (!navigator.clipboard?.read) {
+      setEditorNotice({ kind: 'error', text: `当前浏览器无法主动读取剪贴板，请先选择“${mediaLabels[kind]}图”区域后按 Ctrl+V` });
+      return;
+    }
+    try {
+      const clipboardItems = await navigator.clipboard.read();
+      const files: File[] = [];
+      for (const item of clipboardItems) {
+        const imageType = item.types.find((type) => type.startsWith('image/'));
+        if (!imageType) continue;
+        const blob = await item.getType(imageType);
+        const extension = imageType === 'image/png' ? 'png' : imageType === 'image/webp' ? 'webp' : 'jpg';
+        files.push(new File([blob], `clipboard-${crypto.randomUUID()}.${extension}`, { type: imageType }));
+      }
+      if (!files.length) {
+        setEditorNotice({ kind: 'error', text: '剪贴板中没有可用的图片' });
+        return;
+      }
+      addImages(kind, files);
+    } catch (error) {
+      setEditorNotice({ kind: 'error', text: error instanceof Error ? `读取剪贴板失败：${error.message}` : '读取剪贴板失败，请改用 Ctrl+V' });
+    }
   }
 
   function updateActiveVideoBvid(videoBvid: string) {
@@ -523,7 +598,13 @@ export default function App() {
   }
 
   return (
-    <main className={`app-shell ${isEditMode ? 'is-editing' : ''}`}>
+    <main
+      className={`app-shell ${isEditMode ? 'is-editing' : ''}`}
+      onKeyDown={(event) => {
+        if (event.key === 'Escape' && lightboxItem) setLightboxItem(null);
+      }}
+      onPaste={handlePaste}
+    >
       <aside className="map-rail" aria-label="地图选择">
         <div className="brand-mark" aria-label="Lineup Atlas"><span>LA</span></div>
         <p className="eyebrow rail-label">地图</p>
@@ -560,7 +641,7 @@ export default function App() {
           <div className="topbar-tools">
             <div className="agent-tabs" aria-label="英雄选择">
               {availableAgents.map((agent) => {
-                const count = mapLineups.filter((lineup) => lineup.agentId === agent.id).length;
+                const count = filteredMapLineups.filter((lineup) => lineup.agentId === agent.id).length;
                 return (
                   <button
                     aria-pressed={agent.id === selectedAgentId}
@@ -597,7 +678,20 @@ export default function App() {
           <section className="map-panel" aria-label={`${activeMap.name} Lineup 地图`}>
             <div className="panel-heading">
               <div><p className="eyebrow">{isEditMode ? '编辑技能最终落点' : '技能最终落点'}</p><h2>{groups.length ? (isEditMode ? '拖动标记调整坐标' : '选择地图上的标记') : '等待点位数据'}</h2></div>
-              <div className="legend"><span /> {activeMap.sites.map((site) => site.label).join('/')} 包点 · {activeAgent?.name ?? '未选择英雄'} · {groups.length} 个落点</div>
+              <div className="panel-tools">
+                <div className="side-filter" aria-label="道具阵营筛选">
+                  {(['attack', 'defense', 'all'] as const).map((filter) => (
+                    <button
+                      aria-pressed={sideFilter === filter}
+                      className={sideFilter === filter ? 'is-active' : ''}
+                      key={filter}
+                      onClick={() => selectSideFilter(filter)}
+                      type="button"
+                    >{sideFilterLabels[filter]}</button>
+                  ))}
+                </div>
+                <div className="legend"><span /> {activeMap.sites.map((site) => site.label).join('/')} 包点 · {activeAgent?.name ?? '未选择英雄'} · {groups.length} 个落点</div>
+              </div>
             </div>
 
             <div
@@ -774,24 +868,37 @@ export default function App() {
                       <p><span>0{sectionIndex + 1}</span>{mediaLabels[kind]}</p>
                       {items.map((item) => (
                         <div className={`media-item ${item.pending ? 'is-pending' : ''}`} key={item.id}>
-                          <img alt={item.alt} loading="lazy" src={item.src} />
+                          <button
+                            aria-label={`放大查看：${item.alt}`}
+                            className="media-preview-button"
+                            onClick={() => setLightboxItem({ src: item.src, alt: item.alt })}
+                            type="button"
+                          >
+                            <img alt={item.alt} loading="lazy" src={item.src} />
+                            <span aria-hidden="true">↗ 放大查看</span>
+                          </button>
                           {item.pending ? <em>待导出</em> : null}
                         </div>
                       ))}
                       {isEditMode ? (
-                        <label className="media-add">
-                          <span>＋ 添加{mediaLabels[kind]}图</span>
-                          <small>PNG / JPG / WebP，单张不超过 12 MB</small>
-                          <input
-                            accept="image/png,image/jpeg,image/webp"
-                            multiple
-                            onChange={(event) => {
-                              addImages(kind, event.target.files);
-                              event.currentTarget.value = '';
-                            }}
-                            type="file"
-                          />
-                        </label>
+                        <div className={`media-add-actions ${pasteTargetKind === kind ? 'is-paste-target' : ''}`} onClick={() => setPasteTargetKind(kind)}>
+                          <label className="media-add">
+                            <span>＋ 添加{mediaLabels[kind]}图</span>
+                            <small>PNG / JPG / WebP，单张不超过 12 MB</small>
+                            <input
+                              accept="image/png,image/jpeg,image/webp"
+                              multiple
+                              onChange={(event) => {
+                                setPasteTargetKind(kind);
+                                addImages(kind, event.target.files);
+                                event.currentTarget.value = '';
+                              }}
+                              type="file"
+                            />
+                          </label>
+                          <button className="media-paste" onClick={() => void pasteImages(kind)} type="button">粘贴图片</button>
+                          <small className="paste-hint">{pasteTargetKind === kind ? '当前 Ctrl+V 粘贴目标' : '点击此区域后可按 Ctrl+V'}</small>
+                        </div>
                       ) : null}
                     </section>
                   );
@@ -826,6 +933,20 @@ export default function App() {
           onCancel={() => setIsNewLineupDialogOpen(false)}
           onPlace={beginNewLineupPlacement}
         />
+      ) : null}
+      {lightboxItem ? (
+        <div
+          className="lightbox-backdrop"
+          onClick={(event) => {
+            if (event.target === event.currentTarget) setLightboxItem(null);
+          }}
+          role="presentation"
+        >
+          <section aria-label={`图片预览：${lightboxItem.alt}`} aria-modal="true" className="lightbox-dialog" role="dialog">
+            <header><p>{lightboxItem.alt}</p><button autoFocus aria-label="关闭图片预览" onClick={() => setLightboxItem(null)} type="button">×</button></header>
+            <img alt={lightboxItem.alt} src={lightboxItem.src} />
+          </section>
+        </div>
       ) : null}
     </main>
   );

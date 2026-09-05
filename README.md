@@ -4,17 +4,18 @@ ValoLineup 是一个纯静态的《无畏契约》Lineup 图鉴。地图、英�
 
 ## 本地运行
 
-环境要求：Node.js 22.13 或更高版本。
+环境要求：Node.js 22.13 或更高版本（推荐使用仓库 `.nvmrc` 指定的 24.18.0）和 pnpm 11.10.0。
 
 ```bash
-npm install
-npm run dev
+nvm use 24.18.0
+pnpm install
+pnpm run dev
 ```
 
 生产静态文件输出到 `dist/`：
 
 ```bash
-npm run build
+pnpm run build
 ```
 
 Vite 使用相对资源路径，`dist/` 可以作为完整静态目录交给 Toy CLI 预览和发布。
@@ -30,7 +31,7 @@ Vite 使用相对资源路径，`dist/` 可以作为完整静态目录交给 Toy
 开发者拿到 ZIP 后，在最新仓库内容上运行：
 
 ```bash
-npm run content:import-edits -- /absolute/path/to/valo-lineup-edits-YYYYMMDD-HHmmss.zip
+pnpm run content:import-edits -- /absolute/path/to/valo-lineup-edits-YYYYMMDD-HHmmss.zip
 ```
 
 CLI 会把编辑包逐条合并到当前仓库。不同用户基于同一版本并行编辑不同 Lineup 时，各自的包可以按任意顺序导入。它会校验：
@@ -50,11 +51,11 @@ CLI 会在终端逐条列出跳过的冲突及原因。共享同一个地图落�
 ## 内容维护命令
 
 ```bash
-npm run content:build
-npm run content:import -- /absolute/path/to/lineups.md
-npm run content:import-agents -- /path/PublicContentCatalog.json /path/catalog-assets
-npm test
-npm run lint
+pnpm run content:build
+pnpm run content:import -- /absolute/path/to/lineups.md
+pnpm run content:import-agents -- /path/PublicContentCatalog.json /path/catalog-assets
+pnpm test
+pnpm run lint
 ```
 
 `content:import` 是保留的单次 Markdown 导入口；正常开发和构建只读取 `content/*.yaml`，不会重新导入 Markdown。

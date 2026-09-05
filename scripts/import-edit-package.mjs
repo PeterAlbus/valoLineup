@@ -55,7 +55,7 @@ const manifestSchema = z.object({
 });
 
 function usage() {
-  return '用法：npm run content:import-edits -- /absolute/path/to/valo-lineup-edits.zip';
+  return '用法：pnpm run content:import-edits -- /absolute/path/to/valo-lineup-edits.zip';
 }
 
 function allMedia(lineups) {

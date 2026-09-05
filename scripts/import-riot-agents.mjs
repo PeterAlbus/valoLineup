@@ -8,7 +8,7 @@ const root = process.cwd();
 const catalogPath = process.argv[2];
 const assetsRoot = process.argv[3];
 if (!catalogPath || !assetsRoot) {
-  throw new Error('用法：npm run content:import-agents -- /path/PublicContentCatalog.json /path/catalog-assets');
+  throw new Error('用法：pnpm run content:import-agents -- /path/PublicContentCatalog.json /path/catalog-assets');
 }
 
 const catalog = JSON.parse(await readFile(path.resolve(catalogPath), 'utf8'));
