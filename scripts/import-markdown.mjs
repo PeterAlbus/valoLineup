@@ -160,6 +160,7 @@ for (const [index, draft] of drafts.entries()) {
 
   imported.push({
     id,
+    uploader: { name: 'Markdown 导入者（未认证）', source: 'local' },
     mapId,
     agentId,
     abilityId: abilityFrom(draft),

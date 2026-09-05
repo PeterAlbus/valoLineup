@@ -16,7 +16,8 @@
     "prebuild": "pnpm run content:build",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "test": "pnpm run content:build && node scripts/check-content.mjs && node scripts/check-edit-package.mjs",
+    "test": "pnpm run content:build && node scripts/check-content.mjs && node scripts/check-package-model.mjs && node scripts/check-edit-package.mjs",
+    "test:browser": "node scripts/check-local-library.mjs && node scripts/check-viewer.mjs",
     "lint": "eslint . --ignore-pattern dist"
   },
   "dependencies": {

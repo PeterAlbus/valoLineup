@@ -40,6 +40,9 @@ assert.equal(content.agents.find((agent) => agent.id === 'veto')?.name, '禁灭'
 assert.ok(content.agents.every((agent) => agent.abilities.length >= 4), 'Every agent must expose all active abilities');
 assert.ok(content.agents.every((agent) => agent.icon.endsWith('.webp') && agent.abilities.every((ability) => ability.icon.endsWith('.webp'))), 'Agent media must use local optimized WebP assets');
 assert.equal(content.lineups.length, 26, 'The local metadata must preserve every existing lineup');
+assert.ok(content.lineups.every((lineup) => lineup.uploader.name === 'PeterAlbus' && lineup.uploader.bilibiliUid === '2003822'), 'Existing lineup attribution must be preserved');
+assert.equal(new Set(content.lineups.map((lineup) => lineup.id)).size, content.lineups.length, 'Lineup IDs must be unique');
+assert.ok(Array.isArray(content.history), 'Generated content must include repository update history');
 assert.ok(content.lineups.every((lineup) => typeof lineup.instructions === 'string'), 'Every lineup must use one editable instructions string');
 assert.ok(content.lineups.every((lineup) => lineup.videoBvid === ''), 'Every existing lineup must store an empty Bilibili BVID');
 assert.doesNotThrow(() => lineupsSchema.parse([{ ...content.lineups[0], videoBvid: 'BV17x411w7KC' }]));

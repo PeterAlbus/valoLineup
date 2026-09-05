@@ -1498,6 +1498,11 @@
       "mapId": "ascent",
       "agentId": "sova",
       "abilityId": "recon-bolt",
+      "uploader": {
+        "name": "PeterAlbus",
+        "source": "curated",
+        "bilibiliUid": "2003822"
+      },
       "title": "A包点全扫，射到第二个高处炮管上",
       "side": "attack",
       "area": "A点",
@@ -1529,6 +1534,11 @@
       "mapId": "ascent",
       "agentId": "sova",
       "abilityId": "recon-bolt",
+      "uploader": {
+        "name": "PeterAlbus",
+        "source": "curated",
+        "bilibiliUid": "2003822"
+      },
       "title": "A包点全扫，射到第二个高处炮管上",
       "side": "attack",
       "area": "A点",
@@ -1560,6 +1570,11 @@
       "mapId": "ascent",
       "agentId": "sova",
       "abilityId": "recon-bolt",
+      "uploader": {
+        "name": "PeterAlbus",
+        "source": "curated",
+        "bilibiliUid": "2003822"
+      },
       "title": "A包点快攻，射到第二个高处炮管上",
       "side": "attack",
       "area": "A点",
@@ -1591,6 +1606,11 @@
       "mapId": "ascent",
       "agentId": "sova",
       "abilityId": "recon-bolt",
+      "uploader": {
+        "name": "PeterAlbus",
+        "source": "curated",
+        "bilibiliUid": "2003822"
+      },
       "title": "A包快攻，第一个高处炮管",
       "side": "attack",
       "area": "A点",
@@ -1617,6 +1637,11 @@
       "mapId": "ascent",
       "agentId": "sova",
       "abilityId": "recon-bolt",
+      "uploader": {
+        "name": "PeterAlbus",
+        "source": "curated",
+        "bilibiliUid": "2003822"
+      },
       "title": "A包快攻，二楼掩体上方的墙面上",
       "side": "attack",
       "area": "A点",
@@ -1648,6 +1673,11 @@
       "mapId": "ascent",
       "agentId": "sova",
       "abilityId": "recon-bolt",
+      "uploader": {
+        "name": "PeterAlbus",
+        "source": "curated",
+        "bilibiliUid": "2003822"
+      },
       "title": "中路屋檐",
       "side": "attack",
       "area": "中路",
@@ -1679,6 +1709,11 @@
       "mapId": "ascent",
       "agentId": "sova",
       "abilityId": "recon-bolt",
+      "uploader": {
+        "name": "PeterAlbus",
+        "source": "curated",
+        "bilibiliUid": "2003822"
+      },
       "title": "射到中路拱门内侧",
       "side": "attack",
       "area": "中路",
@@ -1710,6 +1745,11 @@
       "mapId": "ascent",
       "agentId": "sova",
       "abilityId": "recon-bolt",
+      "uploader": {
+        "name": "PeterAlbus",
+        "source": "curated",
+        "bilibiliUid": "2003822"
+      },
       "title": "拱门内墙角",
       "side": "attack",
       "area": "中路",
@@ -1741,6 +1781,11 @@
       "mapId": "ascent",
       "agentId": "sova",
       "abilityId": "recon-bolt",
+      "uploader": {
+        "name": "PeterAlbus",
+        "source": "curated",
+        "bilibiliUid": "2003822"
+      },
       "title": "开大箭",
       "side": "attack",
       "area": "中路",
@@ -1767,6 +1812,11 @@
       "mapId": "ascent",
       "agentId": "sova",
       "abilityId": "shock-bolt",
+      "uploader": {
+        "name": "PeterAlbus",
+        "source": "curated",
+        "bilibiliUid": "2003822"
+      },
       "title": "清道具雷击箭",
       "side": "attack",
       "area": "中路",
@@ -1793,6 +1843,11 @@
       "mapId": "ascent",
       "agentId": "sova",
       "abilityId": "recon-bolt",
+      "uploader": {
+        "name": "PeterAlbus",
+        "source": "curated",
+        "bilibiliUid": "2003822"
+      },
       "title": "射中路窗户上",
       "side": "attack",
       "area": "B点",
@@ -1819,6 +1874,11 @@
       "mapId": "ascent",
       "agentId": "sova",
       "abilityId": "recon-bolt",
+      "uploader": {
+        "name": "PeterAlbus",
+        "source": "curated",
+        "bilibiliUid": "2003822"
+      },
       "title": "全扫，B点屋檐",
       "side": "attack",
       "area": "B点",
@@ -1850,6 +1910,11 @@
       "mapId": "ascent",
       "agentId": "sova",
       "abilityId": "recon-bolt",
+      "uploader": {
+        "name": "PeterAlbus",
+        "source": "curated",
+        "bilibiliUid": "2003822"
+      },
       "title": "包点箭射树上",
       "side": "attack",
       "area": "B点",
@@ -1876,6 +1941,11 @@
       "mapId": "ascent",
       "agentId": "sova",
       "abilityId": "recon-bolt",
+      "uploader": {
+        "name": "PeterAlbus",
+        "source": "curated",
+        "bilibiliUid": "2003822"
+      },
       "title": "台上箭",
       "side": "attack",
       "area": "B点",
@@ -1902,6 +1972,11 @@
       "mapId": "ascent",
       "agentId": "sova",
       "abilityId": "recon-bolt",
+      "uploader": {
+        "name": "PeterAlbus",
+        "source": "curated",
+        "bilibiliUid": "2003822"
+      },
       "title": "回防",
       "side": "defense",
       "area": "A点",
@@ -1937,6 +2012,11 @@
       "mapId": "ascent",
       "agentId": "sova",
       "abilityId": "recon-bolt",
+      "uploader": {
+        "name": "PeterAlbus",
+        "source": "curated",
+        "bilibiliUid": "2003822"
+      },
       "title": "A外探测",
       "side": "defense",
       "area": "A点",
@@ -1968,6 +2048,11 @@
       "mapId": "ascent",
       "agentId": "sova",
       "abilityId": "recon-bolt",
+      "uploader": {
+        "name": "PeterAlbus",
+        "source": "curated",
+        "bilibiliUid": "2003822"
+      },
       "title": "开大箭",
       "side": "defense",
       "area": "A点",
@@ -1994,6 +2079,11 @@
       "mapId": "ascent",
       "agentId": "sova",
       "abilityId": "recon-bolt",
+      "uploader": {
+        "name": "PeterAlbus",
+        "source": "curated",
+        "bilibiliUid": "2003822"
+      },
       "title": "支援B",
       "side": "defense",
       "area": "A点",
@@ -2025,6 +2115,11 @@
       "mapId": "ascent",
       "agentId": "sova",
       "abilityId": "recon-bolt",
+      "uploader": {
+        "name": "PeterAlbus",
+        "source": "curated",
+        "bilibiliUid": "2003822"
+      },
       "title": "射到水塔上",
       "side": "defense",
       "area": "中路",
@@ -2051,6 +2146,11 @@
       "mapId": "ascent",
       "agentId": "sova",
       "abilityId": "recon-bolt",
+      "uploader": {
+        "name": "PeterAlbus",
+        "source": "curated",
+        "bilibiliUid": "2003822"
+      },
       "title": "第二时间中路箭",
       "side": "defense",
       "area": "中路",
@@ -2077,6 +2177,11 @@
       "mapId": "ascent",
       "agentId": "sova",
       "abilityId": "shock-bolt",
+      "uploader": {
+        "name": "PeterAlbus",
+        "source": "curated",
+        "bilibiliUid": "2003822"
+      },
       "title": "放血雷击",
       "side": "defense",
       "area": "B点",
@@ -2103,6 +2208,11 @@
       "mapId": "ascent",
       "agentId": "sova",
       "abilityId": "recon-bolt",
+      "uploader": {
+        "name": "PeterAlbus",
+        "source": "curated",
+        "bilibiliUid": "2003822"
+      },
       "title": "B外箭，射外面台子上",
       "side": "defense",
       "area": "B点",
@@ -2134,6 +2244,11 @@
       "mapId": "ascent",
       "agentId": "sova",
       "abilityId": "recon-bolt",
+      "uploader": {
+        "name": "PeterAlbus",
+        "source": "curated",
+        "bilibiliUid": "2003822"
+      },
       "title": "B外箭，射B外屋顶",
       "side": "defense",
       "area": "B点",
@@ -2160,6 +2275,11 @@
       "mapId": "ascent",
       "agentId": "sova",
       "abilityId": "recon-bolt",
+      "uploader": {
+        "name": "PeterAlbus",
+        "source": "curated",
+        "bilibiliUid": "2003822"
+      },
       "title": "反刷箭",
       "side": "defense",
       "area": "B点",
@@ -2186,6 +2306,11 @@
       "mapId": "ascent",
       "agentId": "sova",
       "abilityId": "recon-bolt",
+      "uploader": {
+        "name": "PeterAlbus",
+        "source": "curated",
+        "bilibiliUid": "2003822"
+      },
       "title": "船坞箭，射墙上",
       "side": "defense",
       "area": "B点",
@@ -2212,6 +2337,11 @@
       "mapId": "ascent",
       "agentId": "sova",
       "abilityId": "recon-bolt",
+      "uploader": {
+        "name": "PeterAlbus",
+        "source": "curated",
+        "bilibiliUid": "2003822"
+      },
       "title": "支援A，射进点墙上",
       "side": "defense",
       "area": "B点",
@@ -2233,5 +2363,6 @@
         "effect": []
       }
     }
-  ]
+  ],
+  "history": []
 }

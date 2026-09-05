@@ -1,4 +1,8 @@
 - id: ascent-sova-01
+  uploader:
+    name: PeterAlbus
+    source: curated
+    bilibiliUid: "2003822"
   mapId: ascent
   agentId: sova
   abilityId: recon-bolt
@@ -20,6 +24,10 @@
         alt: A包点全扫，射到第二个高处炮管上瞄点图 1
     effect: []
 - id: ascent-sova-02
+  uploader:
+    name: PeterAlbus
+    source: curated
+    bilibiliUid: "2003822"
   mapId: ascent
   agentId: sova
   abilityId: recon-bolt
@@ -41,6 +49,10 @@
         alt: A包点全扫，射到第二个高处炮管上瞄点图 1
     effect: []
 - id: ascent-sova-03
+  uploader:
+    name: PeterAlbus
+    source: curated
+    bilibiliUid: "2003822"
   mapId: ascent
   agentId: sova
   abilityId: recon-bolt
@@ -62,6 +74,10 @@
         alt: A包点快攻，射到第二个高处炮管上瞄点图 1
     effect: []
 - id: ascent-sova-04
+  uploader:
+    name: PeterAlbus
+    source: curated
+    bilibiliUid: "2003822"
   mapId: ascent
   agentId: sova
   abilityId: recon-bolt
@@ -81,6 +97,10 @@
         alt: A包快攻，第一个高处炮管瞄点图 1
     effect: []
 - id: ascent-sova-05
+  uploader:
+    name: PeterAlbus
+    source: curated
+    bilibiliUid: "2003822"
   mapId: ascent
   agentId: sova
   abilityId: recon-bolt
@@ -102,6 +122,10 @@
         alt: A包快攻，二楼掩体上方的墙面上瞄点图 1
     effect: []
 - id: ascent-sova-06
+  uploader:
+    name: PeterAlbus
+    source: curated
+    bilibiliUid: "2003822"
   mapId: ascent
   agentId: sova
   abilityId: recon-bolt
@@ -123,6 +147,10 @@
         alt: 中路屋檐瞄点图 1
     effect: []
 - id: ascent-sova-07
+  uploader:
+    name: PeterAlbus
+    source: curated
+    bilibiliUid: "2003822"
   mapId: ascent
   agentId: sova
   abilityId: recon-bolt
@@ -144,6 +172,10 @@
         alt: 射到中路拱门内侧瞄点图 1
     effect: []
 - id: ascent-sova-08
+  uploader:
+    name: PeterAlbus
+    source: curated
+    bilibiliUid: "2003822"
   mapId: ascent
   agentId: sova
   abilityId: recon-bolt
@@ -165,6 +197,10 @@
         alt: 拱门内墙角瞄点图 1
     effect: []
 - id: ascent-sova-09
+  uploader:
+    name: PeterAlbus
+    source: curated
+    bilibiliUid: "2003822"
   mapId: ascent
   agentId: sova
   abilityId: recon-bolt
@@ -184,6 +220,10 @@
         alt: 开大箭瞄点图 1
     effect: []
 - id: ascent-sova-10
+  uploader:
+    name: PeterAlbus
+    source: curated
+    bilibiliUid: "2003822"
   mapId: ascent
   agentId: sova
   abilityId: shock-bolt
@@ -203,6 +243,10 @@
         alt: 清道具雷击箭瞄点图 1
     effect: []
 - id: ascent-sova-11
+  uploader:
+    name: PeterAlbus
+    source: curated
+    bilibiliUid: "2003822"
   mapId: ascent
   agentId: sova
   abilityId: recon-bolt
@@ -222,6 +266,10 @@
         alt: 射中路窗户上瞄点图 1
     effect: []
 - id: ascent-sova-12
+  uploader:
+    name: PeterAlbus
+    source: curated
+    bilibiliUid: "2003822"
   mapId: ascent
   agentId: sova
   abilityId: recon-bolt
@@ -243,6 +291,10 @@
         alt: 全扫，B点屋檐瞄点图 1
     effect: []
 - id: ascent-sova-13
+  uploader:
+    name: PeterAlbus
+    source: curated
+    bilibiliUid: "2003822"
   mapId: ascent
   agentId: sova
   abilityId: recon-bolt
@@ -262,6 +314,10 @@
         alt: 包点箭射树上瞄点图 1
     effect: []
 - id: ascent-sova-14
+  uploader:
+    name: PeterAlbus
+    source: curated
+    bilibiliUid: "2003822"
   mapId: ascent
   agentId: sova
   abilityId: recon-bolt
@@ -281,6 +337,10 @@
         alt: 台上箭瞄点图 1
     effect: []
 - id: ascent-sova-15
+  uploader:
+    name: PeterAlbus
+    source: curated
+    bilibiliUid: "2003822"
   mapId: ascent
   agentId: sova
   abilityId: recon-bolt
@@ -304,6 +364,10 @@
         alt: 回防瞄点图 2
     effect: []
 - id: ascent-sova-16
+  uploader:
+    name: PeterAlbus
+    source: curated
+    bilibiliUid: "2003822"
   mapId: ascent
   agentId: sova
   abilityId: recon-bolt
@@ -325,6 +389,10 @@
         alt: A外探测瞄点图 1
     effect: []
 - id: ascent-sova-17
+  uploader:
+    name: PeterAlbus
+    source: curated
+    bilibiliUid: "2003822"
   mapId: ascent
   agentId: sova
   abilityId: recon-bolt
@@ -344,6 +412,10 @@
         alt: 开大箭瞄点图 1
     effect: []
 - id: ascent-sova-18
+  uploader:
+    name: PeterAlbus
+    source: curated
+    bilibiliUid: "2003822"
   mapId: ascent
   agentId: sova
   abilityId: recon-bolt
@@ -365,6 +437,10 @@
         alt: 支援B瞄点图 1
     effect: []
 - id: ascent-sova-19
+  uploader:
+    name: PeterAlbus
+    source: curated
+    bilibiliUid: "2003822"
   mapId: ascent
   agentId: sova
   abilityId: recon-bolt
@@ -384,6 +460,10 @@
         alt: 射到水塔上瞄点图 1
     effect: []
 - id: ascent-sova-20
+  uploader:
+    name: PeterAlbus
+    source: curated
+    bilibiliUid: "2003822"
   mapId: ascent
   agentId: sova
   abilityId: recon-bolt
@@ -403,6 +483,10 @@
         alt: 第二时间中路箭瞄点图 1
     effect: []
 - id: ascent-sova-21
+  uploader:
+    name: PeterAlbus
+    source: curated
+    bilibiliUid: "2003822"
   mapId: ascent
   agentId: sova
   abilityId: shock-bolt
@@ -422,6 +506,10 @@
         alt: 放血雷击瞄点图 1
     effect: []
 - id: ascent-sova-22
+  uploader:
+    name: PeterAlbus
+    source: curated
+    bilibiliUid: "2003822"
   mapId: ascent
   agentId: sova
   abilityId: recon-bolt
@@ -443,6 +531,10 @@
         alt: B外箭，射外面台子上瞄点图 1
     effect: []
 - id: ascent-sova-23
+  uploader:
+    name: PeterAlbus
+    source: curated
+    bilibiliUid: "2003822"
   mapId: ascent
   agentId: sova
   abilityId: recon-bolt
@@ -462,6 +554,10 @@
         alt: B外箭，射B外屋顶瞄点图 1
     effect: []
 - id: ascent-sova-24
+  uploader:
+    name: PeterAlbus
+    source: curated
+    bilibiliUid: "2003822"
   mapId: ascent
   agentId: sova
   abilityId: recon-bolt
@@ -481,6 +577,10 @@
         alt: 反刷箭瞄点图 1
     effect: []
 - id: ascent-sova-25
+  uploader:
+    name: PeterAlbus
+    source: curated
+    bilibiliUid: "2003822"
   mapId: ascent
   agentId: sova
   abilityId: recon-bolt
@@ -500,6 +600,10 @@
         alt: 船坞箭，射墙上瞄点图 1
     effect: []
 - id: ascent-sova-26
+  uploader:
+    name: PeterAlbus
+    source: curated
+    bilibiliUid: "2003822"
   mapId: ascent
   agentId: sova
   abilityId: recon-bolt

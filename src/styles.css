@@ -332,3 +332,29 @@ button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
   .source-note { margin-top: 16px; }
   .empty-state { min-height: 260px; }
 }
+/* Local library and history use the same compact controls on desktop and mobile. */
+.history-toggle, .editor-export, .history-actions button, .package-import { border: 1px solid #385356; background: #122224; color: #e9f3f2; border-radius: 5px; min-height: 42px; padding: 8px 12px; font: inherit; cursor: pointer; }
+.editor-actions, .topbar-tools { flex-wrap: wrap; }
+.history-page { max-width: 1100px; padding: 24px; margin: auto; width: 100%; min-width: 0; }
+.history-section { margin: 24px 0; }
+.history-page h2 { font-size: 21px; margin: 0 0 12px; }
+.history-page h3 { font-size: 16px; margin: 0 0 10px; }
+.history-page p { line-height: 1.7; color: #acbfbe; }
+.history-page small { color: #829998; overflow-wrap: anywhere; }
+.history-card { border: 1px solid #304648; border-radius: 8px; padding: 20px; margin: 14px 0; background: #101d1f; overflow-wrap: anywhere; }
+.local-edit-card { border-color: #71c0ae; }
+.package-list { padding: 0; list-style: none; }
+.history-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.history-actions button:disabled, .package-import.is-disabled { opacity: .45; cursor: not-allowed; }
+.package-import { position: relative; display: inline-flex; align-items: center; overflow: hidden; }
+.package-import input { position: absolute; inset: 0; width: 100%; opacity: 0; cursor: pointer; }
+.package-import:focus-within { outline: 2px solid #71c0ae; outline-offset: 3px; }
+.uploader-line { color: #a4bbb8; margin: 10px 0; font-size: 13px; }
+.uploader-link { border: 0; background: transparent; padding: 4px; color: #8cddc7; font: inherit; cursor: pointer; text-decoration: underline; }
+@media (max-width: 760px) {
+  .history-page { padding: 16px 0; }
+  .history-card { padding: 16px; }
+  .history-toggle { min-height: 44px; margin-top: 10px; }
+  .editor-actions { display: flex; margin-top: 10px; }
+  .editor-actions button { min-height: 44px; padding: 0 11px; }
+}

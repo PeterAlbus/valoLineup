@@ -1,0 +1,27 @@
+{
+  "format": "valo-lineup-edit-package",
+  "version": 4,
+  "packageId": "9bfe614f-e03f-4f1f-aee0-90bf58f533ba",
+  "revision": 1,
+  "createdAt": "2026-09-05T00:00:00.000Z",
+  "updatedAt": "2026-09-05T00:00:00.000Z",
+  "author": { "name": "V4 Compatibility Fixture", "source": "toy", "toyOpenId": "fixture-only-not-a-real-user" },
+  "changes": {
+    "added": [{
+      "id": "ascent-sova-v4-compatibility",
+      "mapId": "ascent",
+      "agentId": "sova",
+      "abilityId": "recon-bolt",
+      "uploader": { "name": "V4 Compatibility Fixture", "source": "toy", "toyOpenId": "fixture-only-not-a-real-user" },
+      "title": "固定 v4 兼容性样例",
+      "side": "attack",
+      "area": "A点",
+      "videoBvid": "",
+      "target": { "groupId": "v4-compatibility", "x": 0.25, "y": 0.3 },
+      "instructions": "此文件是协议兼容性基线，后续格式升级不能修改此样例来绕过兼容测试。",
+      "media": { "stance": [], "aim": [], "effect": [] }
+    }],
+    "updated": []
+  },
+  "uploadedAssets": []
+}

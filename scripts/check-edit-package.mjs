@@ -1,12 +1,13 @@
 import assert from 'node:assert/strict';
 import { execFile } from 'node:child_process';
-import { createHash } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
 import { access, cp, mkdir, mkdtemp, readFile, readdir, rm, symlink, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { promisify } from 'node:util';
 import JSZip from 'jszip';
 import { parse } from 'yaml';
+import { allMedia } from '../src/package-model.mjs';
 
 const execFileAsync = promisify(execFile);
 const root = process.cwd();
@@ -18,12 +19,22 @@ function changed(lineup, videoBvid) {
 }
 
 async function createPackage(name, changes, assets = []) {
+  const supplied = new Map(assets.map((asset) => [asset.key, asset]));
+  for (const item of allMedia([...changes.added, ...changes.updated.map((change) => change.after)])) {
+    if (supplied.has(item.key)) continue;
+    const bytes = await readFile(path.join(root, 'public', item.key));
+    supplied.set(item.key, { ...item, bytes, size: bytes.length, sha256: createHash('sha256').update(bytes).digest('hex'), mimeType: item.key.endsWith('.png') ? 'image/png' : item.key.endsWith('.webp') ? 'image/webp' : 'image/jpeg' });
+  }
+  assets = [...supplied.values()];
   const zip = new JSZip();
   for (const asset of assets) zip.file(asset.key, asset.bytes);
   zip.file('manifest.json', `${JSON.stringify({
     format: 'valo-lineup-edit-package',
-    version: 3,
+    version: 4,
+    packageId: randomUUID(), revision: 1,
+    author: { name: 'SDK Test User', source: 'toy', toyOpenId: 'test-only-open-id' },
     createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
     changes,
     uploadedAssets: assets.map((asset) => ({
       key: asset.key,
@@ -138,6 +149,28 @@ try {
     const current = finalLineups.find((lineup) => lineup.id === before.id);
     return current.target.x === before.target.x && current.target.y === before.target.y;
   }), 'A conflicted shared destination must keep all original coordinates');
+
+  const history = JSON.parse(await readFile(path.join(temporaryRoot, 'content', 'history.json'), 'utf8'));
+  assert.equal(history.length, 3, 'Only successful nonempty imports add history entries');
+  assert.ok(history.every((entry) => entry.author.name === 'SDK Test User' && entry.mapIds.length === 1 && entry.lineupIds.length === 1));
+  assert.deepEqual(history.map((entry) => [entry.added, entry.updated]), [[0, 1], [0, 1], [1, 0]]);
+  const historyBeforeRepeat = JSON.stringify(history);
+  await importPackage(additionPackage);
+  assert.equal(JSON.stringify(JSON.parse(await readFile(path.join(temporaryRoot, 'content', 'history.json'), 'utf8'))), historyBeforeRepeat);
+
+  // Force the final build to fail after images, YAML and history were written, using only the isolated fixture tree.
+  const rollbackId = 'ascent-sova-rollback-test';
+  const rollbackKey = `lineups/${rollbackId}/effect-01.png`;
+  const rollbackRecord = { ...added, id: rollbackId, target: { ...added.target, groupId: rollbackId }, media: { stance: [], aim: [], effect: [{ key: rollbackKey, alt: addedAsset.alt }] } };
+  const rollbackPackage = await createPackage('rollback', { added: [rollbackRecord], updated: [] }, [{ ...addedAsset, key: rollbackKey, lineupId: rollbackId }]);
+  const beforeRollback = await readFile(path.join(temporaryRoot, 'content', 'lineups.yaml'), 'utf8');
+  const outputPath = path.join(temporaryRoot, 'src', 'data', 'content.json');
+  await rm(outputPath);
+  await mkdir(outputPath);
+  await assert.rejects(importPackage(rollbackPackage));
+  assert.equal(await readFile(path.join(temporaryRoot, 'content', 'lineups.yaml'), 'utf8'), beforeRollback, 'Failed builds must restore YAML');
+  assert.equal(JSON.stringify(JSON.parse(await readFile(path.join(temporaryRoot, 'content', 'history.json'), 'utf8'))), historyBeforeRepeat, 'Failed builds must restore history');
+  await assert.rejects(access(path.join(temporaryRoot, 'public', rollbackKey)), 'Failed builds must remove new image files');
 
   console.log('Edit package checks passed: parallel updates merge, conflicts skip per lineup, additions and images remain importable.');
 } finally {

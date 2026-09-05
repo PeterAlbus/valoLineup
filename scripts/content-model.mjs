@@ -3,6 +3,9 @@ import { access, mkdir, readFile, rename, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { parse, stringify } from 'yaml';
 import { z } from 'zod';
+import { lineupSchema, lineupsSchema } from '../src/package-model.mjs';
+export { lineupSchema, lineupsSchema };
+export { mediaItemSchema } from '../src/package-model.mjs';
 
 const mapPositionSchema = z.object({
   x: z.number().min(0).max(1),
@@ -27,38 +30,6 @@ const assetKeySchema = z.string()
   .refine((value) => !value.startsWith('/') && !value.includes('..') && !value.includes('\\'), {
     message: 'Media keys must be relative paths without traversal segments',
   });
-
-export const mediaItemSchema = z.object({
-  key: assetKeySchema,
-  alt: z.string().min(1),
-});
-
-export const lineupSchema = z.object({
-  id: z.string().regex(/^[a-z0-9-]+$/),
-  mapId: z.string().min(1),
-  agentId: z.string().min(1),
-  abilityId: z.string().min(1),
-  title: z.string().min(1),
-  side: z.enum(['attack', 'defense']),
-  area: z.string().min(1),
-  videoBvid: z.union([
-    z.literal(''),
-    z.string().regex(/^BV[0-9A-Za-z]{10}$/, '教学视频必须填写完整 BV 号'),
-  ]),
-  target: z.object({
-    groupId: z.string().min(1),
-    x: z.number().min(0).max(1),
-    y: z.number().min(0).max(1),
-  }),
-  instructions: z.string().max(1000),
-  media: z.object({
-    stance: z.array(mediaItemSchema),
-    aim: z.array(mediaItemSchema),
-    effect: z.array(mediaItemSchema),
-  }),
-});
-
-export const lineupsSchema = z.array(lineupSchema);
 
 export const mapsSchema = z.array(z.object({
   id: z.string().regex(/^[a-z0-9-]+$/),
@@ -113,7 +84,10 @@ export async function readSourceContent(root = process.cwd()) {
     readYaml(root, 'agents.yaml'),
     readYaml(root, 'lineups.yaml'),
   ]);
-  return { maps, agents, lineups };
+  let history = [];
+  try { history = JSON.parse(await readFile(path.join(root, 'content', 'history.json'), 'utf8')); }
+  catch (error) { if (error.code !== 'ENOENT') throw error; }
+  return { maps, agents, lineups, history };
 }
 
 export async function validateContent(content, { root = process.cwd(), verifyAssets = true } = {}) {
@@ -171,7 +145,12 @@ export async function validateContent(content, { root = process.cwd(), verifyAss
     }
   }
 
-  return { maps, agents, lineups };
+  const history = z.array(z.object({
+    id: z.string(), packageId: z.string().uuid(), revision: z.number().int().positive(),
+    appliedAt: z.string().datetime(), author: z.object({ name: z.string(), source: z.string() }).passthrough(),
+    mapIds: z.array(z.string()), lineupIds: z.array(z.string()), added: z.number().int().nonnegative(), updated: z.number().int().nonnegative(),
+  }).passthrough()).parse(content.history ?? []);
+  return { maps, agents, lineups, history };
 }
 
 export async function buildContent(root = process.cwd(), { quiet = false } = {}) {

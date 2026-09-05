@@ -150,7 +150,7 @@ export default function NewLineupDialog({ maps, agents, initialMapId, initialAge
           </label>
 
           <div className="dialog-footer">
-            <p>创建后仍是浏览器草稿，可以继续拖动并添加站位、瞄点和效果图，最后统一导出编辑包。</p>
+            <p>创建后仍是浏览器草稿，可以继续拖动并添加图片；点击保存编辑后刷新仍保留，也可统一导出编辑包。</p>
             <div><button className="dialog-cancel" onClick={onCancel} type="button">取消</button><button className="dialog-next" type="submit">下一步：在地图上放置</button></div>
           </div>
         </form>
