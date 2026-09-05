@@ -78,6 +78,11 @@ async function click(selector) {
     await evaluate(`document.querySelector('.exit-edit-confirm').click()`);
     await waitFor(`!document.querySelector('.exit-edit-dialog')`);
   }
+  if (['.lineup-delete', '.package-list li:nth-child(2) button:last-child', '.local-edit-card button:last-child'].includes(selector)) {
+    await waitFor(`document.querySelector('.confirm-dialog')?.open`);
+    await evaluate(`document.querySelector('.confirm-accept').click()`);
+    await waitFor(`!document.querySelector('.confirm-dialog')`);
+  }
 }
 const storage = `JSON.parse(localStorage.getItem('valo-lineup:v4:/'))`;
 async function navigate() {

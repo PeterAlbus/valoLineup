@@ -185,7 +185,6 @@ button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
 .empty-state > span { color: var(--accent); font: 800 64px var(--font-mono); opacity: .32; }
 .empty-state p { color: var(--muted); font-size: 13px; line-height: 1.7; }
 
-.dialog-backdrop { position: fixed; z-index: 30; inset: 0; display: grid; place-items: center; padding: 24px; overflow: auto; background: rgba(4,7,8,.78); backdrop-filter: blur(7px); }
 .new-lineup-dialog { width: min(680px, 100%); border: 1px solid rgba(104,224,214,.26); background: #111719; box-shadow: 0 32px 90px rgba(0,0,0,.66); }
 .dialog-heading { display: flex; align-items: center; justify-content: space-between; padding: 20px 22px; border-bottom: 1px solid var(--line); }
 .dialog-heading .eyebrow { margin-bottom: 5px; }
@@ -214,13 +213,6 @@ button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
 .dialog-footer .dialog-next { border-color: rgba(255,90,68,.58); background: rgba(255,90,68,.12); color: #ffd0c9; }
 .dialog-footer button:hover { border-color: rgba(104,224,214,.5); color: var(--ink); }
 
-.exit-edit-dialog { width: min(480px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); margin: auto; padding: 24px; overflow: auto; color: var(--ink); background: #111719; border: 1px solid rgba(104,224,214,.4); border-radius: 8px; box-shadow: 0 24px 80px rgba(0,0,0,.6); }
-.exit-edit-dialog::backdrop { background: rgba(4,7,8,.78); }
-.exit-edit-dialog h2 { margin: 0 0 16px; font-size: 21px; }
-.exit-edit-dialog p { margin: 10px 0; font-size: 14px; line-height: 1.7; color: #b5c5c3; }
-.exit-edit-actions { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
-.exit-edit-actions button { min-height: 44px; padding: 10px 14px; border: 1px solid #476664; border-radius: 5px; background: #122224; color: var(--ink); cursor: pointer; }
-.exit-edit-actions .exit-edit-confirm { border-color: #aa5846; background: #351d18; color: #ffd0c9; }
 
 .canvas-status { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 12px; color: var(--muted); font-size: 13px; }
 .canvas-status button { padding: 8px 14px; border: 1px solid var(--cyan); background: var(--panel); color: var(--cyan); cursor: pointer; }

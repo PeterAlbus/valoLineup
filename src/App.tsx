@@ -12,6 +12,8 @@ import { useDecodedImage } from './useDecodedImage';
 import ZoomControls from './ZoomControls';
 import ImageLightbox from './ImageLightbox';
 import ExitEditDialog from './ExitEditDialog';
+import ConfirmDialog from './ConfirmDialog';
+import PackageImport from './PackageImport';
 
 type PendingUpload = {
   key: string;
@@ -23,6 +25,7 @@ type PendingUpload = {
 };
 type EditorNotice = { kind: 'info' | 'success' | 'error'; text: string };
 type LightboxItem = { src: string; alt: string };
+type DeleteRequest = { kind: 'manual' } | { kind: 'package'; id: string; author: string } | { kind: 'lineup'; id: string; title: string };
 
 const maps = content.maps;
 const agents = content.agents;
@@ -150,6 +153,7 @@ export default function App() {
   const [sideFilter, setSideFilter] = useState<SideFilter>('attack');
   const [isEditing, setIsEditing] = useState(false);
   const [isExitConfirmOpen, setIsExitConfirmOpen] = useState(false);
+  const [deleteRequest, setDeleteRequest] = useState<DeleteRequest | null>(null);
   const [isMobileView, setIsMobileView] = useState(false);
   const [isEditorBusy, setIsEditorBusy] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
@@ -500,12 +504,22 @@ export default function App() {
     setIsDirty(true);
   }
 
-  function deleteActiveLineup() {
-    if (!activeLineup || !window.confirm(`删除“${activeLineup.title}”？保存后生效；退出而不保存可放弃本次删除。`)) return;
-    setDraftLineups((current) => current.filter((item) => item.id !== activeLineup.id));
-    const removed = pendingUploads.filter((upload) => upload.lineupId === activeLineup.id);
+  function confirmDeletion() {
+    if (!deleteRequest || isEditorBusy) return;
+    setDeleteRequest(null);
+    if (deleteRequest.kind === 'manual') {
+      void manageLibrary({ ...library, manual: null }, undefined, '已删除本地手动编辑。仓库点位与已导入的更新包仍然保留。');
+      return;
+    }
+    if (deleteRequest.kind === 'package') {
+      void manageLibrary({ ...library, packages: library.packages.filter((item) => item.packageId !== deleteRequest.id) }, undefined, '已移除更新包，并按剩余顺序重新应用。已保存的手动编辑不受影响。');
+      return;
+    }
+    if (!isEditing) return;
+    setDraftLineups((current) => current.filter((item) => item.id !== deleteRequest.id));
+    const removed = pendingUploads.filter((upload) => upload.lineupId === deleteRequest.id);
     removed.forEach((upload) => URL.revokeObjectURL(upload.previewUrl));
-    setPendingUploads((current) => current.filter((upload) => upload.lineupId !== activeLineup.id));
+    setPendingUploads((current) => current.filter((upload) => upload.lineupId !== deleteRequest.id));
     setIsDirty(true);
     setEditorNotice({ kind: 'info', text: '已标记删除点位，保存后生效。新建后又删除的点位不会产生删除记录。' });
   }
@@ -606,10 +620,10 @@ export default function App() {
     finally { setIsEditorBusy(false); }
   }
 
-  async function manageLibrary(next: LocalLibrary, data?: PackageData) {
+  async function manageLibrary(next: LocalLibrary, data?: PackageData, successText = '本地更新包已重新应用，手动编辑仍在最上层。') {
     if (isEditorBusy || isEditing || !storageReady) return;
     setIsEditorBusy(true);
-    try { await commitLibrary(next, data); setEditorNotice({ kind: 'success', text: '本地更新包已重新应用，手动编辑仍在最上层。' }); }
+    try { await commitLibrary(next, data); setEditorNotice({ kind: 'success', text: successText }); }
     catch (error) { setEditorNotice({ kind: 'error', text: error instanceof Error ? error.message : '本地更新失败' }); }
     finally { setIsEditorBusy(false); }
   }
@@ -704,6 +718,7 @@ export default function App() {
                 );
               })}
             </div>
+            {!showHistory ? <PackageImport compact disabled={!storageReady || isEditorBusy || isEditing} editing={isEditing} onImport={(file) => void importPackage(file)} /> : null}
             <button className="history-toggle" onClick={() => { location.hash = showHistory ? '' : 'history'; }} type="button">{showHistory ? '返回图鉴' : '更新历史'}</button>
             {!isMobileView || library.manual || isEditing ? (
               <div className="editor-actions" aria-label="浏览器编辑">
@@ -731,8 +746,8 @@ export default function App() {
         {showHistory ? <HistoryPage packages={library.packages} manual={library.manual} dirty={isDirty} entries={content.history} maps={maps} busy={isEditorBusy || !storageReady} editing={isEditing}
           onImport={(file) => void importPackage(file)} onExport={() => void exportEdits()}
           onMove={(index, offset) => { const packages = [...library.packages]; [packages[index], packages[index + offset]] = [packages[index + offset], packages[index]]; void manageLibrary({ ...library, packages }); }}
-          onRemove={(index) => { if (window.confirm('删除此更新包？只影响当前浏览器，可重新导入恢复。')) void manageLibrary({ ...library, packages: library.packages.filter((_, i) => i !== index) }); }}
-          onClearManual={() => { if (window.confirm('删除已保存的本地编辑？建议先下载备份，删除后无法撤销。')) void manageLibrary({ ...library, manual: null }); }}
+          onRemove={(index) => setDeleteRequest({ kind: 'package', id: library.packages[index].packageId, author: library.packages[index].author.name })}
+          onClearManual={() => setDeleteRequest({ kind: 'manual' })}
         /> : null}
         <div className="content-grid" style={showHistory ? { display: 'none' } : undefined} inert={isEditorBusy}>
           <section className="map-panel" aria-label={`${activeMap.name} Lineup 地图`}>
@@ -889,7 +904,7 @@ export default function App() {
                   <label>点位名称<input aria-label="点位名称" maxLength={200} value={activeLineup.title} onChange={(event) => updateActiveFields({ title: event.target.value })} /></label>
                   <label>阵营<select aria-label="点位阵营" value={activeLineup.side} onChange={(event) => updateActiveFields({ side: event.target.value as Perspective })}><option value="attack">进攻方</option><option value="defense">防守方</option></select></label>
                   <label>区域<input aria-label="点位区域" maxLength={100} value={activeLineup.area} onChange={(event) => updateActiveFields({ area: event.target.value })} /></label>
-                  <button className="lineup-delete" onClick={deleteActiveLineup} type="button">删除此点位</button>
+                  <button className="lineup-delete" onClick={() => setDeleteRequest({ kind: 'lineup', id: activeLineup.id, title: activeLineup.title })} type="button">删除此点位</button>
                 </section> : null}
                 <p className="uploader-line">上传者：<UploaderLabel uploader={activeLineup.uploader} onOpen={(uid) => void openUploader(uid)} /></p>
                 {isEditMode ? (
@@ -1003,6 +1018,14 @@ export default function App() {
         />
       ) : null}
       {isEditing && isExitConfirmOpen ? <ExitEditDialog dirty={isDirty} onCancel={() => setIsExitConfirmOpen(false)} onConfirm={exitEditMode} /> : null}
+      {deleteRequest ? <ConfirmDialog
+        title={deleteRequest.kind === 'manual' ? '删除本地编辑？' : deleteRequest.kind === 'package' ? '移除此更新包？' : '删除此点位？'}
+        confirmLabel={deleteRequest.kind === 'manual' ? '删除本地编辑' : deleteRequest.kind === 'package' ? '移除更新包' : '确认删除点位'}
+        onCancel={() => setDeleteRequest(null)} onConfirm={confirmDeletion}>
+        {deleteRequest.kind === 'manual' ? <><p>已保存的手动编辑将从当前浏览器中删除，无法直接撤销。建议取消并先下载编辑包备份。</p><p>仓库点位和已导入的更新包不受影响。</p></>
+          : deleteRequest.kind === 'package' ? <><p>移除由「{deleteRequest.author}」提供的更新包后，将按剩余更新包的顺序重新显示点位。</p><p>只影响当前浏览器，手动编辑仍然保留；可重新导入原包恢复。</p></>
+            : <><p>即将删除「{deleteRequest.title}」。此操作会暂存在当前草稿，保存后生效。</p><p>退出编辑并放弃未保存变更，可以取消本次删除。</p></>}
+      </ConfirmDialog> : null}
       {lightboxItem ? (
         <ImageLightbox key={lightboxItem.src} {...lightboxItem} onClose={() => setLightboxItem(null)} />
       ) : null}

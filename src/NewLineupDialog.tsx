@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 type MapOption = { id: string; name: string; sites: { label: string }[] };
 type AgentOption = { id: string; name: string; icon: string; abilities: { id: string; name: string; icon: string }[] };
@@ -39,21 +39,26 @@ export default function NewLineupDialog({ maps, agents, initialMapId, initialAge
   const [instructions, setInstructions] = useState('');
   const activeAgent = useMemo(() => agents.find((agent) => agent.id === agentId) ?? agents[0], [agentId, agents]);
   const activeAbility = activeAgent.abilities.find((ability) => ability.id === abilityId) ?? activeAgent.abilities[0];
+  const dialog = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') onCancel();
+    const element = dialog.current!;
+    const focus = document.activeElement as HTMLElement | null;
+    const overflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    element.showModal();
+    return () => {
+      element.close();
+      document.body.style.overflow = overflow;
+      if (focus?.isConnected) focus.focus({ preventScroll: true });
     };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onCancel]);
+  }, []);
 
   return (
-    <div className="dialog-backdrop" onMouseDown={(event) => event.target === event.currentTarget && onCancel()}>
-      <section aria-labelledby="new-lineup-title" aria-modal="true" className="new-lineup-dialog" role="dialog">
+      <dialog ref={dialog} aria-labelledby="new-lineup-title" className="new-lineup-dialog" onCancel={(event) => { event.preventDefault(); onCancel(); }}>
         <div className="dialog-heading">
           <div><p className="eyebrow">浏览器草稿</p><h2 id="new-lineup-title">新增 Lineup 点位</h2></div>
-          <button aria-label="关闭新增点位窗口" onClick={onCancel} type="button">×</button>
+          <button aria-label="关闭新增点位窗口" onClick={onCancel} type="button"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg></button>
         </div>
         <p className="dialog-intro">先定义点位内容，下一步到地图上点击技能最终落点。坐标不会使用默认值。</p>
 
@@ -125,8 +130,10 @@ export default function NewLineupDialog({ maps, agents, initialMapId, initialAge
           <div className="form-grid">
             <label>
               <span>区域</span>
-              <input maxLength={40} onChange={(event) => setArea(event.target.value)} placeholder="例如：A点、B大、中路" required value={area} />
-              <span className="area-shortcuts">{['A点', 'B点', ...(maps.find((map) => map.id === mapId)?.sites.some((site) => site.label === 'C') ? ['C点'] : [])].map((value) => <button key={value} type="button" aria-pressed={area === value} onClick={() => setArea(value)}>{value}</button>)}</span>
+              <span className="area-input">
+                <input maxLength={40} onChange={(event) => setArea(event.target.value)} placeholder="例如：A点、B大、中路" required value={area} />
+                <span className="area-shortcuts" role="group" aria-label="快捷选择区域">{['A点', 'B点', ...(maps.find((map) => map.id === mapId)?.sites.some((site) => site.label === 'C') ? ['C点'] : [])].map((value) => <button key={value} type="button" aria-pressed={area === value} onClick={() => setArea(value)}>{value}</button>)}</span>
+              </span>
             </label>
             <label>
               <span>点位标题</span>
@@ -156,7 +163,6 @@ export default function NewLineupDialog({ maps, agents, initialMapId, initialAge
             <div><button className="dialog-cancel" onClick={onCancel} type="button">取消</button><button className="dialog-next" type="submit">下一步：在地图上放置</button></div>
           </div>
         </form>
-      </section>
-    </div>
+      </dialog>
   );
 }

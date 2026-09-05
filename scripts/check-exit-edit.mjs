@@ -1,5 +1,8 @@
 // Run only in the isolated browser used by test:browser. This resets the test origin's local edits.
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+import { randomUUID } from 'node:crypto';
+import JSZip from 'jszip';
 
 const [debugUrl = 'http://127.0.0.1:9335', appUrl = 'http://127.0.0.1:4174/'] = process.argv.slice(2);
 const tabs = await fetch(`${debugUrl}/json`).then((response) => response.json());
@@ -59,7 +62,7 @@ try {
   assert.equal(await evaluate(`${frame}.confirm('Native modal sandbox probe')`), false, 'The regression environment must suppress native confirm');
   await enter();
   await requestExit();
-  assert.equal(await evaluate(`${doc}.activeElement.className`), 'exit-edit-continue', 'Default focus must be non-destructive');
+  assert(await evaluate(`${doc}.activeElement.classList.contains('exit-edit-continue')`), 'Default focus must be non-destructive');
   await send('Input.dispatchKeyEvent', { type: 'keyDown', key: 'Escape', code: 'Escape', windowsVirtualKeyCode: 27 });
   await wait(`!${doc}.querySelector('.exit-edit-dialog')`);
   assert(await evaluate(`!!${doc}.querySelector('.editor-cancel')`));
@@ -89,6 +92,59 @@ try {
   await click('.exit-edit-confirm'); await wait(`!${doc}.querySelector('.editor-cancel')`);
   assert.equal(await evaluate(`${doc}.querySelector('.detail-lead').textContent`), 'Saved sandbox draft');
   console.log('PASS sandboxed exit without allow-modals, Escape/cancel, unsaved discard, saved-layer preservation, clean exit and mobile dialog');
+
+  // Every destructive confirmation must also work without the host's allow-modals permission.
+  await send('Emulation.setDeviceMetricsOverride', { width: 1280, height: 900, deviceScaleFactor: 1, mobile: false });
+  await wait(`${doc}.querySelector('.editor-enter')`);
+  await enter();
+  const title = await evaluate(`${doc}.querySelector('.detail-panel h2').textContent`);
+  await click('.lineup-delete'); await wait(`${doc}.querySelector('.confirm-dialog')?.open`);
+  assert(await evaluate(`${doc}.activeElement.classList.contains('confirm-cancel')`));
+  await click('.confirm-cancel');
+  assert.equal(await evaluate(`${doc}.querySelector('.detail-panel h2').textContent`), title);
+  await click('.lineup-delete'); await wait(`${doc}.querySelector('.confirm-dialog')?.open`);
+  await click('.confirm-accept'); await wait(`${doc}.querySelector('.instructions-editor textarea')?.value !== 'Saved sandbox draft'`);
+  assert.equal(await evaluate(`localStorage.getItem(${JSON.stringify(storageKey)})`), saved, 'Point deletion remains an unsaved draft until explicitly saved');
+  await requestExit(); await click('.exit-edit-confirm'); await wait(`${doc}.querySelector('.editor-enter')`);
+  assert.equal(await evaluate(`${doc}.querySelector('.detail-panel h2').textContent`), title);
+  assert.equal(await evaluate(`${doc}.querySelector('.detail-lead').textContent`), 'Saved sandbox draft');
+
+  // Import via the new main-page entry inside the sandbox, then remove layers independently.
+  const manifest = { ...JSON.parse(saved).manual, packageId: randomUUID() };
+  const zip = new JSZip(); zip.file('manifest.json', JSON.stringify(manifest));
+  for (const asset of manifest.uploadedAssets) zip.file(asset.key, await readFile(`public/${asset.key}`));
+  const base64 = await zip.generateAsync({ type: 'base64' });
+  await evaluate(`(() => {const w=${frame}; const dt=new w.DataTransfer();dt.items.add(new w.File([Uint8Array.from(atob(${JSON.stringify(base64)}),c=>c.charCodeAt(0))],'confirm-fixture.zip',{type:'application/zip'}));const input=${doc}.querySelector('.topbar .package-import input');input.files=dt.files;input.dispatchEvent(new w.Event('change',{bubbles:true}));})()`);
+  await wait(`JSON.parse(localStorage.getItem(${JSON.stringify(storageKey)})).packages.length === 1 && !${doc}.querySelector('.package-import input').disabled`);
+  assert.equal(await evaluate(`${doc}.querySelector('.history-page')`), null, 'Main-page import must not require navigating to history');
+  const beforeRemoval = await evaluate(`localStorage.getItem(${JSON.stringify(storageKey)})`);
+  await click('.history-toggle'); await wait(`${doc}.querySelector('.local-edit-card')`);
+  await click('.local-edit-card .action-danger'); await wait(`${doc}.querySelector('.confirm-dialog')?.open`);
+  await send('Input.dispatchKeyEvent', { type: 'keyDown', key: 'Escape', code: 'Escape', windowsVirtualKeyCode: 27 });
+  await wait(`!${doc}.querySelector('.confirm-dialog')`);
+  assert.equal(await evaluate(`localStorage.getItem(${JSON.stringify(storageKey)})`), beforeRemoval, 'Escape must not remove saved edits');
+  await click('.local-edit-card .action-danger'); await wait(`${doc}.querySelector('.confirm-dialog')?.open`);
+  await click('.confirm-cancel'); await wait(`!${doc}.querySelector('.confirm-dialog')`);
+  assert.equal(await evaluate(`localStorage.getItem(${JSON.stringify(storageKey)})`), beforeRemoval, 'Cancel must not remove saved edits');
+  await click('.local-edit-card .action-danger'); await wait(`${doc}.querySelector('.confirm-dialog')?.open`);
+  await click('.confirm-accept'); await wait(`!${doc}.querySelector('.local-edit-card')`);
+  assert.equal(await evaluate(`JSON.parse(localStorage.getItem(${JSON.stringify(storageKey)})).manual`), null, 'Confirmed local edit deletion must persist');
+  assert.equal(await evaluate(`JSON.parse(localStorage.getItem(${JSON.stringify(storageKey)})).packages.length`), 1, 'Deleting manual edits must preserve imported packages');
+  const beforePackageRemoval = await evaluate(`localStorage.getItem(${JSON.stringify(storageKey)})`);
+  await click('.package-list .action-danger'); await wait(`${doc}.querySelector('.confirm-dialog')?.open`);
+  await click('.confirm-cancel'); await wait(`!${doc}.querySelector('.confirm-dialog')`);
+  assert.equal(await evaluate(`localStorage.getItem(${JSON.stringify(storageKey)})`), beforePackageRemoval);
+  await click('.package-list .action-danger'); await wait(`${doc}.querySelector('.confirm-dialog')?.open`);
+  await send('Input.dispatchKeyEvent', { type: 'keyDown', key: 'Escape', code: 'Escape', windowsVirtualKeyCode: 27 });
+  await wait(`!${doc}.querySelector('.confirm-dialog')`);
+  assert.equal(await evaluate(`localStorage.getItem(${JSON.stringify(storageKey)})`), beforePackageRemoval);
+  await click('.package-list .action-danger'); await wait(`${doc}.querySelector('.confirm-dialog')?.open`);
+  await click('.confirm-accept'); await wait(`!${doc}.querySelector('.package-list li')`);
+  assert.equal(await evaluate(`JSON.parse(localStorage.getItem(${JSON.stringify(storageKey)})).packages.length`), 0);
+  await evaluate(`${frame}.location.reload()`);
+  await wait(`${doc}.querySelector('.package-import input') && !${doc}.querySelector('.package-import input').disabled`);
+  assert.equal(await evaluate(`${doc}.querySelectorAll('.local-edit-card, .package-list li').length`), 0, 'Deleted layers stay deleted after reload');
+  console.log('PASS sandboxed point/local edit/package deletion, cancel/Escape safety, reload persistence and main-page package import');
 } finally {
   await evaluate(`window.exitTestFrame?.remove();localStorage.removeItem(${JSON.stringify(storageKey)})`).catch(() => {});
   socket.close();
