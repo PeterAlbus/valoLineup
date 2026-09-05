@@ -66,26 +66,6 @@ async function resolveImage(reference) {
   throw new Error(`找不到 Markdown 引用的图片：${reference}`);
 }
 
-function techniqueFrom(text) {
-  let charge;
-  if (/无蓄力/.test(text)) charge = 'none';
-  else if (/满格蓄力/.test(text)) charge = 'full';
-  else if (/两格蓄力/.test(text)) charge = 'two';
-  else if (/一格蓄力/.test(text)) charge = 'one';
-
-  let bounce;
-  if (/无反弹/.test(text)) bounce = 0;
-  else if (/两次反弹/.test(text)) bounce = 2;
-  else if (/(一次|一格)反弹/.test(text)) bounce = 1;
-
-  return {
-    ...(charge ? { charge } : {}),
-    ...(bounce !== undefined ? { bounce } : {}),
-    ...(text.includes('跳射') ? { jump: true } : {}),
-    instructions: text ? [text] : [],
-  };
-}
-
 function abilityFrom(entry) {
   const text = `${entry.title} ${entry.notes.join(' ')}`;
   return /雷击|放血|清道具/.test(text) ? 'shock-bolt' : 'recon-bolt';
@@ -188,7 +168,7 @@ for (const [index, draft] of drafts.entries()) {
     area: draft.area,
     videoBvid: '',
     target: { groupId, x, y },
-    technique: techniqueFrom(draft.notes.join('，').replaceAll('，，', '，')),
+    instructions: draft.notes.join('，').replaceAll('，，', '，'),
     media,
   });
 }

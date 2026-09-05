@@ -40,6 +40,7 @@ assert.equal(content.agents.find((agent) => agent.id === 'veto')?.name, '禁灭'
 assert.ok(content.agents.every((agent) => agent.abilities.length >= 4), 'Every agent must expose all active abilities');
 assert.ok(content.agents.every((agent) => agent.icon.endsWith('.webp') && agent.abilities.every((ability) => ability.icon.endsWith('.webp'))), 'Agent media must use local optimized WebP assets');
 assert.equal(content.lineups.length, 26, 'The local metadata must preserve every existing lineup');
+assert.ok(content.lineups.every((lineup) => typeof lineup.instructions === 'string'), 'Every lineup must use one editable instructions string');
 assert.ok(content.lineups.every((lineup) => lineup.videoBvid === ''), 'Every existing lineup must store an empty Bilibili BVID');
 assert.doesNotThrow(() => lineupsSchema.parse([{ ...content.lineups[0], videoBvid: 'BV17x411w7KC' }]));
 assert.throws(() => lineupsSchema.parse([{ ...content.lineups[0], videoBvid: 'https://www.bilibili.com/video/BV17x411w7KC' }]));

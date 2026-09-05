@@ -1507,13 +1507,7 @@
         "x": 0.29,
         "y": 0.21333333333333335
       },
-      "technique": {
-        "charge": "two",
-        "bounce": 0,
-        "instructions": [
-          "两格蓄力无反弹"
-        ]
-      },
+      "instructions": "两格蓄力无反弹",
       "media": {
         "stance": [
           {
@@ -1544,13 +1538,7 @@
         "x": 0.29,
         "y": 0.21333333333333335
       },
-      "technique": {
-        "charge": "full",
-        "bounce": 1,
-        "instructions": [
-          "一次反弹满格蓄力"
-        ]
-      },
+      "instructions": "一次反弹满格蓄力",
       "media": {
         "stance": [
           {
@@ -1581,12 +1569,7 @@
         "x": 0.29,
         "y": 0.21333333333333335
       },
-      "technique": {
-        "charge": "one",
-        "instructions": [
-          "建筑物边缘转角，一格蓄力"
-        ]
-      },
+      "instructions": "建筑物边缘转角，一格蓄力",
       "media": {
         "stance": [
           {
@@ -1617,12 +1600,7 @@
         "x": 0.28072,
         "y": 0.209
       },
-      "technique": {
-        "charge": "one",
-        "instructions": [
-          "一格蓄力"
-        ]
-      },
+      "instructions": "一格蓄力",
       "media": {
         "stance": [],
         "aim": [
@@ -1648,12 +1626,7 @@
         "x": 0.28761,
         "y": 0.10734
       },
-      "technique": {
-        "charge": "one",
-        "instructions": [
-          "天空图形尖端，一格蓄力"
-        ]
-      },
+      "instructions": "天空图形尖端，一格蓄力",
       "media": {
         "stance": [
           {
@@ -1684,13 +1657,7 @@
         "x": 0.49,
         "y": 0.54
       },
-      "technique": {
-        "charge": "full",
-        "bounce": 1,
-        "instructions": [
-          "一次反弹满格蓄力，中路右侧死角可以藏人"
-        ]
-      },
+      "instructions": "一次反弹满格蓄力，中路右侧死角可以藏人",
       "media": {
         "stance": [
           {
@@ -1721,13 +1688,7 @@
         "x": 0.5,
         "y": 0.49
       },
-      "technique": {
-        "charge": "full",
-        "bounce": 2,
-        "instructions": [
-          "L型电线下方，两次反弹满格蓄力"
-        ]
-      },
+      "instructions": "L型电线下方，两次反弹满格蓄力",
       "media": {
         "stance": [
           {
@@ -1758,13 +1719,7 @@
         "x": 0.535,
         "y": 0.5
       },
-      "technique": {
-        "charge": "full",
-        "bounce": 1,
-        "instructions": [
-          "路灯下方，一次反弹满格蓄力"
-        ]
-      },
+      "instructions": "路灯下方，一次反弹满格蓄力",
       "media": {
         "stance": [
           {
@@ -1795,12 +1750,7 @@
         "x": 0.48,
         "y": 0.5449999999999999
       },
-      "technique": {
-        "charge": "full",
-        "instructions": [
-          "背靠墙，满格蓄力"
-        ]
-      },
+      "instructions": "背靠墙，满格蓄力",
       "media": {
         "stance": [],
         "aim": [
@@ -1826,9 +1776,7 @@
         "x": 0.52,
         "y": 0.46499999999999997
       },
-      "technique": {
-        "instructions": []
-      },
+      "instructions": "",
       "media": {
         "stance": [],
         "aim": [
@@ -1854,12 +1802,7 @@
         "x": 0.355,
         "y": 0.74
       },
-      "technique": {
-        "charge": "full",
-        "instructions": [
-          "满格蓄力"
-        ]
-      },
+      "instructions": "满格蓄力",
       "media": {
         "stance": [],
         "aim": [
@@ -1885,13 +1828,7 @@
         "x": 0.32,
         "y": 0.825
       },
-      "technique": {
-        "charge": "full",
-        "bounce": 1,
-        "instructions": [
-          "一次反弹满格蓄力"
-        ]
-      },
+      "instructions": "一次反弹满格蓄力",
       "media": {
         "stance": [
           {
@@ -1922,9 +1859,7 @@
         "x": 0.285,
         "y": 0.85
       },
-      "technique": {
-        "instructions": []
-      },
+      "instructions": "",
       "media": {
         "stance": [],
         "aim": [
@@ -1950,12 +1885,7 @@
         "x": 0.34,
         "y": 0.8
       },
-      "technique": {
-        "charge": "full",
-        "instructions": [
-          "满格蓄力"
-        ]
-      },
+      "instructions": "满格蓄力",
       "media": {
         "stance": [],
         "aim": [
@@ -1981,13 +1911,7 @@
         "x": 0.285,
         "y": 0.21666666666666667
       },
-      "technique": {
-        "charge": "full",
-        "jump": true,
-        "instructions": [
-          "满格蓄力跳射"
-        ]
-      },
+      "instructions": "满格蓄力跳射",
       "media": {
         "stance": [
           {
@@ -2022,12 +1946,7 @@
         "x": 0.3,
         "y": 0.31000000000000005
       },
-      "technique": {
-        "charge": "one",
-        "instructions": [
-          "一格蓄力"
-        ]
-      },
+      "instructions": "一格蓄力",
       "media": {
         "stance": [
           {
@@ -2058,9 +1977,7 @@
         "x": 0.285,
         "y": 0.21666666666666667
       },
-      "technique": {
-        "instructions": []
-      },
+      "instructions": "",
       "media": {
         "stance": [],
         "aim": [
@@ -2086,9 +2003,7 @@
         "x": 0.32,
         "y": 0.8200000000000001
       },
-      "technique": {
-        "instructions": []
-      },
+      "instructions": "",
       "media": {
         "stance": [
           {
@@ -2119,12 +2034,7 @@
         "x": 0.5,
         "y": 0.55
       },
-      "technique": {
-        "jump": true,
-        "instructions": [
-          "跳射射到水塔上"
-        ]
-      },
+      "instructions": "跳射射到水塔上",
       "media": {
         "stance": [],
         "aim": [
@@ -2150,14 +2060,7 @@
         "x": 0.52,
         "y": 0.5
       },
-      "technique": {
-        "charge": "full",
-        "bounce": 1,
-        "jump": true,
-        "instructions": [
-          "瞄准45度斜的墙壁，一格反弹满格蓄力，跳射合适，站位随意"
-        ]
-      },
+      "instructions": "瞄准45度斜的墙壁，一格反弹满格蓄力，跳射合适，站位随意",
       "media": {
         "stance": [],
         "aim": [
@@ -2183,9 +2086,7 @@
         "x": 0.325,
         "y": 0.825
       },
-      "technique": {
-        "instructions": []
-      },
+      "instructions": "",
       "media": {
         "stance": [],
         "aim": [
@@ -2211,12 +2112,7 @@
         "x": 0.35,
         "y": 0.72
       },
-      "technique": {
-        "charge": "one",
-        "instructions": [
-          "一格蓄力"
-        ]
-      },
+      "instructions": "一格蓄力",
       "media": {
         "stance": [
           {
@@ -2247,13 +2143,7 @@
         "x": 0.36,
         "y": 0.77
       },
-      "technique": {
-        "charge": "two",
-        "bounce": 1,
-        "instructions": [
-          "两格蓄力一格反弹"
-        ]
-      },
+      "instructions": "两格蓄力一格反弹",
       "media": {
         "stance": [],
         "aim": [
@@ -2279,13 +2169,7 @@
         "x": 0.345,
         "y": 0.74
       },
-      "technique": {
-        "charge": "full",
-        "bounce": 1,
-        "instructions": [
-          "站警家角落，一次反弹满格蓄力，射关门按钮的屋檐上"
-        ]
-      },
+      "instructions": "站警家角落，一次反弹满格蓄力，射关门按钮的屋檐上",
       "media": {
         "stance": [],
         "aim": [
@@ -2311,12 +2195,7 @@
         "x": 0.3,
         "y": 0.8200000000000001
       },
-      "technique": {
-        "charge": "full",
-        "instructions": [
-          "满格蓄力"
-        ]
-      },
+      "instructions": "满格蓄力",
       "media": {
         "stance": [],
         "aim": [
@@ -2342,11 +2221,7 @@
         "x": 0.285,
         "y": 0.21666666666666667
       },
-      "technique": {
-        "instructions": [
-          "站绿箱房檐边角向上移动少许"
-        ]
-      },
+      "instructions": "站绿箱房檐边角向上移动少许",
       "media": {
         "stance": [],
         "aim": [

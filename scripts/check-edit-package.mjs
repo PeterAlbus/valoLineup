@@ -22,7 +22,7 @@ async function createPackage(name, changes, assets = []) {
   for (const asset of assets) zip.file(asset.key, asset.bytes);
   zip.file('manifest.json', `${JSON.stringify({
     format: 'valo-lineup-edit-package',
-    version: 2,
+    version: 3,
     createdAt: new Date().toISOString(),
     changes,
     uploadedAssets: assets.map((asset) => ({

@@ -45,7 +45,7 @@ const updateSchema = z.object({
 
 const manifestSchema = z.object({
   format: z.literal('valo-lineup-edit-package'),
-  version: z.literal(2),
+  version: z.literal(3),
   createdAt: z.string().datetime(),
   changes: z.object({
     added: lineupsSchema,

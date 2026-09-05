@@ -50,12 +50,7 @@ export const lineupSchema = z.object({
     x: z.number().min(0).max(1),
     y: z.number().min(0).max(1),
   }),
-  technique: z.object({
-    charge: z.enum(['none', 'one', 'two', 'full']).optional(),
-    bounce: z.number().int().min(0).max(2).optional(),
-    jump: z.boolean().optional(),
-    instructions: z.array(z.string()),
-  }),
+  instructions: z.string().max(1000),
   media: z.object({
     stance: z.array(mediaItemSchema),
     aim: z.array(mediaItemSchema),

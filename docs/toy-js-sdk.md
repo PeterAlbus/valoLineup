@@ -1,6 +1,6 @@
 # Toy JS SDK 1.7.0 接入分析
 
-> 文档性质：项目内技术参考，不代表当前项目已经接入 SDK。  
+> 文档性质：项目内技术参考，并记录当前项目已经使用的 SDK 能力。
 > 分析依据：用户提供的《Toy JS SDK 能力清单》，版本 1.7.0，更新时间 2026-08-27。  
 > 原始文档：[Toy JS SDK 能力清单 1.7.0](./references/toy-js-sdk-1.7.0.md)。接口签名、参数和示例以该版本化快照为准。  
 > 更新条件：SDK 版本、加载地址、接口签名、环境支持或平台隐私规则变化时，应重新核对并更新本文。
@@ -9,7 +9,7 @@
 
 Toy JS SDK 是运行在 Toy 页面中的浏览器端桥接 SDK，用于让页面调用 B站 App 或 Web 环境提供的能力。它与 `toy` CLI 分工不同：CLI 负责作品发布、更新、审核、查询和视频绑定，JS SDK 负责作品打开后的页面交互。
 
-SDK 通过远程脚本加载，加载成功后暴露全局 `window.toy`。文档没有提供 npm 包、ES Module 入口或 TypeScript 类型包。除 `onContainerChange` 同步返回取消监听函数外，其余方法均返回 Promise。
+SDK 通过远程脚本加载，加载成功后暴露全局 `window.toy`。文档没有提供 npm 包、ES Module 入口或 TypeScript 类型包。除 `onContainerChange` 同步返回取消监听函数外，其余方法均返回 Promise。当前页面已经加载该脚本，并为实际使用的 `isSupport` 与 `navigate` 建立了最小 TypeScript 类型边界。
 
 对 ValoLineup 当前产品形态最有价值的能力是：
 
@@ -42,7 +42,7 @@ SDK 不能替代当前项目的 Lineup 内容存储和编辑机制：云存储�
 在 HTML `<head>` 中加载：
 
 ```html
-<script src="//s1.hdslb.com/bfs/seed/toy/app/sdk/toy-sdk.js"></script>
+<script src="https://s1.hdslb.com/bfs/seed/toy/app/sdk/toy-sdk.js"></script>
 ```
 
 加载后通过全局对象调用：
@@ -55,10 +55,10 @@ if (supported) {
 }
 ```
 
-接入当前 TypeScript/React 项目时需要额外处理以下工程事实：
+当前 TypeScript/React 接入遵守以下工程事实：
 
 - SDK 只能从浏览器客户端代码访问，服务端渲染阶段不能读取 `window`。
-- 文档未提供类型声明，项目若实际接入，需要为用到的方法声明最小的 `window.toy` 类型。
+- 文档未提供类型声明，项目只为用到的 `isSupport` 与 `navigate` 声明最小的 `window.toy` 类型。
 - 本地开发、普通浏览器和 B站 App 的能力不同，不能以“脚本加载成功”代替能力判断。
 - 每次调用 App 专属能力前都应执行 `isSupport`；不支持时 Promise 会 reject。
 - 所有 SDK 错误带 `[ToySDK]` 前缀，调用点应使用 `try/catch` 处理。
@@ -196,7 +196,7 @@ ValoLineup 当前以浏览已有 Lineup 和上传本地图片为主，没有实�
 
 ### 教学视频跳转
 
-当前 Lineup 数据使用可选 `videoBvid` 直接保存 B站视频 BV 号，不保存完整 URL。普通 Web 环境由页面拼接 `https://www.bilibili.com/video/{videoBvid}`；接入 SDK 后，可在 `navigate` 可用时直接传 `type: 'video'` 和该 BV 号。
+当前 Lineup 数据使用可选 `videoBvid` 直接保存 B站视频 BV 号，不保存完整 URL。用户点击“教学视频”后，页面先调用 `isSupport('navigate')`，确认支持后再调用 `navigate({ type: 'video', id: videoBvid })`。SDK 未加载、能力不受支持或调用失败时，页面显示错误信息，地图浏览不受影响。
 
 ### 分享某个 Lineup
 
@@ -220,33 +220,25 @@ ValoLineup 当前以浏览已有 Lineup 和上传本地图片为主，没有实�
 
 Toy 云存储不参与这条内容维护链路。它没有共享内容管理、图片对象存储或仓库写回能力，不能作为编辑包导入的替代品。
 
-## 建议的接入顺序
+## 当前接入范围
 
-如果后续决定在 ValoLineup 中使用 SDK，最短且一致的实施顺序是：
+页面当前只接入教学视频跳转所需的能力：
 
-1. 建立浏览器端 SDK 加载和最小类型边界，并统一封装 `isSupport` 与错误处理。
-2. 为 Lineup 建立可由 URL 恢复的稳定状态，保证分享链接真正指向当前点位。
-3. 对 `videoBvid` 接入 `navigate`，在普通 Web 环境继续使用 B站视频页链接。
-4. 接入 `share` 和 `getQrCode`，只传当前 Toy 内的相对路径。
-5. 在 B站 App 中接入容器状态监听，再按实际状态支持横屏、沉浸和安全区。
-6. 只有出现明确的用户偏好或学习进度需求时，才接入云存储。
+1. 在 HTML 中加载 Toy SDK。
+2. 为 `window.toy.isSupport` 与 `window.toy.navigate` 声明最小类型。
+3. 由教学视频按钮的点击事件直接触发能力检测和 BV 视频跳转。
+4. 捕获 SDK 加载、能力检测和跳转错误，并在页面内提示。
 
-排行榜、用户画像、作者关系、媒体采集等能力没有当前产品需求，不应仅因为 SDK 支持就提前接入。
+分享、二维码、容器控制、云存储、排行榜、用户资料、作者关系和媒体采集没有当前产品需求，不属于页面现有行为。
 
 ## 接入验收条件
 
-实际接入 SDK 时至少验证以下行为：
+当前 SDK 接入需要验证以下行为：
 
 - SDK 脚本失败或 `window.toy` 不存在时，页面核心地图浏览仍可使用。
-- 每个被调用的方法都先经过 `isSupport` 或有等价的环境约束。
-- App 专属方法在普通 Web 环境不会产生未处理的 Promise rejection。
-- `navigate`、摄像头和麦克风只从真实用户操作触发。
-- 分享路径不能是完整外部 URL，也不能使用 `../` 越界。
-- `toyOpenId` 不进入埋点、公开日志或客户端持久化凭证。
-- 云存储 key/value 满足字符集、长度和保留前缀限制。
-- 排行榜使用 `ranked` 判断上榜状态，并正确处理负数和 0 分。
-- 使用媒体流后调用 `stopMedia`。
-- 容器模式切换以状态监听结果为准，而不是以 `setContainerMode` Promise resolve 为准。
+- `navigate` 调用前先经过 `isSupport('navigate')`。
+- SDK Promise rejection 被页面捕获并显示为错误信息。
+- `navigate` 只从真实的教学视频按钮点击触发。
 - B站 App 与 Web 环境分别完成测试，不能只在本地浏览器中验证。
 
 ## 方法总表

@@ -1,7 +1,8 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import content from './data/content.json';
 import { downloadEditPackage, type PackageUpload } from './edit-package';
 import NewLineupDialog, { type NewLineupInput } from './NewLineupDialog';
+import { openBilibiliVideo } from './toy-sdk';
 
 type MediaItem = { key: string; alt: string };
 type MediaKind = 'stance' | 'aim' | 'effect';
@@ -15,7 +16,7 @@ type Lineup = {
   area: string;
   videoBvid: string;
   target: { groupId: string; x: number; y: number };
-  technique: { charge?: 'none' | 'one' | 'two' | 'full'; bounce?: number; jump?: boolean; instructions: string[] };
+  instructions: string;
   media: { stance: MediaItem[]; aim: MediaItem[]; effect: MediaItem[] };
 };
 type PendingUpload = {
@@ -31,13 +32,13 @@ type EditorNotice = { kind: 'info' | 'success' | 'error'; text: string };
 const maps = content.maps;
 const agents = content.agents;
 const initialLineups = content.lineups as Lineup[];
-const chargeLabels = { none: '无蓄力', one: '一格', two: '两格', full: '满格' };
 const sideLabels = { attack: '进攻', defense: '防守' };
 const mediaLabels = { stance: '站位', aim: '瞄点', effect: '道具效果' };
 const MIN_ZOOM = 1;
 const MAX_ZOOM = 8;
 const ZOOM_STEP = 0.5;
 const DESTINATION_CLUSTER_DISTANCE = 0.0125;
+const MOBILE_VIEW_QUERY = '(max-width: 760px)';
 
 type Point = { x: number; y: number };
 type MapRegion = Point & { width: number; height: number; rotation: number };
@@ -105,12 +106,8 @@ function clusterDestinations(items: Lineup[], mergeNearby: boolean) {
   });
 }
 
-function techniqueSummary(lineup: Lineup) {
-  const parts = [];
-  if (lineup.technique.charge) parts.push(chargeLabels[lineup.technique.charge]);
-  if (lineup.technique.bounce !== undefined) parts.push(`${lineup.technique.bounce} 次反弹`);
-  if (lineup.technique.jump) parts.push('跳射');
-  return parts.join(' · ') || '查看操作说明';
+function instructionSummary(lineup: Lineup) {
+  return lineup.instructions.split('\n').find((line) => line.trim()) ?? '暂无操作说明';
 }
 
 function assetUrl(key: string) {
@@ -153,6 +150,7 @@ export default function App() {
   const [mapViewport, setMapViewport] = useState<MapViewport>({ zoom: MIN_ZOOM, x: 0, y: 0 });
   const [isDraggingMap, setIsDraggingMap] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [isMobileView, setIsMobileView] = useState(false);
   const [isEditorBusy, setIsEditorBusy] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
   const [pendingUploads, setPendingUploads] = useState<PendingUpload[]>([]);
@@ -163,12 +161,21 @@ export default function App() {
   const dragRef = useRef<{ pointerId: number; startX: number; startY: number; originX: number; originY: number } | null>(null);
   const pinDragRef = useRef<{ pointerId: number; groupIds: string[] } | null>(null);
 
-  const lineups = isEditing ? draftLineups : savedLineups;
+  useEffect(() => {
+    const mediaQuery = window.matchMedia(MOBILE_VIEW_QUERY);
+    const updateMobileView = () => setIsMobileView(mediaQuery.matches);
+    updateMobileView();
+    mediaQuery.addEventListener('change', updateMobileView);
+    return () => mediaQuery.removeEventListener('change', updateMobileView);
+  }, []);
+
+  const isEditMode = isEditing && !isMobileView;
+  const lineups = isEditMode ? draftLineups : savedLineups;
   const activeMap = maps.find((map) => map.id === selectedMapId) ?? maps[0];
   const mapLineups = lineups.filter((lineup) => lineup.mapId === selectedMapId);
   const agentLineups = mapLineups.filter((lineup) => lineup.agentId === selectedAgentId);
   const availableAgents = agents.filter((agent) => mapLineups.some((lineup) => lineup.agentId === agent.id));
-  const groups = clusterDestinations(agentLineups, !isEditing);
+  const groups = clusterDestinations(agentLineups, !isEditMode);
   const activeGroup = groups.find((group) => group.memberIds.includes(selectedGroupId)) ?? groups[0];
   const activeLineup = activeGroup?.items.find((lineup) => lineup.id === selectedLineupId) ?? activeGroup?.items[0];
   const activeAgent = agents.find((agent) => agent.id === selectedAgentId) ?? availableAgents[0] ?? agents[0];
@@ -269,7 +276,7 @@ export default function App() {
   }
 
   function handleMapPointerDown(event: React.PointerEvent<HTMLDivElement>) {
-    if (newLineupPlacement) {
+    if (isEditMode && newLineupPlacement) {
       if ((event.target as HTMLElement).closest('button')) return;
       const point = rawPointFromPointer(event.clientX, event.clientY);
       if (point) createNewLineup(point);
@@ -319,7 +326,7 @@ export default function App() {
 
   function handlePinPointerDown(event: React.PointerEvent<HTMLButtonElement>, group: (typeof groups)[number]) {
     selectGroup(group);
-    if (!isEditing) return;
+    if (!isEditMode) return;
     event.preventDefault();
     event.stopPropagation();
     event.currentTarget.setPointerCapture(event.pointerId);
@@ -328,7 +335,7 @@ export default function App() {
 
   function handlePinPointerMove(event: React.PointerEvent<HTMLButtonElement>) {
     const drag = pinDragRef.current;
-    if (!isEditing || !drag || drag.pointerId !== event.pointerId) return;
+    if (!isEditMode || !drag || drag.pointerId !== event.pointerId) return;
     event.preventDefault();
     event.stopPropagation();
     const point = rawPointFromPointer(event.clientX, event.clientY);
@@ -399,7 +406,7 @@ export default function App() {
       area: newLineupPlacement.area,
       videoBvid: newLineupPlacement.videoBvid,
       target: { groupId: `${id}-target`, x: point.x, y: point.y },
-      technique: { instructions: newLineupPlacement.instructions },
+      instructions: newLineupPlacement.instructions,
       media: { stance: [], aim: [], effect: [] },
     };
     setDraftLineups((current) => [...current, lineup]);
@@ -447,6 +454,24 @@ export default function App() {
     )));
     setIsDirty(true);
     setEditorNotice({ kind: 'info', text: '教学视频 BV 号已修改 · 尚未导出' });
+  }
+
+  function updateActiveInstructions(instructions: string) {
+    if (!activeLineup) return;
+    setDraftLineups((current) => current.map((lineup) => (
+      lineup.id === activeLineup.id ? { ...lineup, instructions } : lineup
+    )));
+    setIsDirty(true);
+    setEditorNotice({ kind: 'info', text: '操作说明已修改 · 尚未导出' });
+  }
+
+  async function openTeachingVideo(videoBvid: string) {
+    setEditorNotice(null);
+    try {
+      await openBilibiliVideo(videoBvid);
+    } catch (error) {
+      setEditorNotice({ kind: 'error', text: error instanceof Error ? error.message : '教学视频打开失败' });
+    }
   }
 
   async function saveEdits() {
@@ -498,7 +523,7 @@ export default function App() {
   }
 
   return (
-    <main className={`app-shell ${isEditing ? 'is-editing' : ''}`}>
+    <main className={`app-shell ${isEditMode ? 'is-editing' : ''}`}>
       <aside className="map-rail" aria-label="地图选择">
         <div className="brand-mark" aria-label="Lineup Atlas"><span>LA</span></div>
         <p className="eyebrow rail-label">地图</p>
@@ -550,17 +575,19 @@ export default function App() {
                 );
               })}
             </div>
-            <div className="editor-actions" aria-label="浏览器编辑">
-              {isEditing ? (
-                <>
-                  <button className="editor-new" disabled={isEditorBusy || Boolean(newLineupPlacement)} onClick={() => setIsNewLineupDialogOpen(true)} type="button">＋ 新增点位</button>
-                  <button className="editor-cancel" disabled={isEditorBusy} onClick={exitEditMode} type="button">退出编辑</button>
-                  <button className="editor-save" disabled={!isDirty || isEditorBusy} onClick={saveEdits} type="button">{isEditorBusy ? '生成中…' : '导出编辑包'}</button>
-                </>
-              ) : (
-                <button className="editor-enter" onClick={enterEditMode} type="button">编辑点位</button>
-              )}
-            </div>
+            {!isMobileView ? (
+              <div className="editor-actions" aria-label="浏览器编辑">
+                {isEditMode ? (
+                  <>
+                    <button className="editor-new" disabled={isEditorBusy || Boolean(newLineupPlacement)} onClick={() => setIsNewLineupDialogOpen(true)} type="button">＋ 新增点位</button>
+                    <button className="editor-cancel" disabled={isEditorBusy} onClick={exitEditMode} type="button">退出编辑</button>
+                    <button className="editor-save" disabled={!isDirty || isEditorBusy} onClick={saveEdits} type="button">{isEditorBusy ? '生成中…' : '导出编辑包'}</button>
+                  </>
+                ) : (
+                  <button className="editor-enter" onClick={enterEditMode} type="button">编辑点位</button>
+                )}
+              </div>
+            ) : null}
           </div>
         </header>
 
@@ -569,12 +596,12 @@ export default function App() {
         <div className="content-grid">
           <section className="map-panel" aria-label={`${activeMap.name} Lineup 地图`}>
             <div className="panel-heading">
-              <div><p className="eyebrow">{isEditing ? '编辑技能最终落点' : '技能最终落点'}</p><h2>{groups.length ? (isEditing ? '拖动标记调整坐标' : '选择地图上的标记') : '等待点位数据'}</h2></div>
+              <div><p className="eyebrow">{isEditMode ? '编辑技能最终落点' : '技能最终落点'}</p><h2>{groups.length ? (isEditMode ? '拖动标记调整坐标' : '选择地图上的标记') : '等待点位数据'}</h2></div>
               <div className="legend"><span /> {activeMap.sites.map((site) => site.label).join('/')} 包点 · {activeAgent?.name ?? '未选择英雄'} · {groups.length} 个落点</div>
             </div>
 
             <div
-              className={`map-stage ${mapViewport.zoom > MIN_ZOOM ? 'is-zoomed' : ''} ${mapViewport.zoom >= 4 ? 'is-detail-zoom' : ''} ${isDraggingMap ? 'is-dragging' : ''} ${newLineupPlacement ? 'is-placing' : ''}`}
+              className={`map-stage ${mapViewport.zoom > MIN_ZOOM ? 'is-zoomed' : ''} ${mapViewport.zoom >= 4 ? 'is-detail-zoom' : ''} ${isDraggingMap ? 'is-dragging' : ''} ${isEditMode && newLineupPlacement ? 'is-placing' : ''}`}
               onDoubleClick={(event) => {
                 if ((event.target as HTMLElement).closest('button')) return;
                 setZoom(mapViewport.zoom + ZOOM_STEP, event.clientX, event.clientY);
@@ -604,8 +631,8 @@ export default function App() {
                 <button className="zoom-value" aria-label="重置地图缩放" disabled={mapViewport.zoom === MIN_ZOOM} onClick={resetMapViewport} type="button">{Math.round(mapViewport.zoom * 100)}%</button>
                 <button aria-label="放大地图" disabled={mapViewport.zoom === MAX_ZOOM} onClick={() => setZoom(mapViewport.zoom + ZOOM_STEP)} type="button">＋</button>
               </div>
-              <div className="map-gesture-hint">{isEditing ? '拖动 Lineup 标记修改落点 · 地图放大后可拖拽移动' : '当前阵营位于地图下侧 · 最高 800% · 放大后拖拽移动'}</div>
-              {newLineupPlacement ? (
+              <div className="map-gesture-hint">{isEditMode ? '拖动 Lineup 标记修改落点 · 地图放大后可拖拽移动' : isMobileView ? '当前阵营位于地图下侧 · 使用 ＋ 放大 · 放大后拖动地图' : '当前阵营位于地图下侧 · 最高 800% · 放大后拖拽移动'}</div>
+              {isEditMode && newLineupPlacement ? (
                 <div className="placement-banner" role="status">
                   <span><b>放置新点位</b>点击地图上的技能最终落点</span>
                   <button
@@ -654,9 +681,9 @@ export default function App() {
                   const ability = activeAgent?.abilities.find((item) => item.id === representative.abilityId);
                   return (
                     <button
-                      aria-label={`${representative.area}，${representative.title}，${group.items.length} 种 Lineup${isEditing ? '，可拖动' : ''}`}
+                      aria-label={`${representative.area}，${representative.title}，${group.items.length} 种 Lineup${isEditMode ? '，可拖动' : ''}`}
                       aria-pressed={group.id === activeGroup?.id}
-                      className={`lineup-pin ${group.id === activeGroup?.id ? 'is-active' : ''} ${isEditing ? 'is-editable' : ''}`}
+                      className={`lineup-pin ${group.id === activeGroup?.id ? 'is-active' : ''} ${isEditMode ? 'is-editable' : ''}`}
                       key={group.id}
                       onClick={() => selectGroup(group)}
                       onPointerCancel={finishPinDrag}
@@ -683,7 +710,7 @@ export default function App() {
               <>
                 {activeGroup.items.length > 1 ? (
                   <section className="method-picker" aria-label="相近落点的 Lineup 方法">
-                    <div className="method-heading"><p className="eyebrow">{isEditing ? '同一落点' : '相近落点'}</p><span>{activeGroup.items.length} 种方法</span></div>
+                    <div className="method-heading"><p className="eyebrow">{isEditMode ? '同一落点' : '相近落点'}</p><span>{activeGroup.items.length} 种方法</span></div>
                     <div className="method-list">
                       {activeGroup.items.map((lineup, index) => (
                         <button
@@ -694,7 +721,7 @@ export default function App() {
                           type="button"
                         >
                           <span>{String(index + 1).padStart(2, '0')}</span>
-                          <span><b>方法 {index + 1}</b><small>{techniqueSummary(lineup)}</small></span>
+                          <span><b>方法 {index + 1}</b><small>{instructionSummary(lineup)}</small></span>
                         </button>
                       ))}
                     </div>
@@ -706,15 +733,23 @@ export default function App() {
                   <span>{activeAbility?.name} · {sideLabels[activeLineup.side]} · {activeLineup.area}</span>
                 </div>
                 <h2>{activeLineup.title}</h2>
-                <p className="detail-lead">{activeLineup.technique.instructions[0] || '按图确认站位和瞄点后释放技能。'}</p>
-                {isEditing ? <div className="coordinate-readout"><span>原始地图坐标</span><b>X {activeLineup.target.x.toFixed(5)}</b><b>Y {activeLineup.target.y.toFixed(5)}</b></div> : null}
-                <div className="technique-row">
-                  <span><small>蓄力</small>{activeLineup.technique.charge ? chargeLabels[activeLineup.technique.charge] : '未注明'}</span>
-                  <span><small>反弹</small>{activeLineup.technique.bounce !== undefined ? `${activeLineup.technique.bounce} 次` : '未注明'}</span>
-                  <span><small>方式</small>{activeLineup.technique.jump ? '跳射' : '站立'}</span>
-                </div>
+                {isEditMode ? (
+                  <label className="instructions-editor">
+                    <span>操作说明 <small>可自由描述技能释放方式，每行一条</small></span>
+                    <textarea
+                      maxLength={1000}
+                      onChange={(event) => updateActiveInstructions(event.target.value)}
+                      placeholder="确认站位后瞄准墙面标记，然后按所需方式释放技能"
+                      rows={4}
+                      value={activeLineup.instructions}
+                    />
+                  </label>
+                ) : (
+                  <p className="detail-lead">{activeLineup.instructions || '按图确认站位和瞄点后释放技能。'}</p>
+                )}
+                {isEditMode ? <div className="coordinate-readout"><span>原始地图坐标</span><b>X {activeLineup.target.x.toFixed(5)}</b><b>Y {activeLineup.target.y.toFixed(5)}</b></div> : null}
 
-                {isEditing ? (
+                {isEditMode ? (
                   <label className="video-link-editor">
                     <span>B站教学视频 BV 号 <small>可留空</small></span>
                     <input
@@ -726,16 +761,16 @@ export default function App() {
                     />
                   </label>
                 ) : activeLineup.videoBvid ? (
-                  <a className="video-link" href={`https://www.bilibili.com/video/${activeLineup.videoBvid}`} rel="noreferrer" target="_blank">
+                  <button className="video-link" onClick={() => void openTeachingVideo(activeLineup.videoBvid)} type="button">
                     <span><small>教学视频</small>观看完整操作演示</span><b aria-hidden="true">↗</b>
-                  </a>
+                  </button>
                 ) : null}
 
                 {(['stance', 'aim', 'effect'] as const).map((kind, sectionIndex) => {
                   const items = sectionItems(kind);
-                  if (!items.length && !isEditing) return null;
+                  if (!items.length && !isEditMode) return null;
                   return (
-                    <section className={`media-section ${isEditing ? 'is-editable' : ''}`} key={kind}>
+                    <section className={`media-section ${isEditMode ? 'is-editable' : ''}`} key={kind}>
                       <p><span>0{sectionIndex + 1}</span>{mediaLabels[kind]}</p>
                       {items.map((item) => (
                         <div className={`media-item ${item.pending ? 'is-pending' : ''}`} key={item.id}>
@@ -743,7 +778,7 @@ export default function App() {
                           {item.pending ? <em>待导出</em> : null}
                         </div>
                       ))}
-                      {isEditing ? (
+                      {isEditMode ? (
                         <label className="media-add">
                           <span>＋ 添加{mediaLabels[kind]}图</span>
                           <small>PNG / JPG / WebP，单张不超过 12 MB</small>
@@ -781,7 +816,7 @@ export default function App() {
           </aside>
         </div>
       </section>
-      {isNewLineupDialogOpen ? (
+      {isEditMode && isNewLineupDialogOpen ? (
         <NewLineupDialog
           agents={agents}
           initialAbilityId={activeLineup?.abilityId}

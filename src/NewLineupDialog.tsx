@@ -11,7 +11,7 @@ export type NewLineupInput = {
   area: string;
   title: string;
   videoBvid: string;
-  instructions: string[];
+  instructions: string;
 };
 
 type Props = {
@@ -67,7 +67,7 @@ export default function NewLineupDialog({ maps, agents, initialMapId, initialAge
               area: area.trim(),
               title: title.trim(),
               videoBvid: videoBvid.trim(),
-              instructions: instructions.split('\n').map((value) => value.trim()).filter(Boolean),
+              instructions: instructions.trim(),
             });
           }}
         >
@@ -146,7 +146,7 @@ export default function NewLineupDialog({ maps, agents, initialMapId, initialAge
 
           <label>
             <span>操作说明 <small>可选，每行一条</small></span>
-            <textarea maxLength={1000} onChange={(event) => setInstructions(event.target.value)} placeholder={'确认站位后瞄准墙面标记\n一格蓄力，无反弹'} rows={3} value={instructions} />
+            <textarea maxLength={1000} onChange={(event) => setInstructions(event.target.value)} placeholder={'确认站位后瞄准墙面标记\n释放技能后覆盖入口区域'} rows={3} value={instructions} />
           </label>
 
           <div className="dialog-footer">

@@ -60,7 +60,7 @@ export async function downloadEditPackage<T extends IdentifiedRecord>({
   const createdAt = new Date();
   zip.file('manifest.json', `${JSON.stringify({
     format: 'valo-lineup-edit-package',
-    version: 2,
+    version: 3,
     createdAt: createdAt.toISOString(),
     changes: { added, updated },
     uploadedAssets,
