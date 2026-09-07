@@ -327,14 +327,17 @@ export default function App() {
 
   function rawPointFromPointer(clientX: number, clientY: number) {
     const canvas = mapCanvasRef.current;
-    if (!canvas) return null;
+    const stage = mapStageRef.current;
+    if (!canvas || !stage) return null;
+    const stageRect = stage.getBoundingClientRect();
+    if (clientX < stageRect.left || clientX > stageRect.right || clientY < stageRect.top || clientY > stageRect.bottom) return null;
     const rect = canvas.getBoundingClientRect();
-    if (clientX < rect.left || clientX > rect.right || clientY < rect.top || clientY > rect.bottom) return null;
     const viewPoint = {
       x: 0.5 + (clientX - rect.left - rect.width / 2 - mapViewport.x) / (rect.width * mapViewport.zoom),
       y: 0.5 + (clientY - rect.top - rect.height / 2 - mapViewport.y) / (rect.height * mapViewport.zoom),
     };
     const rawPoint = rotatePoint(viewPoint, -perspectiveRotation);
+    if (rawPoint.x < 0 || rawPoint.x > 1 || rawPoint.y < 0 || rawPoint.y > 1) return null;
     return { x: clampCoordinate(rawPoint.x), y: clampCoordinate(rawPoint.y) };
   }
 
