@@ -15,12 +15,18 @@ declare global {
   }
 }
 
+export const anonymousUploader = { name: '匿名编辑者', source: 'local' as const };
+
 export async function getToyUploader() {
-  const toy = window.toy;
-  if (!toy || !await toy.isSupport('getUserProfile')) throw new Error('当前环境无法获取 B站身份，请在 Toy 页面授权后编辑');
-  const profile = await toy.getUserProfile();
-  if (!profile.nickname?.trim()) throw new Error('未获得有效的 B站用户资料');
-  return { name: profile.nickname, source: 'toy' as const, ...(profile.toyOpenId ? { toyOpenId: profile.toyOpenId } : {}) };
+  try {
+    const toy = window.toy;
+    if (!toy || !await toy.isSupport('getUserProfile')) return anonymousUploader;
+    const profile = await toy.getUserProfile();
+    if (!profile.nickname?.trim()) return anonymousUploader;
+    return { name: profile.nickname.trim(), source: 'toy' as const, ...(profile.toyOpenId ? { toyOpenId: profile.toyOpenId } : {}) };
+  } catch {
+    return anonymousUploader;
+  }
 }
 
 export async function openBilibiliProfile(uid: string) {

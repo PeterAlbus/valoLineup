@@ -7,7 +7,7 @@ import { encodeWebp, formatBytes } from './image-compression';
 import { emptyLibrary, readLibrary, readImage, libraryUrls, persistLibrary, migrateLegacyImages, STORAGE_KEY, type LocalLibrary } from './local-library';
 import HistoryPage, { UploaderLabel } from './HistoryPage';
 import AgentPicker from './AgentPicker';
-import { getToyUploader, openBilibiliProfile, openBilibiliVideo } from './toy-sdk';
+import { anonymousUploader, getToyUploader, openBilibiliProfile, openBilibiliVideo } from './toy-sdk';
 import { usePanZoom } from './usePanZoom';
 import { useDecodedImage } from './useDecodedImage';
 import ZoomControls from './ZoomControls';
@@ -148,7 +148,7 @@ export default function App() {
   const [imageUrls, setImageUrls] = useState<Map<string, string>>(new Map());
   const [storageReady, setStorageReady] = useState(false);
   const [showHistory, setShowHistory] = useState(location.hash === '#history');
-  const [uploader, setUploader] = useState<Uploader | null>(null);
+  const [uploader, setUploader] = useState<Uploader>(anonymousUploader);
   const manualIdRef = useRef<string>(crypto.randomUUID());
   const { lineups: savedLineups, sources } = useMemo(() => applyLayers(initialLineups, library.packages, library.manual), [library]);
   const [draftLineups, setDraftLineups] = useState<Lineup[]>(initialLineups);
@@ -172,7 +172,7 @@ export default function App() {
   const [newLineupId, setNewLineupId] = useState<string | null>(null);
   const newLineupOriginRef = useRef({ lineupId: '', sideFilter: 'attack' as SideFilter });
   const [newLineupPlacement, setNewLineupPlacement] = useState<{ agentId: string; abilityId: string; side: Perspective } | null>(null);
-  const [validation, setValidation] = useState<{ id: string; field: 'title' | 'area' | 'videoBvid'; message: string } | null>(null);
+  const [validation, setValidation] = useState<{ id: string; field: 'title' | 'area' | 'videoBvid' } | null>(null);
   const detailPanelRef = useRef<HTMLElement>(null);
   const mapCanvasRef = useRef<HTMLDivElement>(null);
   const mapStageRef = useRef<HTMLDivElement>(null);
@@ -180,6 +180,12 @@ export default function App() {
   const mapClickPointRef = useRef<Point | null>(null);
   const { viewport: mapViewport, isDragging: isDraggingMap, setZoom, reset: resetMapViewport, handlers: mapHandlers } = usePanZoom(mapStageRef, mapCanvasRef);
   const pinDragRef = useRef<{ pointerId: number; lineupIds: string[] } | null>(null);
+
+  useEffect(() => {
+    if (!editorNotice) return;
+    const timer = window.setTimeout(() => setEditorNotice(null), editorNotice.kind === 'error' ? 8000 : 5000);
+    return () => window.clearTimeout(timer);
+  }, [editorNotice]);
 
   useEffect(() => {
     let active = true;
@@ -418,8 +424,7 @@ export default function App() {
       setNewLineupPlacement(null);
       if (showHistory) location.hash = '';
       setEditorNotice({ kind: 'info', text: `编辑人：${identity.name}。修改后请保存，也可以下载编辑包分享。` });
-    } catch (error) { setEditorNotice({ kind: 'error', text: editorError(error, 'B站身份授权失败') }); }
-    finally { setIsEditorBusy(false); }
+    } finally { setIsEditorBusy(false); }
   }
 
   function exitEditMode() {
@@ -464,8 +469,15 @@ export default function App() {
     setEditorNotice(null);
   }
 
+  function confirmNewLineup() {
+    const lineup = draftLineups.find((item) => item.id === newLineupId);
+    if (isEditorBusy || !lineup || !validateEdits([lineup])) return;
+    setNewLineupId(null);
+    setEditorNotice({ kind: 'success', text: '已确认新增，可切换其他点位继续编辑。完成后请保存编辑。' });
+  }
+
   function createNewLineup(point: Point) {
-    if (!newLineupPlacement || !uploader) return;
+    if (!newLineupPlacement) return;
     const id = newLineupId ?? nextLineupId(selectedMapId, newLineupPlacement.agentId);
     if (newLineupId) {
       setDraftLineups((current) => current.map((item) => item.id === id ? { ...item, target: { ...item.target, ...point } } : item));
@@ -547,7 +559,7 @@ export default function App() {
     setValidation(null);
     setEditorNotice(null);
     if (fields.agentId) setSelectedAgentId(fields.agentId);
-    if (fields.side && sideFilter !== 'all') setSideFilter('all');
+    if (fields.side && sideFilter !== 'all') setSideFilter(fields.side);
   }
 
   function confirmDeletion() {
@@ -610,7 +622,6 @@ export default function App() {
 
   async function currentEdits() {
     if (!isDirty && library.manual) return packageData(library.manual);
-    if (!uploader) throw new Error('请先获取 B站身份再编辑');
     return buildManualPackage({
       previous: library.manual, packageId: manualIdRef.current, author: uploader,
       startLineups: savedLineups, lineups: draftLineups,
@@ -636,17 +647,17 @@ export default function App() {
     setLightboxItem(null);
   }
 
-  function validateEdits() {
+  function validateEdits(candidates: Lineup[] = draftLineups) {
     if (newLineupPlacement) return false;
-    for (const lineup of draftLineups) {
+    for (const lineup of candidates) {
       const field = !lineup.title.trim() ? 'title' : !lineup.area.trim() ? 'area' : lineup.videoBvid && !/^BV[0-9A-Za-z]{10}$/.test(lineup.videoBvid) ? 'videoBvid' : null;
       if (!field) continue;
       const message = field === 'title' ? '请填写点位名称' : field === 'area' ? '请填写区域或选择包点' : '请填写完整的 12 位 BV 号，或留空';
-      setValidation({ id: lineup.id, field, message });
+      setValidation({ id: lineup.id, field });
       setSelectedMapId(lineup.mapId);
       setSelectedAgentId(lineup.agentId);
       setSelectedLineupId(lineup.id);
-      setSideFilter('all');
+      if (lineup.id !== activeLineup?.id && sideFilter !== 'all') setSideFilter(lineup.side);
       setEditorNotice({ kind: 'error', text: message });
       requestAnimationFrame(() => detailPanelRef.current?.querySelector<HTMLInputElement>('[aria-invalid="true"]')?.focus());
       return false;
@@ -729,6 +740,12 @@ export default function App() {
       className={`app-shell ${isEditMode ? 'is-editing' : ''}`}
       onPaste={handlePaste}
     >
+      <div className="message-container">
+        {editorNotice ? <div className={`editor-message is-${editorNotice.kind}`} role={editorNotice.kind === 'error' ? 'alert' : 'status'}>
+          <span>{editorNotice.text}</span>
+          <button type="button" aria-label="关闭提示" onClick={() => setEditorNotice(null)}>×</button>
+        </div> : null}
+      </div>
       <aside className="map-rail" aria-label="地图选择">
         <div className="brand-mark" aria-label="Lineup Atlas"><span>LA</span></div>
         <p className="eyebrow rail-label">地图</p>
@@ -790,6 +807,10 @@ export default function App() {
         </header>
 
         <div className="editing-toolbar">
+          <div className="editor-status">
+            {isEditing ? <div className="save-state" role="status" data-dirty={isDirty}>{isEditorBusy ? '正在处理…' : isDirty ? '有未保存修改' : library.manual ? '已保存到当前浏览器' : '暂无修改'}</div> : null}
+            {isEditing || library.manual ? <div className={`package-size ${isPackageFull ? 'is-full' : ''}`} role="status"><span>图片：{formatBytes(packageImageBytes)} / {formatBytes(MAX_PACKAGE_BYTES)}</span><progress aria-label="编辑包图片容量" max={MAX_PACKAGE_BYTES} value={packageImageBytes} />{isPackageFull ? <small>已超限，请移除图片</small> : null}</div> : null}
+          </div>
             {!isMobileView || library.manual || isEditing ? (
               <div className="editor-actions" aria-label="编辑工具">
                 {isEditMode ? (
@@ -807,11 +828,7 @@ export default function App() {
                 )}
               </div>
             ) : null}
-          {isEditing ? <div className="save-state" role="status" data-dirty={isDirty}>{isEditorBusy ? '正在处理…' : isDirty ? '有未保存修改' : library.manual ? '已保存到当前浏览器' : '暂无修改'}</div> : null}
         </div>
-
-        <div className={`notice-slot ${editorNotice ? `is-${editorNotice.kind}` : ''}`} role="status">{editorNotice?.text ?? (newLineupPlacement ? '单击地图放置，按住拖动地图' : newLineupId ? '补充右侧资料后保存，也可以继续微调落点' : isEditing ? '拖动标点调整位置，修改完成后保存' : '')}</div>
-        {isEditing || library.manual ? <div className={`package-size ${isPackageFull ? 'is-full' : ''}`} role="status"><span>编辑包图片：{formatBytes(packageImageBytes)} / {formatBytes(MAX_PACKAGE_BYTES)}</span><progress aria-label="编辑包图片容量" max={MAX_PACKAGE_BYTES} value={packageImageBytes} />{isPackageFull ? <small>已超限，请移除图片</small> : null}</div> : null}
 
         </div>
         {showHistory ? <HistoryPage packages={library.packages} manual={library.manual} dirty={isDirty} entries={content.history} maps={maps} busy={isEditorBusy || !storageReady} editing={isEditing}
@@ -974,14 +991,17 @@ export default function App() {
                   <span>{activeAbility?.name} · {sideLabels[activeLineup.side]} · {activeLineup.area}</span>
                 </div>
                 <h2>{activeLineup.title || '新增点位'}</h2>
-                {newLineupId ? <div className="new-lineup-heading"><span className="draft-badge">新增 · 未保存</span><button className="new-lineup-cancel" disabled={isEditorBusy} onClick={cancelNewLineup} type="button">取消新增</button></div> : null}
+                {newLineupId ? <div className="new-lineup-heading"><span className="draft-badge">新增 · 未保存</span><div className="new-lineup-actions">
+                  <button className="new-lineup-cancel" disabled={isEditorBusy} onClick={cancelNewLineup} type="button">取消新增</button>
+                  <button className="new-lineup-confirm" disabled={isEditorBusy} onClick={confirmNewLineup} type="button">确认新增</button>
+                </div></div> : null}
                 {isEditMode ? <section className="lineup-fields">
                   <label>点位名称<input aria-label="点位名称" maxLength={200} required aria-invalid={validation?.id === activeLineup.id && validation.field === 'title'} value={activeLineup.title} onChange={(event) => updateActiveFields({ title: event.target.value })} /></label>
-                  {validation?.id === activeLineup.id && validation.field === 'title' ? <p className="field-error">{validation.message}</p> : null}
                   <label>阵营<select aria-label="点位阵营" value={activeLineup.side} onChange={(event) => updateActiveFields({ side: event.target.value as Perspective })}><option value="attack">进攻方</option><option value="defense">防守方</option></select></label>
-                  <label>区域<input aria-label="点位区域" maxLength={100} required aria-invalid={validation?.id === activeLineup.id && validation.field === 'area'} value={activeLineup.area} onChange={(event) => updateActiveFields({ area: event.target.value })} /></label>
-                  <div className="area-shortcuts" role="group" aria-label="快捷选择区域">{activeMap.sites.map((site) => <button type="button" key={site.label} aria-pressed={activeLineup.area === `${site.label}点`} onClick={() => updateActiveFields({ area: `${site.label}点` })}>{site.label}点</button>)}</div>
-                  {validation?.id === activeLineup.id && validation.field === 'area' ? <p className="field-error">{validation.message}</p> : null}
+                  <div className="area-field"><label htmlFor="lineup-area">区域</label><div className="area-input-row">
+                    <input id="lineup-area" aria-label="点位区域" maxLength={100} required aria-invalid={validation?.id === activeLineup.id && validation.field === 'area'} value={activeLineup.area} onChange={(event) => updateActiveFields({ area: event.target.value })} />
+                    <div className="area-shortcuts" role="group" aria-label="快捷选择区域">{activeMap.sites.map((site) => <button type="button" key={site.label} aria-pressed={activeLineup.area === `${site.label}点`} onClick={() => updateActiveFields({ area: `${site.label}点` })}>{site.label}点</button>)}</div>
+                  </div></div>
                   <AgentPicker key={activeLineup.id} agents={agents} agentId={activeLineup.agentId} abilityId={activeLineup.abilityId} onChange={updateActiveFields} />
                   {!newLineupId ? <button className="lineup-delete" onClick={() => setDeleteRequest({ kind: 'lineup', id: activeLineup.id, title: activeLineup.title })} type="button">删除此点位</button> : null}
                 </section> : null}
@@ -1021,7 +1041,6 @@ export default function App() {
                   </button>
                 ) : null}
 
-                {validation?.id === activeLineup.id && validation.field === 'videoBvid' ? <p className="field-error">{validation.message}</p> : null}
                 {(['stance', 'aim', 'effect'] as const).map((kind, sectionIndex) => {
                   const items = sectionItems(kind);
                   if (!items.length && !isEditMode) return null;

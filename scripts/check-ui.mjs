@@ -63,14 +63,34 @@ try {
   await wait("document.querySelector('.editor-enter') && !document.querySelector('.editor-enter').disabled && document.querySelector('.map-stage').getAttribute('aria-busy') === 'false'");
   assert(await evaluate("document.querySelector('.topbar .package-import input') && !document.querySelector('.topbar .package-import input').disabled"));
   await screenshot('refined-desktop');
+  const viewerLayout = new Map();
   for (const width of [1440, 1280, 1024, 980, 760, 390, 320]) {
     await size(width); await viewportFits(`Viewer ${width}`);
+    viewerLayout.set(width, await evaluate("document.querySelector('.content-grid').getBoundingClientRect().top"));
+    if (width > 760) assert(await evaluate("Math.abs(document.querySelector('.editor-actions').getBoundingClientRect().right - document.querySelector('.editing-toolbar').getBoundingClientRect().right) < 1"), 'Editing entry aligns with the right edge');
   }
   await size(390, 844); await screenshot('refined-mobile');
   await size(1440);
   await evaluate("window.toy={isSupport:async()=>true,getUserProfile:async()=>({nickname:'UI Test',avatar:'',toyOpenId:'ui-test-only'})}");
   await click('.editor-enter'); await wait("document.querySelector('.lineup-fields select')");
   assert(await evaluate("document.querySelector('.topbar .package-import input').disabled"), 'Import must not overwrite an active unsaved edit session');
+  for (const [width, top] of viewerLayout) {
+    await size(width); await viewportFits(`Editor ${width}`);
+    assert(Math.abs(await evaluate("document.querySelector('.content-grid').getBoundingClientRect().top") - top) < 1, `Entering editor preserves content height at ${width}px`);
+    assert(await evaluate("(() => {const input=document.querySelector('[aria-label=点位区域]').getBoundingClientRect();return [...document.querySelectorAll('.area-shortcuts button')].every(button=>{const r=button.getBoundingClientRect();return Math.abs(r.top-input.top)<1 && r.left>=input.right})})()"), `Area shortcuts stay beside the input at ${width}px`);
+  }
+  await size(1440);
+  await wait("!document.querySelector('.editor-message')");
+  const contentTop = await evaluate("document.querySelector('.content-grid').getBoundingClientRect().top");
+  await evaluate("window.dispatchEvent(new StorageEvent('storage',{key:'valo-lineup:v4:/'}))");
+  await wait("document.querySelector('.editor-message[role=alert]')");
+  assert.equal(await evaluate("document.querySelector('.content-grid').getBoundingClientRect().top"), contentTop, 'Error messages do not shift layout');
+  await wait("!document.querySelector('.editor-message')");
+  await evaluate("window.dispatchEvent(new StorageEvent('storage',{key:'valo-lineup:v4:/'}))");
+  await wait("document.querySelector('.editor-message')");
+  await click('[aria-label=关闭提示]');
+  assert(!await evaluate("document.querySelector('.editor-message')"));
+  console.log('PASS stable editor height, right-aligned entry, inline area shortcuts, transient and dismissible messages');
   await viewportFits('Editor'); await screenshot('refined-editor');
   await click('.editor-new'); await wait("document.querySelector('.placement-guide')");
   const point = await evaluate("(() => {const r=document.querySelector('.map-canvas').getBoundingClientRect();return {x:r.x+r.width*.8,y:r.y+r.height/2}})()");
@@ -89,7 +109,7 @@ try {
   for (const width of [1440, 1024, 980, 760, 390, 320]) {
     await size(width); await viewportFits(`New point ${width}`);
     await evaluate("document.querySelector('.detail-panel').scrollTop = 10000; window.scrollTo(0, document.documentElement.scrollHeight)");
-    assert(await evaluate("(() => {const r=document.querySelector('.editor-save').getBoundingClientRect();const n=document.querySelector('.notice-slot').getBoundingClientRect();return r.top>=0 && r.bottom<=innerHeight && n.top>=0 && n.bottom<=innerHeight})()"), `Save and feedback remain visible at ${width}px`);
+    assert(await evaluate("(() => {const r=document.querySelector('.editor-save').getBoundingClientRect();const n=document.querySelector('.save-state').getBoundingClientRect();return r.top>=0 && r.bottom<=innerHeight && n.top>=0 && n.bottom<=innerHeight})()"), `Save and feedback remain visible at ${width}px`);
   }
   await screenshot('editor-narrow');
   await click('.new-lineup-cancel'); await wait("!document.querySelector('.new-lineup-heading')");

@@ -69,7 +69,7 @@ async function evaluate(expression) {
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 async function waitFor(expression) {
   for (let attempt = 0; attempt < 100; attempt++) { if (await evaluate(`Boolean(${expression})`)) return; await delay(100); }
-  throw new Error(`Condition failed: ${expression}\n${await evaluate("document.querySelector('.notice-slot')?.textContent")}`);
+  throw new Error(`Condition failed: ${expression}\n${await evaluate("document.querySelector('.editor-message')?.textContent")}`);
 }
 async function click(selector) {
   await evaluate(`document.querySelector(${JSON.stringify(selector)}).click()`);
@@ -113,8 +113,10 @@ try {
   await navigate();
   await evaluate(`localStorage.removeItem('valo-lineup:v4:/')`); await navigate();
   await evaluate(`window.toy.getUserProfile=async()=>{throw new Error('用户取消授权')}`);
-  await click('.editor-enter'); await waitFor(`document.querySelector('.notice-slot')?.textContent.includes('用户取消授权')`);
-  assert.equal(await evaluate(`!!document.querySelector('.instructions-editor')`), false);
+  await click('.editor-enter'); await waitFor(`document.querySelector('.instructions-editor')`);
+  assert(await evaluate(`document.querySelector('.editor-message').textContent.includes('匿名编辑者')`));
+  await click('.editor-cancel');
+  await waitFor(`document.querySelector('.editor-enter')`);
   await evaluate(`window.toy.getUserProfile=async()=>({nickname:'Browser Tester',avatar:'',toyOpenId:'test-private-id'})`);
   await click('.uploader-link'); assert.deepEqual(await evaluate('window.lastNavigate'), { type: 'space', id: '2003822' });
   await click('.history-toggle'); await waitFor(`document.querySelector('.history-page')`);
@@ -167,7 +169,7 @@ try {
   const savedToken = await evaluate(`${storage}.token`);
   await instructions('Quota failure draft');
   await evaluate(`window.realSetItem=Storage.prototype.setItem; Storage.prototype.setItem=function(key,value){if(key==='valo-lineup:v4:/')throw new DOMException('full','QuotaExceededError');return window.realSetItem.call(this,key,value)}`);
-  await click('.editor-save'); await waitFor(`document.querySelector('.notice-slot').textContent.includes('存储空间不足')`);
+  await click('.editor-save'); await waitFor(`document.querySelector('.editor-message').textContent.includes('存储空间不足')`);
   assert.equal(await evaluate(`${storage}.token`), savedToken);
   assert.equal(await evaluate(`document.querySelector('.instructions-editor textarea').value`), 'Quota failure draft');
   await evaluate('Storage.prototype.setItem=window.realSetItem');
@@ -243,7 +245,7 @@ try {
   assert.equal(await evaluate(`(async()=>{const {applyLayers}=await import('/src/package-model.mjs');const c=await(await fetch('/src/data/content.json')).json();const l=${storage};return applyLayers(c.lineups,l.packages,l.manual).lineups.some(item=>item.id==='${deletedId}')})()`), false);
   await click('.history-toggle'); await waitFor(`document.querySelector('.local-edit-card')`);
   await click('.local-edit-card button:last-child'); await waitFor(`${storage}.manual === null`);
-  console.log('PASS denied SDK authorization, authenticated new uploader, stable new lineup/package IDs, invalid ZIP atomic rejection');
+  console.log('PASS anonymous editing after denied authorization, authenticated new uploader, stable new lineup/package IDs, invalid ZIP atomic rejection');
   await send('Emulation.setDeviceMetricsOverride', { width: 390, height: 844, deviceScaleFactor: 1, mobile: true });
   await delay(250);
   assert(await evaluate('document.documentElement.scrollWidth <= innerWidth'), 'Mobile history must not overflow');

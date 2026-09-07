@@ -76,14 +76,57 @@ const library = `JSON.parse(localStorage.getItem(${JSON.stringify(storageKey)}))
 const content = JSON.parse(await readFile(new URL('../src/data/content.json', import.meta.url), 'utf8'));
 try {
   await send('Page.enable'); await size(1440, 900);
+  await send('Browser.setDownloadBehavior', { behavior: 'deny' });
   await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
   await send('Page.navigate', { url: appUrl });
   await wait("document.querySelector('.editor-enter') && !document.querySelector('.editor-enter').disabled");
   await evaluate(`localStorage.removeItem(${JSON.stringify(storageKey)})`);
   await send('Page.navigate', { url: appUrl });
   await wait("document.querySelector('.editor-enter') && !document.querySelector('.editor-enter').disabled && document.querySelector('.map-stage').getAttribute('aria-busy') === 'false'");
-  await evaluate("window.toy={isSupport:async()=>true,getUserProfile:async()=>({nickname:'Map Author',avatar:'',toyOpenId:'map-author-test'})}");
+  for (const sdk of [
+    'undefined',
+    '{isSupport:async()=>false}',
+    '{isSupport:async()=>{throw new Error("unsupported")}}',
+    '{isSupport:async()=>true,getUserProfile:async()=>({nickname:" "})}',
+    '{isSupport:async()=>true,getUserProfile:async()=>{throw new Error("用户取消授权")}}',
+  ]) {
+    await evaluate(`window.toy=${sdk}`);
+    await click('.editor-enter'); await wait("document.querySelector('.editor-new')");
+    assert((await evaluate("document.querySelector('.editor-message').textContent")).includes('匿名编辑者'));
+    await click('.editor-cancel'); await click('.exit-edit-confirm');
+    await wait("document.querySelector('.editor-enter')");
+  }
+  console.log('PASS absent, unsupported, rejected and empty SDK identity allow anonymous editing');
   await click('.editor-enter'); await wait("document.querySelector('.editor-new')");
+  const filterIndex = () => evaluate("[...document.querySelectorAll('.side-filter button')].findIndex(button => button.getAttribute('aria-pressed') === 'true')");
+  for (const filter of [0, 1, 2]) {
+    await click(`.side-filter button:nth-child(${filter + 1})`);
+    await wait(`document.querySelector('.side-filter button:nth-child(${filter + 1})').getAttribute('aria-pressed') === 'true'`);
+    await click('.editor-new'); await place();
+    for (const field of ['title', 'area', 'videoBvid']) {
+      if (field === 'area') await input('[aria-label=点位名称]', '阵营筛选校验');
+      if (field === 'videoBvid') {
+        await click('.area-shortcuts button:first-child');
+        await input('[aria-label="教学视频 BV 号"]', 'BV123');
+      }
+      await click('.new-lineup-confirm');
+      await wait("document.querySelector('.editor-message.is-error') && document.activeElement.getAttribute('aria-invalid') === 'true'");
+      assert.equal(await filterIndex(), filter, `${field} validation preserves the current side filter`);
+      assert(await evaluate("!!document.querySelector('.new-lineup-confirm')"));
+    }
+    for (const side of ['defense', 'attack']) {
+      await evaluate(`(() => {const select=document.querySelector('[aria-label=点位阵营]');select.value=${JSON.stringify(side)};select.dispatchEvent(new Event('change',{bubbles:true}));})()`);
+      await wait(`document.querySelector('[aria-label=点位阵营]').value === ${JSON.stringify(side)}`);
+      assert.equal(await filterIndex(), filter === 2 ? 2 : side === 'attack' ? 0 : 1, 'Single-side filters follow the new point side; All stays All');
+      await click('.new-lineup-confirm');
+      await wait("document.querySelector('.editor-message.is-error')");
+      assert.equal(await filterIndex(), filter === 2 ? 2 : side === 'attack' ? 0 : 1, 'Failed confirmation preserves the filter after a side change');
+    }
+    await click('.new-lineup-cancel');
+    await wait("!document.querySelector('.new-lineup-heading')");
+  }
+  await click('.side-filter button:first-child');
+  console.log('PASS confirmation errors preserve all three side filters; point side changes follow single-side filters and preserve All');
   await input('.instructions-editor textarea', '保留原点位的未保存修改');
   const originalTitle = await evaluate("document.querySelector('[aria-label=点位名称]').value");
   await click('.editor-new');
@@ -112,12 +155,14 @@ try {
   assert.equal(await evaluate(`${library}.manual.changes.added.length`), 0, 'Cancelled drafts are not saved');
   console.log('PASS map-first placement, preserved viewport, pan vs tap, cancellation preserves prior edits');
 
+  await input('[aria-label=点位名称]', '   ');
   await click('.editor-new'); await place();
-  await click('.editor-save');
+  await click('.new-lineup-confirm');
   await wait("document.querySelector('[aria-label=点位名称]').getAttribute('aria-invalid') === 'true'");
   assert.equal(await evaluate(`${library}.manual.changes.added.length`), 0, 'Incomplete point is not persisted');
+  assert(await evaluate("!!document.querySelector('.new-lineup-confirm') && document.querySelector('.editor-new').disabled"), 'Invalid confirmation retains the current new draft');
   await input('[aria-label=点位名称]', 'B点测试落点');
-  await click('.editor-save');
+  await click('.new-lineup-confirm');
   await wait("document.querySelector('[aria-label=点位区域]').getAttribute('aria-invalid') === 'true'");
   await click('.area-shortcuts button:nth-child(2)');
   await input('.instructions-editor textarea', '站在角落，瞄准墙沿后释放');
@@ -127,7 +172,7 @@ try {
   await click('.ability-picker button:nth-child(2)');
   assert((await evaluate("document.querySelector('.lineup-pin.is-new img').src")).endsWith(hero.abilities[1].icon));
   await input('[aria-label="教学视频 BV 号"]', 'BV123');
-  await click('.editor-save');
+  await click('.new-lineup-confirm');
   await wait("document.querySelector('[aria-label=\"教学视频 BV 号\"]').getAttribute('aria-invalid') === 'true'");
   await input('[aria-label="教学视频 BV 号"]', 'BV17x411w7KC');
   await evaluate(`(async () => {
@@ -147,12 +192,45 @@ try {
   assert.equal(await evaluate("document.querySelectorAll('.media-item img').length"), 1, 'Map change preserves images');
   await click('.perspective-controls button:nth-child(2)');
   assert.equal(await evaluate("document.querySelector('[aria-label=点位阵营]').value"), 'attack', 'Viewing perspective does not change draft side');
+  const confirmedCoordinates = await evaluate("document.querySelector('.coordinate-readout').textContent");
+  await click('.new-lineup-confirm');
+  await wait("!document.querySelector('.new-lineup-heading') && !document.querySelector('.editor-new').disabled");
+  assert.equal(await evaluate("document.querySelector('[aria-label=点位名称]').value"), 'B点测试落点', 'Confirmation validates only the current point');
+  assert.equal(await evaluate(`${library}.manual.changes.added.length`), 0, 'Confirmation keeps edits in the draft until Save');
+  assert.equal(await evaluate("document.querySelector('.save-state').dataset.dirty"), 'true');
+  assert(await evaluate("[...document.querySelectorAll('.agent-tab, .lineup-pin, .side-filter button')].every(button => !button.disabled)"), 'Confirmation unlocks point, hero and side selection');
+  await click('.editor-new'); await place(); await click('.new-lineup-cancel');
+  assert.equal(await evaluate("document.querySelector('[aria-label=点位名称]').value"), 'B点测试落点', 'Cancelling the next new point preserves the confirmed draft');
+  await click('.map-card:first-child');
+  await wait("document.querySelector('[aria-label=点位名称]')?.value === '   '");
+  await input('[aria-label=点位名称]', originalTitle);
+  await input('.instructions-editor textarea', '确认新增后编辑其他点位');
+  await click('.map-card:nth-child(2)');
+  await wait("document.querySelector('.map-stage').getAttribute('aria-busy') === 'false'");
+  await evaluate(`document.querySelectorAll('.agent-tab').forEach(button=>{if(button.textContent.includes(${JSON.stringify(hero.name)})) button.click()})`);
+  await wait("[...document.querySelectorAll('.lineup-pin')].some(pin=>pin.getAttribute('aria-label').includes('B点测试落点'))");
+  await evaluate("[...document.querySelectorAll('.lineup-pin')].find(pin=>pin.getAttribute('aria-label').includes('B点测试落点')).click()");
+  await wait("document.querySelector('[aria-label=点位名称]')?.value === 'B点测试落点'");
+  assert.equal(await evaluate("document.querySelector('.coordinate-readout').textContent"), confirmedCoordinates);
+  assert.equal(await evaluate("document.querySelectorAll('.media-item img').length"), 1, 'Switching away and back retains pending images');
+  assert.equal(await evaluate("document.querySelector('.instructions-editor textarea').value"), '站在角落，瞄准墙沿后释放');
+  await input('.instructions-editor textarea', '站在角落，瞄准墙沿后释放，确认后继续编辑');
   await save();
   const created = await evaluate(`${library}.manual.changes.added[0]`);
+  assert.equal(created.instructions, '站在角落，瞄准墙沿后释放，确认后继续编辑');
+  assert((await evaluate(`${library}.manual.changes.updated`)).some(change => change.after.instructions === '确认新增后编辑其他点位'));
+  console.log('PASS confirm current point, validation, unsaved draft retention, switch away/back, continued edits and cumulative save');
+  assert.deepEqual(created.uploader, { name: '匿名编辑者', source: 'local' });
+  assert.deepEqual(await evaluate(`${library}.manual.author`), created.uploader);
   assert.equal(created.mapId, 'bind'); assert.equal(created.agentId, hero.id); assert.equal(created.abilityId, hero.abilities[1].id);
   assert.equal(created.media.stance.length, 1); assert.equal(created.title, 'B点测试落点');
   assert.equal(created.videoBvid, 'BV17x411w7KC');
-  console.log('PASS field validation, avatar/ability selection, map reassignment with text and images, perspective independent of side');
+  await evaluate("window.downloadedPackage = null; window.originalObjectURL = URL.createObjectURL; URL.createObjectURL = blob => { if (blob.type === 'application/zip') window.downloadedPackage = {type: blob.type, size: blob.size}; return window.originalObjectURL(blob); }");
+  await click('.editor-export');
+  await wait("document.querySelector('.editor-message.is-success')?.textContent.includes('已下载') && !document.querySelector('.editor-export').disabled");
+  assert(await evaluate("window.downloadedPackage?.size > 0"), 'Anonymous editors can export a ZIP package');
+  await evaluate("URL.createObjectURL = window.originalObjectURL");
+  console.log('PASS field validation, avatar/ability selection, map reassignment with text and images, anonymous save/export, perspective independent of side');
 
   const savedTransform = await evaluate("document.querySelector('.map-transform-layer').style.transform");
   await click('.editor-new'); await place();
