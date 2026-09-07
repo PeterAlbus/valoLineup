@@ -33,7 +33,7 @@ export async function downloadEditPackage({ manifest, blobs }: PackageData) {
   const zip = new JSZip();
   for (const asset of manifest.uploadedAssets) {
     const blob = blobs.get(asset.sha256);
-    if (!blob) throw new Error(`导出缺少图片：${asset.key}`);
+    if (!blob) throw new Error('部分图片丢失，请重新添加图片或导入原编辑包后再下载');
     zip.file(asset.key, await blob.arrayBuffer());
   }
   zip.file('manifest.json', `${JSON.stringify(manifestSchema.parse(manifest), null, 2)}\n`);

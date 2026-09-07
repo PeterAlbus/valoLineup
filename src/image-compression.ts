@@ -11,13 +11,13 @@ export async function encodeWebp(file: Blob): Promise<Blob> {
     const context = canvas.getContext('2d');
     if (!context) throw new Error('当前浏览器无法压缩图片');
     context.drawImage(image, 0, 0);
-    const blob = await new Promise<Blob>((resolve, reject) => canvas.toBlob((result) => result?.type === 'image/webp' ? resolve(result) : reject(new Error('当前浏览器不支持 WebP 编码，请上传 WebP 图片')), 'image/webp', 0.86));
-    if (blob.size > MAX_IMAGE_BYTES) throw new Error('压缩后图片仍超过 12 MiB，请缩小图片后重试');
+    const blob = await new Promise<Blob>((resolve, reject) => canvas.toBlob((result) => result?.type === 'image/webp' ? resolve(result) : reject(new Error('当前浏览器无法处理这张图片，请使用 WebP 格式的图片')), 'image/webp', 0.86));
+    if (blob.size > MAX_IMAGE_BYTES) throw new Error('图片仍超过 12 MB，请缩小图片后重试');
     return blob;
   } finally { image.close(); }
 }
 
 export function formatBytes(bytes: number) {
   if (!bytes) return '0 B';
-  return bytes < 1024 * 1024 ? `${(bytes / 1024).toFixed(1)} KiB` : `${(bytes / 1024 / 1024).toFixed(2)} MiB`;
+  return bytes < 1024 * 1024 ? `${(bytes / 1024).toFixed(1)} KB` : `${(bytes / 1024 / 1024).toFixed(2)} MB`;
 }

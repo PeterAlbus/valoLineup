@@ -10,7 +10,7 @@ function db() {
     const request = indexedDB.open(`${STORAGE_KEY}:images`, 1);
     request.onupgradeneeded = () => request.result.createObjectStore('blobs');
     request.onerror = () => { database = undefined; reject(request.error); };
-    request.onblocked = () => { database = undefined; reject(new Error('图片数据库被其他页面占用，请关闭其他标签页后重试')); };
+    request.onblocked = () => { database = undefined; reject(new Error('其他页面正在处理图片，请关闭其他标签页后重试')); };
     request.onsuccess = () => {
       request.result.onversionchange = () => { request.result.close(); database = undefined; };
       resolve(request.result);
@@ -23,7 +23,7 @@ export function readLibrary(): LocalLibrary {
   const value = JSON.parse(raw);
   if (value.version !== 1 || typeof value.token !== 'string' || !Array.isArray(value.packages)) throw new Error('本地资料格式无法识别；未覆盖原始数据，请先备份浏览器数据');
   const packages = value.packages.map((item: unknown) => manifestSchema.parse(item));
-  if (new Set(packages.map((item: Manifest) => item.packageId)).size !== packages.length) throw new Error('本地更新包 ID 重复');
+  if (new Set(packages.map((item: Manifest) => item.packageId)).size !== packages.length) throw new Error('保存的资料中有重复更新包，请重新导入');
   return { version: 1, token: value.token, packages, manual: value.manual === null ? null : manifestSchema.parse(value.manual) };
 }
 export async function readImage(asset: Asset): Promise<Blob> {
@@ -32,7 +32,7 @@ export async function readImage(asset: Asset): Promise<Blob> {
     const request = database.transaction('blobs', 'readonly').objectStore('blobs').get(asset.sha256);
     request.onerror = () => reject(request.error);
     request.onsuccess = () => request.result instanceof Blob && request.result.size === asset.size
-      ? resolve(request.result) : reject(new Error(`本地图片丢失：${asset.key}。请重新导入原包恢复图片`));
+      ? resolve(request.result) : reject(new Error('部分图片丢失，请重新导入原编辑包恢复图片'));
   });
 }
 function assetsOf(library: LocalLibrary) { return [...library.packages, ...(library.manual ? [library.manual] : [])].flatMap((item) => item.uploadedAssets); }

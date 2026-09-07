@@ -67,7 +67,7 @@ async function assertPinAt(point, label) {
     return [0.5 + local.x / canvas.width, 0.5 + local.y / canvas.height];
   })()`);
   const actual = await evaluate("[...document.querySelectorAll('.coordinate-readout b')].map(el => Number(el.textContent.slice(2)))");
-  actual.forEach((value, index) => assert(Math.abs(value - expected[index]) < 0.00002, `${label}: raw map coordinate must match the rendered map`));
+  actual.forEach((value, index) => assert(Math.abs(value - expected[index]) < 0.00002, `${label}: coordinate ${value} must match rendered coordinate ${expected[index]}`));
 }
 async function dragTo(point, label) {
   const pin = await bounds('.lineup-pin.is-active');
@@ -100,17 +100,19 @@ try {
     await evaluate("window.toy={isSupport:async()=>true,getUserProfile:async()=>({nickname:'Map Regression',avatar:'',toyOpenId:'map-test-only'})}");
     await click('.editor-enter'); await wait("document.querySelector('.editor-new')");
     await size(width, 1000);
-    await click('.editor-new'); await wait("document.querySelector('.new-lineup-dialog')?.open");
-    await input('.new-lineup-dialog input[maxlength="100"]', label);
-    await click('.dialog-next'); await wait("document.querySelector('.placement-banner')");
     await input('.map-zoom-controls input[type=range]', String(zoom));
     await wait(`document.querySelector('.map-zoom-controls input[type=range]').value === '${zoom}'`);
+    const transform = await evaluate("document.querySelector('.map-transform-layer').style.transform");
+    await click('.editor-new'); await wait("document.querySelector('.placement-banner')");
+    assert.equal(await evaluate("document.querySelector('.map-transform-layer').style.transform"), transform, 'Starting placement preserves the map viewport');
     await evaluate("document.querySelector('.map-stage').scrollIntoView({block:'center'})");
     const stage = await bounds('.map-stage');
     const canvas = await bounds('.map-canvas');
     const right = { x: (canvas.right + stage.right) / 2, y: stage.y + stage.height / 2 };
     await clickPoint(right);
     assert.equal(await evaluate("!!document.querySelector('.placement-banner')"), false, `${label}: add a marker on the visible map beyond the original canvas`);
+    await input('[aria-label="点位名称"]', label);
+    await click('.area-shortcuts button');
     await assertPinAt(right, label);
     await dragTo({ x: canvas.x + canvas.width / 2, y: right.y }, label);
     await dragTo(right, label);

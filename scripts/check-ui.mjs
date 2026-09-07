@@ -17,6 +17,7 @@ let id = 0;
 const pending = new Map();
 ws.onmessage = ({ data }) => {
   const result = JSON.parse(data), request = pending.get(result.id);
+  if (result.method === 'Page.javascriptDialogOpening' && result.params.type === 'beforeunload') void send('Page.handleJavaScriptDialog', { accept: true });
   if (!request) return;
   pending.delete(result.id); clearTimeout(request.timer);
   if (result.error) request.reject(new Error(result.error.message)); else request.resolve(result.result);
@@ -71,20 +72,27 @@ try {
   await click('.editor-enter'); await wait("document.querySelector('.lineup-fields select')");
   assert(await evaluate("document.querySelector('.topbar .package-import input').disabled"), 'Import must not overwrite an active unsaved edit session');
   await viewportFits('Editor'); await screenshot('refined-editor');
-  await click('.editor-new'); await wait("document.querySelector('.new-lineup-dialog')?.open");
-  assert.equal(await evaluate("getComputedStyle(document.querySelector('.new-lineup-dialog select')).colorScheme"), 'dark');
-  assert(await evaluate("document.querySelector('.new-lineup-dialog').contains(document.activeElement)"));
-  assert(await evaluate("(() => {const area=document.querySelector('.area-input').getBoundingClientRect(); const title=document.querySelector('.new-lineup-dialog input[maxlength=\"100\"]').getBoundingClientRect();return Math.abs(area.top-title.top)<1 && Math.abs(area.height-title.height)<1})()"), 'Area shortcuts must not add a row or misalign the title field');
-  // Native select still supports keyboard navigation, without adding a custom inaccessible listbox.
-  await evaluate("document.querySelectorAll('.new-lineup-dialog select')[1].focus()");
-  await send('Input.dispatchKeyEvent', { type: 'keyDown', key: 'ArrowDown', code: 'ArrowDown', windowsVirtualKeyCode: 40 });
-  await send('Input.dispatchKeyEvent', { type: 'keyUp', key: 'ArrowDown', code: 'ArrowDown', windowsVirtualKeyCode: 40 });
-  await wait("document.querySelectorAll('.new-lineup-dialog select')[1].value === 'defense'");
-  await screenshot('refined-new-lineup');
-  await size(390, 844);
-  assert(await evaluate("(() => {const r=document.querySelector('.new-lineup-dialog').getBoundingClientRect(); return r.left>=0 && r.right<=innerWidth && r.top>=0 && r.bottom<=innerHeight})()"));
-  await screenshot('refined-mobile-form');
-  await click('.dialog-cancel'); await wait("!document.querySelector('.new-lineup-dialog')");
+  await click('.editor-new'); await wait("document.querySelector('.placement-guide')");
+  const point = await evaluate("(() => {const r=document.querySelector('.map-canvas').getBoundingClientRect();return {x:r.x+r.width*.8,y:r.y+r.height/2}})()");
+  await send('Input.dispatchMouseEvent', { type: 'mousePressed', ...point, button: 'left', clickCount: 1 });
+  await send('Input.dispatchMouseEvent', { type: 'mouseReleased', ...point, button: 'left', clickCount: 1 });
+  await wait("document.querySelector('.new-lineup-heading')");
+  await wait("document.activeElement.getAttribute('aria-label') === '点位名称'");
+  await click('.agent-picker-toggle');
+  assert(await evaluate("[...document.querySelectorAll('.agent-picker-grid button')].every(button => button.querySelector('img') && button.textContent.trim())"), 'Each hero choice includes an avatar and name');
+  await evaluate("document.querySelector('.agent-picker-grid button').focus()");
+  await send('Input.dispatchKeyEvent', { type: 'keyDown', key: ' ', code: 'Space', windowsVirtualKeyCode: 32 });
+  await send('Input.dispatchKeyEvent', { type: 'keyUp', key: ' ', code: 'Space', windowsVirtualKeyCode: 32 });
+  await wait("!document.querySelector('.agent-picker-grid')");
+  await click('.agent-picker-toggle');
+  await screenshot('editor-hero-grid');
+  for (const width of [1440, 1024, 980, 760, 390, 320]) {
+    await size(width); await viewportFits(`New point ${width}`);
+    await evaluate("document.querySelector('.detail-panel').scrollTop = 10000; window.scrollTo(0, document.documentElement.scrollHeight)");
+    assert(await evaluate("(() => {const r=document.querySelector('.editor-save').getBoundingClientRect();const n=document.querySelector('.notice-slot').getBoundingClientRect();return r.top>=0 && r.bottom<=innerHeight && n.top>=0 && n.bottom<=innerHeight})()"), `Save and feedback remain visible at ${width}px`);
+  }
+  await screenshot('editor-narrow');
+  await click('.new-lineup-cancel'); await wait("!document.querySelector('.new-lineup-heading')");
   await size(1440);
   await click('.lineup-delete'); await wait("document.querySelector('.confirm-dialog')?.open");
   await screenshot('refined-confirm');
@@ -103,5 +111,5 @@ try {
   await click('.history-toggle'); await wait("document.querySelector('.history-page')");
   await viewportFits('Mobile history'); await screenshot('refined-mobile-history');
   await size(1440); await screenshot('refined-history');
-  console.log('PASS unified prompt audit, responsive layouts 320–1440px, dark keyboard-operable selects, modal focus and backdrop safety');
+  console.log('PASS unified prompt audit, responsive layouts 320–1440px, keyboard-operable hero grid and persistent save controls, modal focus and backdrop safety');
 } finally { ws.close(); }

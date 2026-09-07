@@ -126,6 +126,7 @@ export function usePanZoom(surfaceRef: RefObject<HTMLDivElement | null>, content
     pointers.current.set(event.pointerId, { x: event.clientX, y: event.clientY });
     const after = [...pointers.current.values()].slice(0, 2);
     const from = current.current;
+    if (start.current && Math.hypot(event.clientX - start.current.x, event.clientY - start.current.y) > 4) moved.current = true;
     if (after.length === 2) {
       const distance = (points: Point[]) => Math.hypot(points[0].x - points[1].x, points[0].y - points[1].y);
       const center = (points: Point[]) => ({ x: (points[0].x + points[1].x) / 2, y: (points[0].y + points[1].y) / 2 });
@@ -141,7 +142,6 @@ export function usePanZoom(surfaceRef: RefObject<HTMLDivElement | null>, content
       moved.current = true;
     } else if (from.zoom > 1) {
       commit({ ...from, x: from.x + after[0].x - before[0].x, y: from.y + after[0].y - before[0].y });
-      if (start.current && Math.hypot(after[0].x - start.current.x, after[0].y - start.current.y) > 4) moved.current = true;
     }
     setIsDragging(moved.current);
   }

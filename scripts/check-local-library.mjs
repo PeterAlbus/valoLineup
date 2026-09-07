@@ -33,7 +33,7 @@ assert.equal((await readPackage(a.buffer)).manifest.packageId, a.manifest.packag
 assert(same({ a: 1, b: 2 }, { b: 2, a: 1 }));
 const invalid = await JSZip.loadAsync(a.buffer);
 invalid.file('manifest.json', JSON.stringify({ ...a.manifest, version: 3 }));
-await assert.rejects(readPackage(await invalid.generateAsync({ type: 'nodebuffer' })), /仅支持 v4/);
+await assert.rejects(readPackage(await invalid.generateAsync({ type: 'nodebuffer' })), /当前版本无法读取/);
 invalid.file('manifest.json', JSON.stringify(a.manifest));
 invalid.file(a.manifest.uploadedAssets[0].key, Buffer.alloc(a.manifest.uploadedAssets[0].size));
 await assert.rejects(readPackage(await invalid.generateAsync({ type: 'nodebuffer' })), /图片/);
@@ -69,7 +69,7 @@ async function evaluate(expression) {
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 async function waitFor(expression) {
   for (let attempt = 0; attempt < 100; attempt++) { if (await evaluate(`Boolean(${expression})`)) return; await delay(100); }
-  throw new Error(`Condition failed: ${expression}\n${await evaluate("document.querySelector('.editor-notice')?.textContent")}`);
+  throw new Error(`Condition failed: ${expression}\n${await evaluate("document.querySelector('.notice-slot')?.textContent")}`);
 }
 async function click(selector) {
   await evaluate(`document.querySelector(${JSON.stringify(selector)}).click()`);
@@ -113,7 +113,7 @@ try {
   await navigate();
   await evaluate(`localStorage.removeItem('valo-lineup:v4:/')`); await navigate();
   await evaluate(`window.toy.getUserProfile=async()=>{throw new Error('用户取消授权')}`);
-  await click('.editor-enter'); await waitFor(`document.querySelector('.editor-notice')?.textContent.includes('用户取消授权')`);
+  await click('.editor-enter'); await waitFor(`document.querySelector('.notice-slot')?.textContent.includes('用户取消授权')`);
   assert.equal(await evaluate(`!!document.querySelector('.instructions-editor')`), false);
   await evaluate(`window.toy.getUserProfile=async()=>({nickname:'Browser Tester',avatar:'',toyOpenId:'test-private-id'})`);
   await click('.uploader-link'); assert.deepEqual(await evaluate('window.lastNavigate'), { type: 'space', id: '2003822' });
@@ -167,7 +167,7 @@ try {
   const savedToken = await evaluate(`${storage}.token`);
   await instructions('Quota failure draft');
   await evaluate(`window.realSetItem=Storage.prototype.setItem; Storage.prototype.setItem=function(key,value){if(key==='valo-lineup:v4:/')throw new DOMException('full','QuotaExceededError');return window.realSetItem.call(this,key,value)}`);
-  await click('.editor-save'); await waitFor(`document.querySelector('.editor-notice').textContent.includes('存储空间不足')`);
+  await click('.editor-save'); await waitFor(`document.querySelector('.notice-slot').textContent.includes('存储空间不足')`);
   assert.equal(await evaluate(`${storage}.token`), savedToken);
   assert.equal(await evaluate(`document.querySelector('.instructions-editor textarea').value`), 'Quota failure draft');
   await evaluate('Storage.prototype.setItem=window.realSetItem');
@@ -196,15 +196,16 @@ try {
   await click('.history-toggle'); await waitFor(`!document.querySelector('.history-page')`);
   await click('.editor-enter'); await waitFor(`document.querySelector('.editor-new')`);
   await click('.perspective-controls button:nth-child(2)');
-  await click('.editor-new'); await waitFor(`document.querySelector('.new-lineup-dialog')`);
-  assert.equal(await evaluate(`document.querySelector('.new-lineup-dialog .form-grid select:nth-of-type(1)')?.value`), 'ascent');
-  assert.equal(await evaluate(`[...document.querySelectorAll('.new-lineup-dialog select')][1].value`), 'defense');
+  await click('.editor-new'); await waitFor(`document.querySelector('.placement-banner')`);
+  const placement = await evaluate(`(() => {const r=document.querySelector('.map-canvas').getBoundingClientRect();return {x:r.x+r.width*.78,y:r.y+r.height/2}})()`);
+  await send('Input.dispatchMouseEvent', { type: 'mousePressed', ...placement, button: 'left', clickCount: 1 });
+  await send('Input.dispatchMouseEvent', { type: 'mouseReleased', ...placement, button: 'left', clickCount: 1 });
+  await waitFor(`document.querySelector('.new-lineup-heading')`);
+  assert.equal(await evaluate(`document.querySelector('[aria-label="点位阵营"]').value`), 'defense');
   await click('.area-shortcuts button:nth-child(2)');
-  assert.equal(await evaluate(`document.querySelector('.new-lineup-dialog input[maxlength="40"]').value`), 'B点');
-  await evaluate(`(() => {const input=document.querySelector('.new-lineup-dialog input[maxlength="40"]');Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set.call(input,'自定义区域');input.dispatchEvent(new Event('input',{bubbles:true}));})()`);
-  await evaluate(`(() => {const input=document.querySelector('.new-lineup-dialog input[maxlength="100"]');Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set.call(input,'SDK 新点位');input.dispatchEvent(new Event('input',{bubbles:true}));})()`);
-  await click('.dialog-next'); await waitFor(`!document.querySelector('.new-lineup-dialog') && document.querySelector('.map-stage').getAttribute('aria-busy') === 'false'`);
-  await evaluate(`(() => {const canvas=document.querySelector('.map-canvas');const r=canvas.getBoundingClientRect();canvas.dispatchEvent(new PointerEvent('pointerdown',{bubbles:true,clientX:r.x+r.width*0.78,clientY:r.y+r.height/2,pointerId:1,pointerType:'mouse',button:0}));})()`);
+  assert.equal(await evaluate(`document.querySelector('[aria-label="点位区域"]').value`), 'B点');
+  await evaluate(`(() => {const input=document.querySelector('[aria-label="点位区域"]');Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set.call(input,'自定义区域');input.dispatchEvent(new Event('input',{bubbles:true}));})()`);
+  await evaluate(`(() => {const input=document.querySelector('[aria-label="点位名称"]');Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set.call(input,'SDK 新点位');input.dispatchEvent(new Event('input',{bubbles:true}));})()`);
   await waitFor(`document.querySelector('.detail-panel h2').textContent === 'SDK 新点位'`);
   const pin = await evaluate(`(() => {const r=document.querySelector('.lineup-pin.is-active').getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2}})()`);
   await send('Input.dispatchMouseEvent', { type: 'mousePressed', x: pin.x, y: pin.y, button: 'left', clickCount: 1 });

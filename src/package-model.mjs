@@ -85,8 +85,8 @@ export function packageStats(manifest) {
 }
 export function validateReferences(manifest, maps, agents) {
   for (const record of changedLineups(manifest)) {
-    if (!maps.some((map) => map.id === record.mapId)) throw new Error(`未知地图：${record.mapId}`);
-    if (!agents.find((agent) => agent.id === record.agentId)?.abilities.some((ability) => ability.id === record.abilityId)) throw new Error(`未知英雄或技能：${record.id}`);
+    if (!maps.some((map) => map.id === record.mapId)) throw new Error('更新包中有无法识别的地图，请获取适用于当前版本的编辑包');
+    if (!agents.find((agent) => agent.id === record.agentId)?.abilities.some((ability) => ability.id === record.abilityId)) throw new Error('更新包中的英雄或技能无法识别，请获取适用于当前版本的编辑包');
   }
 }
 export async function sha256(bytes) {
@@ -97,23 +97,23 @@ export function verifyImage(bytes, asset) {
   const valid = asset.mimeType === 'image/png' ? /\.png$/.test(asset.key) && starts([137,80,78,71,13,10,26,10])
     : asset.mimeType === 'image/jpeg' ? /\.jpe?g$/.test(asset.key) && starts([255,216,255])
       : /\.webp$/.test(asset.key) && starts([82,73,70,70]) && starts([87,69,66,80], 8);
-  if (!valid || bytes.length !== asset.size || bytes.length > MAX_IMAGE_BYTES) throw new Error(`图片类型或大小不合法：${asset.key}`);
+  if (!valid || bytes.length !== asset.size || bytes.length > MAX_IMAGE_BYTES) throw new Error('编辑包中有图片格式或大小不符合要求，请重新获取完整文件');
 }
 export async function readPackage(bytes) {
-  if (bytes.byteLength > MAX_PACKAGE_BYTES) throw new Error('ZIP 超过 128 MB');
+  if (bytes.byteLength > MAX_PACKAGE_BYTES) throw new Error('编辑包超过 128 MB，请选择更小的文件');
   const zip = await JSZip.loadAsync(bytes);
   const entry = zip.file('manifest.json');
-  if (!entry || entry._data.uncompressedSize > 8 * 1024 * 1024) throw new Error('缺少 manifest.json 或清单超过 8 MB');
+  if (!entry || entry._data.uncompressedSize > 8 * 1024 * 1024) throw new Error('编辑包资料缺失或过大，请重新获取完整文件');
   const raw = JSON.parse(await entry.async('string'));
-  if (![4, 5].includes(raw.version)) throw new Error('仅支持 v4 / v5 更新包，未知格式未被应用');
+  if (![4, 5].includes(raw.version)) throw new Error('当前版本无法读取这个编辑包，请使用本页面导出的编辑包');
   const manifest = manifestSchema.parse(raw);
   const blobs = new Map();
   for (const asset of manifest.uploadedAssets) {
     const file = zip.file(asset.key);
-    if (!file || file._data.uncompressedSize !== asset.size) throw new Error(`图片缺失或解压大小不一致：${asset.key}`);
+    if (!file || file._data.uncompressedSize !== asset.size) throw new Error('编辑包中的图片缺失或损坏，请重新获取完整文件');
     const data = await file.async('uint8array');
     verifyImage(data, asset);
-    if (await sha256(data) !== asset.sha256) throw new Error(`图片校验失败：${asset.key}`);
+    if (await sha256(data) !== asset.sha256) throw new Error('编辑包中的图片损坏，请重新获取完整文件');
     blobs.set(asset.sha256, new Blob([data], { type: asset.mimeType }));
   }
   return { manifest, blobs };
@@ -162,7 +162,7 @@ export async function compressPackage(data, encode) {
   const blobs = new Map();
   for (const asset of manifest.uploadedAssets) {
     const originalBlob = data.blobs.get(asset.sha256);
-    if (!originalBlob) throw new Error(`缺少图片：${asset.key}`);
+    if (!originalBlob) throw new Error('部分图片缺失，请重新添加图片或导入原编辑包');
     if (asset.mimeType === 'image/webp') { blobs.set(asset.sha256, originalBlob); continue; }
     const blob = await encode(originalBlob);
     const bytes = new Uint8Array(await blob.arrayBuffer());
