@@ -184,7 +184,7 @@ try {
   await screenshot('history-desktop');
   await send('Emulation.setDeviceMetricsOverride', { width: 390, height: 844, deviceScaleFactor: 1, mobile: true });
   await delay(200); await screenshot('history-mobile');
-  assert(await evaluate(`getComputedStyle(document.querySelector('.editor-export')).display !== 'none' && document.querySelector('.editor-export').getBoundingClientRect().height >= 40`), 'Mobile view must offer export for saved local edits');
+  assert(await evaluate(`!document.querySelector('.editing-toolbar') && !document.querySelector('.local-edit-card .action-primary').disabled && document.querySelector('.local-edit-card .action-primary').getBoundingClientRect().height >= 36`), 'Mobile history offers compact export for saved local edits');
   await send('Emulation.setDeviceMetricsOverride', { width: 1440, height: 900, deviceScaleFactor: 1, mobile: false });
   await click('.package-list li:nth-child(2) button:last-child'); await waitFor(`${storage}.packages.length === 1`);
   await click('.history-toggle'); await waitFor(`document.querySelector('.detail-lead').textContent === 'Manual second save'`);

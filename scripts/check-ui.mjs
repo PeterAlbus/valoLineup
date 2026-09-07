@@ -57,7 +57,7 @@ async function viewportFits(label) {
 try {
   await send('Page.enable'); await size(1440);
   await send('Page.navigate', { url: appUrl });
-  await wait("document.querySelector('.editor-enter') && !document.querySelector('.editor-enter').disabled");
+  await wait("document.querySelector('.editor-enter')");
   await evaluate("localStorage.removeItem('valo-lineup:v4:/')");
   await send('Page.navigate', { url: appUrl });
   await wait("document.querySelector('.editor-enter') && !document.querySelector('.editor-enter').disabled && document.querySelector('.map-stage').getAttribute('aria-busy') === 'false'");
@@ -66,11 +66,57 @@ try {
   const viewerLayout = new Map();
   for (const width of [1440, 1280, 1024, 980, 760, 390, 320]) {
     await size(width); await viewportFits(`Viewer ${width}`);
-    viewerLayout.set(width, await evaluate("document.querySelector('.content-grid').getBoundingClientRect().top"));
+    if (width > 760) viewerLayout.set(width, await evaluate("document.querySelector('.content-grid').getBoundingClientRect().top"));
     if (width > 760) assert(await evaluate("Math.abs(document.querySelector('.editor-actions').getBoundingClientRect().right - document.querySelector('.editing-toolbar').getBoundingClientRect().right) < 1"), 'Editing entry aligns with the right edge');
   }
   await size(390, 844); await screenshot('refined-mobile');
-  await size(1440);
+  const mobileStageTop = await evaluate("document.querySelector('.map-stage').getBoundingClientRect().top");
+  assert(mobileStageTop < 190, 'Mobile map starts near the top of the screen');
+  assert(!await evaluate("document.querySelector('.editing-toolbar, .editor-enter, .agent-tabs')"), 'Phone browsing has no editing toolbar or expanding hero tabs');
+  const content = JSON.parse(await readFile('src/data/content.json', 'utf8'));
+  const fixture = {
+    format: 'valo-lineup-edit-package', version: 5, packageId: 'baaa5138-4667-48ac-9117-19c971e68fc1', revision: 1,
+    createdAt: '2026-09-07T00:00:00.000Z', updatedAt: '2026-09-07T00:00:00.000Z', author: {name:'Mobile Test',source:'local'},
+    changes: { added: content.agents.flatMap(agent => ['attack','defense'].map(side => ({
+      ...content.lineups[0], id: `mobile-${agent.id}-${side}`, mapId:'ascent', agentId:agent.id, abilityId:agent.abilities[0].id,
+      title:`${agent.name}手机浏览`, side, target:{groupId:`mobile-${agent.id}-${side}`,x:.5,y:.5},
+      media:{stance:[],aim:[],effect:[]},
+    }))), updated:[], deleted:[] }, uploadedAssets:[],
+  };
+  await evaluate(`localStorage.setItem('valo-lineup:v4:/',JSON.stringify({version:1,token:'mobile-fixture',packages:[],manual:${JSON.stringify(fixture)}}))`);
+  await send('Page.navigate', {url:appUrl});
+  await wait(`document.querySelector('.mobile-agent-select select')?.options.length === ${content.agents.length} && !document.querySelector('.topbar .package-import input').disabled`);
+  assert.equal(await evaluate("document.querySelector('.map-stage').getBoundingClientRect().top"), mobileStageTop, 'Many heroes and saved edits do not increase header height');
+  await evaluate("document.querySelector('.mobile-agent-select select').focus()");
+  await send('Input.dispatchKeyEvent', {type:'keyDown',key:'End',code:'End',windowsVirtualKeyCode:35});
+  await send('Input.dispatchKeyEvent', {type:'keyUp',key:'End',code:'End',windowsVirtualKeyCode:35});
+  await wait(`document.querySelector('.mobile-agent-select select').value === ${JSON.stringify(content.agents.at(-1).id)}`);
+  assert.equal(await evaluate("document.querySelector('.mobile-agent-current b').textContent"), content.agents.at(-1).name);
+  assert((await evaluate("document.querySelector('.detail-panel h2').textContent")).includes(content.agents.at(-1).name));
+  for (const [width, height] of [[320,844],[390,844],[430,844],[760,844],[844,390]]) {
+    await size(width,height); await viewportFits(`Mobile with many heroes ${width}`);
+    assert(await evaluate("document.querySelector('.map-stage').getBoundingClientRect().top < 190"));
+    assert(await evaluate("(() => {const a=document.querySelector('.mobile-agent-select').getBoundingClientRect(), b=document.querySelector('.side-filter').getBoundingClientRect();return a.right<=b.left && Math.abs((a.top+a.height/2)-(b.top+b.height/2))<1})()"), 'Hero and side filters share one row');
+    await evaluate("window.scrollTo(0,400)");
+    await evaluate("new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)))");
+    assert(await evaluate("document.querySelector('.workspace-toolbar').getBoundingClientRect().bottom < 0"), 'Mobile toolbar scrolls out of view');
+    await evaluate("window.scrollTo(0,0)");
+  }
+  await size(390,844); await screenshot('mobile-many-heroes');
+  await click('.side-filter button:nth-child(2)');
+  await wait("document.querySelector('.side-filter button:nth-child(2)').getAttribute('aria-pressed') === 'true'");
+  await click('.map-card:nth-child(2)');
+  await wait("document.querySelector('.mobile-agent-select select').options.length < 3");
+  await click('.map-card:nth-child(3)');
+  await wait("document.querySelector('.mobile-agent-select select').disabled");
+  assert((await evaluate("document.querySelector('.empty-state').textContent")).includes('切换阵营'));
+  await click('.history-toggle'); await wait("document.querySelector('.local-edit-card')");
+  assert(await evaluate("!document.querySelector('.editing-toolbar') && !document.querySelector('.local-edit-card .action-primary').disabled"), 'Saved package download remains available in mobile history');
+  await screenshot('mobile-compact-history');
+  await evaluate("localStorage.removeItem('valo-lineup:v4:/')");
+  await size(1440); await send('Page.navigate',{url:appUrl});
+  await wait("document.querySelector('.editor-enter') && !document.querySelector('.editor-enter').disabled");
+  console.log('PASS compact mobile layout, natural scrolling, native hero selection with many heroes, empty maps and history access');
   await evaluate("window.toy={isSupport:async()=>true,getUserProfile:async()=>({nickname:'UI Test',avatar:'',toyOpenId:'ui-test-only'})}");
   await click('.editor-enter'); await wait("document.querySelector('.lineup-fields select')");
   assert(await evaluate("document.querySelector('.topbar .package-import input').disabled"), 'Import must not overwrite an active unsaved edit session');
@@ -109,7 +155,7 @@ try {
   for (const width of [1440, 1024, 980, 760, 390, 320]) {
     await size(width); await viewportFits(`New point ${width}`);
     await evaluate("document.querySelector('.detail-panel').scrollTop = 10000; window.scrollTo(0, document.documentElement.scrollHeight)");
-    assert(await evaluate("(() => {const r=document.querySelector('.editor-save').getBoundingClientRect();const n=document.querySelector('.save-state').getBoundingClientRect();return r.top>=0 && r.bottom<=innerHeight && n.top>=0 && n.bottom<=innerHeight})()"), `Save and feedback remain visible at ${width}px`);
+    if (width > 760) assert(await evaluate("(() => {const r=document.querySelector('.editor-save').getBoundingClientRect();const n=document.querySelector('.save-state').getBoundingClientRect();return r.top>=0 && r.bottom<=innerHeight && n.top>=0 && n.bottom<=innerHeight})()"), `Save and feedback remain visible at ${width}px`);
   }
   await screenshot('editor-narrow');
   await click('.new-lineup-cancel'); await wait("!document.querySelector('.new-lineup-heading')");

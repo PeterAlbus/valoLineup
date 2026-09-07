@@ -7,6 +7,7 @@ import { encodeWebp, formatBytes } from './image-compression';
 import { emptyLibrary, readLibrary, readImage, libraryUrls, persistLibrary, migrateLegacyImages, STORAGE_KEY, type LocalLibrary } from './local-library';
 import HistoryPage, { UploaderLabel } from './HistoryPage';
 import AgentPicker from './AgentPicker';
+import MobileAgentSelect from './MobileAgentSelect';
 import { anonymousUploader, getToyUploader, openBilibiliProfile, openBilibiliVideo } from './toy-sdk';
 import { usePanZoom } from './usePanZoom';
 import { useDecodedImage } from './useDecodedImage';
@@ -38,7 +39,7 @@ const SUPPORTED_IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/webp'] as const
 const MAX_IMAGE_BYTES = 12 * 1024 * 1024;
 const MIN_ZOOM = 1;
 const DESTINATION_CLUSTER_DISTANCE = 0.0125;
-const MOBILE_VIEW_QUERY = '(max-width: 760px)';
+const MOBILE_VIEW_QUERY = '(max-width: 760px), (max-width: 980px) and (max-height: 500px)';
 
 type Point = { x: number; y: number };
 type MapRegion = Point & { width: number; height: number; rotation: number };
@@ -161,7 +162,7 @@ export default function App() {
   const [isEditing, setIsEditing] = useState(false);
   const [isExitConfirmOpen, setIsExitConfirmOpen] = useState(false);
   const [deleteRequest, setDeleteRequest] = useState<DeleteRequest | null>(null);
-  const [isMobileView, setIsMobileView] = useState(false);
+  const [isMobileView, setIsMobileView] = useState(() => window.matchMedia(MOBILE_VIEW_QUERY).matches);
   const [isEditorBusy, setIsEditorBusy] = useState(false);
   const isDirty = isEditing && !same(draftLineups, savedLineups);
   const [pendingUploads, setPendingUploads] = useState<PendingUpload[]>([]);
@@ -782,7 +783,7 @@ export default function App() {
             <h1>{showHistory ? '更新历史' : activeMap.name}</h1>
           </div>
           <div className="topbar-tools">
-            <div className="agent-tabs" aria-label="英雄选择" style={showHistory ? { display: 'none' } : undefined}>
+            {!isMobileView ? <div className="agent-tabs" aria-label="英雄选择" style={showHistory ? { display: 'none' } : undefined}>
               {availableAgents.map((agent) => {
                 const count = filteredMapLineups.filter((lineup) => lineup.agentId === agent.id).length;
                 return (
@@ -799,14 +800,14 @@ export default function App() {
                   </button>
                 );
               })}
-            </div>
+            </div> : null}
             {!showHistory ? <PackageImport compact disabled={!storageReady || isEditorBusy || isEditing} editing={isEditing} onImport={(file) => void importPackage(file)} /> : null}
             <button className="history-toggle" disabled={Boolean(newLineupPlacement || newLineupId) || isEditorBusy} onClick={() => { location.hash = showHistory ? '' : 'history'; }} type="button">{showHistory ? '返回图鉴' : '更新历史'}</button>
 
           </div>
         </header>
 
-        <div className="editing-toolbar">
+        {!isMobileView || isEditing ? <div className="editing-toolbar">
           <div className="editor-status">
             {isEditing ? <div className="save-state" role="status" data-dirty={isDirty}>{isEditorBusy ? '正在处理…' : isDirty ? '有未保存修改' : library.manual ? '已保存到当前浏览器' : '暂无修改'}</div> : null}
             {isEditing || library.manual ? <div className={`package-size ${isPackageFull ? 'is-full' : ''}`} role="status"><span>图片：{formatBytes(packageImageBytes)} / {formatBytes(MAX_PACKAGE_BYTES)}</span><progress aria-label="编辑包图片容量" max={MAX_PACKAGE_BYTES} value={packageImageBytes} />{isPackageFull ? <small>已超限，请移除图片</small> : null}</div> : null}
@@ -828,7 +829,7 @@ export default function App() {
                 )}
               </div>
             ) : null}
-        </div>
+        </div> : null}
 
         </div>
         {showHistory ? <HistoryPage packages={library.packages} manual={library.manual} dirty={isDirty} entries={content.history} maps={maps} busy={isEditorBusy || !storageReady} editing={isEditing}
@@ -840,21 +841,23 @@ export default function App() {
         <div className="content-grid" style={showHistory ? { display: 'none' } : undefined} inert={isEditorBusy}>
           <section className="map-panel" aria-label={`${activeMap.name} Lineup 地图`}>
             <div className="panel-heading">
-              <div><p className="eyebrow">{isEditMode ? '编辑技能最终落点' : '技能最终落点'}</p><h2>{groups.length ? (isEditMode ? '拖动标记调整坐标' : '选择地图上的标记') : '等待点位数据'}</h2></div>
+              {isMobileView ? <MobileAgentSelect agents={availableAgents.map((agent) => ({ ...agent, count: filteredMapLineups.filter((lineup) => lineup.agentId === agent.id).length }))} value={selectedAgentId} disabled={Boolean(newLineupId || newLineupPlacement) || isEditorBusy} onChange={selectAgent} />
+                : <div><p className="eyebrow">{isEditMode ? '编辑技能最终落点' : '技能最终落点'}</p><h2>{groups.length ? (isEditMode ? '拖动标记调整坐标' : '选择地图上的标记') : '等待点位数据'}</h2></div>}
               <div className="panel-tools">
                 <div className="side-filter" aria-label="道具阵营筛选">
                   {(['attack', 'defense', 'all'] as const).map((filter) => (
                     <button
                       aria-pressed={sideFilter === filter}
+                      aria-label={sideFilterLabels[filter]}
                       className={sideFilter === filter ? 'is-active' : ''}
                       key={filter}
                       disabled={Boolean(newLineupId || newLineupPlacement)}
                       onClick={() => selectSideFilter(filter)}
                       type="button"
-                    >{sideFilterLabels[filter]}</button>
+                    >{isMobileView ? filter === 'all' ? '全部' : sideLabels[filter] : sideFilterLabels[filter]}</button>
                   ))}
                 </div>
-                <div className="legend"><span /> {activeMap.sites.map((site) => site.label).join('/')} 包点 · {activeAgent?.name ?? '未选择英雄'} · {groups.length} 个落点</div>
+                {!isMobileView ? <div className="legend"><span /> {activeMap.sites.map((site) => site.label).join('/')} 包点 · {activeAgent?.name ?? '未选择英雄'} · {groups.length} 个落点</div> : null}
               </div>
             </div>
 
@@ -1101,7 +1104,7 @@ export default function App() {
                 <p className="source-note">点位资料来自内置内容、导入的更新包和你保存的编辑</p>
               </>
             ) : (
-              <div className="empty-state"><span>00</span><h2>还没有点位</h2><p>这里还没有对应的点位资料。进入编辑后，可以在地图上添加。</p></div>
+              <div className="empty-state"><span>00</span><h2>还没有点位</h2><p>{isMobileView ? '当前筛选下暂无点位，可以切换阵营或查看其他地图。' : '这里还没有对应的点位资料。进入编辑后，可以在地图上添加。'}</p></div>
             )}
           </aside>
         </div>
