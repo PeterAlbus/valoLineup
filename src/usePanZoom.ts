@@ -103,7 +103,7 @@ export function usePanZoom(surfaceRef: RefObject<HTMLDivElement | null>, content
   }, [surfaceRef, contentRef, setZoom, commit]);
 
   function onPointerDown(event: PointerEvent<HTMLDivElement>) {
-    if (event.button !== 0 || (event.target as HTMLElement).closest('[data-zoom-controls], input, select, textarea')) return;
+    if (event.button !== 0 || (event.target as HTMLElement).closest('[data-zoom-controls], [data-geometry-controls], input, select, textarea')) return;
     const button = (event.target as HTMLElement).closest('button');
     if (button && !(event.pointerType === 'touch' && button.classList.contains('lineup-pin'))) return;
     if (!button) event.preventDefault();
@@ -153,7 +153,7 @@ export function usePanZoom(surfaceRef: RefObject<HTMLDivElement | null>, content
   }
 
   function onClickCapture(event: MouseEvent<HTMLDivElement>) {
-    if (!moved.current || (event.target as HTMLElement).closest('[data-zoom-controls]')) return;
+    if (!moved.current || (event.target as HTMLElement).closest('[data-zoom-controls], [data-geometry-controls]')) return;
     event.preventDefault();
     event.stopPropagation();
     moved.current = false;

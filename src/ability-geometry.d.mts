@@ -1,0 +1,17 @@
+import type { Lineup } from './package-model.mjs';
+export type Point = { x: number; y: number };
+export type AbilityEffect = { type: 'direction'; angle: number } | { type: 'path'; points: Point[] };
+export type CircleSpec = { shape: 'circle'; radius: number; label: string };
+export type DirectionSpec = { interaction: 'direction'; shape: 'rectangle' | 'cone' | 'vision-cone' | 'wall' | 'cross' | 'line' | 'full-line' | 'double-wall'; length: number; width: number; label: string };
+export type PathSpec = { interaction: 'path'; maxDistance: number; area?: CircleSpec; wall: boolean };
+export type GeometrySpec = CircleSpec | DirectionSpec | PathSpec;
+export const mapUnitsPerMeter: Readonly<Record<string, number>>;
+export const abilityGeometry: Readonly<Record<string, Record<string, GeometrySpec>>>;
+export function geometryFor(lineup: Pick<Lineup, 'agentId' | 'abilityId'>): GeometrySpec | undefined;
+export function effectPosition(lineup: Lineup): Point;
+export function pathLength(start: Point, points: Point[]): number;
+export function pathDistance(start: Point, points: Point[], mapId: string): number;
+export function pathData(start: Point, points: Point[]): string;
+export function tracePath(start: Point, points: Point[], pointer: Point, maxLength: number, tolerance: number): Point[];
+export function effectError(lineup: Lineup): string | null;
+export function withEffect(lineup: Lineup, effect?: AbilityEffect): Lineup;

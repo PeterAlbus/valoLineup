@@ -36,6 +36,7 @@ Lineup 必填字段：`id, mapId, agentId, abilityId, uploader, title, side, are
 
 - `id` 不随修改变化；新建使用地图、英雄和随机标识组合。目标坐标为原始地图的 `[0,1]` 归一化坐标，与浏览时攻守旋转无关。
 - `side` 为 `attack | defense`；`target` 为 `{groupId,x,y}`；`media` 为 `{stance:[],aim:[],effect:[]}`，条目为 `{key,alt}`。
+- 可选 `effect` 保存技能生效方向或引导路径，与 `media.effect` 的截图分区独立。方向为 `{type:"direction",angle:90}`，角度使用原始地图向右 0°、向下 90°的顺时针坐标，范围 `[0,360)`。路径为 `{type:"path",points:[{x:0.55,y:0.53},{x:0.6,y:0.5}]}`，`target` 保留标记原位作为起点，`points` 保存按拖动顺序采样的连续曲线路径，最后一个坐标是终点。所有坐标均为原始地图的归一化坐标，界面显示一条连续曲线和一个终点标记。长度按整条轨迹累计；拖动实时截断至技能距离上限，沿线回拖会收回末段。校验技能支持的类型及累计路径长度。固定技能范围由技能参数计算，无需存储；清除方向或路径时移除字段。完整技能清单和换算依据见 [技能范围与路径](valoplant-ability-interactions-research.md)。v4/v5 均保留此可选字段，无字段记录继续使用现有点位表现。
 - `videoBvid` 为空字符串或合法 12 位 BV 号；操作说明最长 1000 字符。
 - `uploader` / `author` 为 `{name, source, toyOpenId?, bilibiliUid?}`。`source` 为 `toy | curated | local`。`toy` 表示通过 SDK 获得的资料；`curated` 表示仓库人工归属；`local` 为离线导入来源，UI 明示未认证。
 - `getUserProfile()` 只在用户点击编辑时调用，经 `isSupport` 检查。SDK 未提供 UID/MID，因此不生成 `bilibiliUid`；该可选字段仅保留已有明确 UID 的归属，例如 PeterAlbus / 2003822。OpenID 模式关闭时允许无 `toyOpenId`。不保存头像、登录令牌或其他鉴权信息。

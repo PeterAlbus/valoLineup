@@ -107,7 +107,7 @@ button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
 .lineup-pin img { width: 25px; height: 25px; object-fit: contain; }
 .lineup-pin b { position: absolute; right: -5px; top: -5px; display: grid; width: 22px; height: 22px; place-items: center; border-radius: 50%; background: var(--accent); color: white; font-size: 11px; }
 .lineup-pin i { position: absolute; left: 50%; top: calc(100% + 8px); color: #899091; font: normal 700 9px var(--font-mono); transform: translateX(-50%); }
-.pin-pulse { position: absolute; inset: -8px; border: 1px solid rgba(104,224,214,.22); border-radius: inherit; }
+.pin-pulse { position: absolute; inset: -8px; border: 1px solid rgba(104,224,214,.22); border-radius: inherit; pointer-events: none; }
 .pin-label { position: absolute; left: 50%; bottom: calc(100% + 9px); max-width: 190px; padding: 6px 8px; overflow: hidden; border: 1px solid rgba(104,224,214,.36); border-radius: 3px; background: rgba(9,13,15,.94); color: var(--ink); font-size: 9px; font-weight: 700; line-height: 1.35; opacity: 0; pointer-events: none; text-overflow: ellipsis; transform: translate(-50%, 4px); transition: opacity .14s ease, transform .14s ease; white-space: nowrap; }
 .lineup-pin:hover .pin-label, .map-stage.is-detail-zoom .lineup-pin.is-active .pin-label { opacity: 1; transform: translate(-50%, 0); }
 .map-stage.is-detail-zoom .lineup-pin { width: 38px; height: 38px; }
@@ -417,3 +417,35 @@ button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
 .mobile-agent-current svg { flex: none; margin-left: auto; color: var(--muted); }
 .mobile-agent-select select { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; font-size: 16px; cursor: pointer; }
 .mobile-agent-select:has(select:disabled) { opacity: .5; }
+
+.ability-overlay { position: absolute; inset: 0; width: 100%; height: 100%; overflow: hidden; pointer-events: none; }
+.ability-area { fill: rgba(90, 212, 209, .2); stroke: #79e3d7; stroke-width: 1.5; }
+.ability-area *, .ability-area, .ability-path { vector-effect: non-scaling-stroke; }
+.ability-area line { stroke-width: 3; }
+.ability-direction { fill: none; stroke: #fff; stroke-width: 2; }
+.ability-path { fill: none; stroke: #f5d58a; stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; stroke-dasharray: 7 4; }
+.ability-path.is-wall { stroke: #79e3d7; stroke-width: 5; stroke-dasharray: none; }
+.ability-summary { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; color: #8cddd4; font-size: 11px; }
+.ability-summary span { color: var(--muted); }
+.geometry-controls { position: absolute; inset: 0; z-index: 6; pointer-events: none; }
+.geometry-toolbar { position: absolute; transform: translateX(-50%); pointer-events: auto; padding: 4px; border: 1px solid rgba(140, 221, 212, .45); border-radius: 12px; background: rgba(16, 27, 30, .96); box-shadow: 0 6px 24px #0008, 0 0 0 3px #74dacb0a; backdrop-filter: blur(12px); white-space: nowrap; }
+.geometry-toolbar button { min-height: 32px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 6px 10px; border: 0; border-radius: 8px; color: #c8e9e5; background: transparent; font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; }
+.geometry-toolbar button:hover:not(:disabled) { background: #8cddd41a; color: #fff; }
+.geometry-toolbar button:disabled { opacity: .4; cursor: default; }
+.geometry-toolbar svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linejoin: round; }
+.geometry-toolbar-actions { display: flex; gap: 3px; }
+.geometry-toolbar button.geometry-save { background: #8cddd4; color: #10272a; }
+.geometry-toolbar button.geometry-save:hover:not(:disabled) { background: #b1f5ed; }
+.geometry-toolbar button.geometry-cancel { padding: 5px 9px; font-size: 20px; color: #98afaf; }
+.geometry-toolbar output { display: block; padding: 5px 6px 2px; color: #9fb8b5; font-size: 10px; font-variant-numeric: tabular-nums; text-align: center; }
+.geometry-toolbar output.is-invalid { color: #ffad91; }
+.geometry-anchor { position: absolute; width: 0; height: 0; }
+.geometry-direction-arm { position: absolute; transform-origin: 0 0; }
+.geometry-direction-line { position: absolute; top: -1px; left: 24px; width: 54px; border-top: 1px dashed #8cddd4; }
+.geometry-direction-handle { display: grid; place-items: center; padding: 0; line-height: 0; position: absolute; left: 72px; top: 0; width: 32px; height: 32px; transform: translate(-50%, -50%); border-radius: 50%; border: 2px solid #b7fff4; background: #235450; box-shadow: 0 0 0 5px #8cddd418, 0 4px 14px #0008; color: white; cursor: grab; pointer-events: auto; touch-action: none; }
+.geometry-direction-handle:active, .geometry-endpoint-drag:active { cursor: grabbing; }
+.geometry-direction-handle svg { display: block; width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; }
+.geometry-controls button:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+.geometry-endpoint-drag { position: absolute; width: 50px; height: 50px; transform: translate(-50%, -50%); pointer-events: auto; touch-action: none; border: 2px solid #f5d58a; border-radius: 50%; background: transparent; box-shadow: 0 0 0 5px #f5d58a18; cursor: grab; }
+
+.lineup-pin.is-path-fixed { cursor: pointer; }

@@ -175,6 +175,19 @@ try {
   await importPackage(deletePackage);
   assert.equal(JSON.stringify(JSON.parse(await readFile(path.join(temporaryRoot, 'content', 'history.json'), 'utf8'))), historyBeforeRepeat);
 
+  const geometric = { ...firstBefore, id: 'geometry-import', title: '引导路径导入', agentId: 'harbor', abilityId: 'high-tide', target: { groupId: 'geometry-import', x: .5, y: .5 }, effect: { type: 'path', points: [{ x: .45, y: .5 }, { x: .4, y: .55 }] }, media: { stance: [], aim: [], effect: [] } };
+  const sharedOrigin = { ...geometric, id: 'geometry-shared-origin', abilityId: 'cove', title: '同原位的独立方法' };
+  delete sharedOrigin.effect;
+  await importPackage(await createPackage('geometry', { added: [geometric, sharedOrigin], updated: [] }));
+  const geometryYaml = parse(await readFile(path.join(temporaryRoot, 'content', 'lineups.yaml'), 'utf8'));
+  assert.deepEqual(geometryYaml.find(item => item.id === geometric.id).effect, geometric.effect);
+  const generated = JSON.parse(await readFile(path.join(temporaryRoot, 'src', 'data', 'content.json'), 'utf8'));
+  assert.deepEqual(generated.lineups.find(item => item.id === geometric.id).effect, geometric.effect);
+  assert.deepEqual(generated.lineups.find(item => item.id === sharedOrigin.id), sharedOrigin);
+  assert.deepEqual(generated.lineups.find(item => item.id === geometric.id).target, sharedOrigin.target);
+  historyBeforeRepeat = await readFile(path.join(temporaryRoot, 'content', 'history.json'), 'utf8');
+  historyBeforeRepeat = JSON.stringify(JSON.parse(historyBeforeRepeat));
+
   // Force the final build to fail after images, YAML and history were written, using only the isolated fixture tree.
   const rollbackId = 'ascent-sova-rollback-test';
   const rollbackKey = `lineups/${rollbackId}/effect-01.png`;

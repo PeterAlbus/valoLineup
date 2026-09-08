@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import JSZip from 'jszip';
+import { effectError } from './ability-geometry.mjs';
 
 export const PACKAGE_VERSION = 5;
 export const MAX_IMAGE_BYTES = 12 * 1024 * 1024;
@@ -16,15 +17,23 @@ export const mediaItemSchema = z.object({
   alt: z.string().min(1).max(500),
   original: z.object({ key: z.string().regex(/^lineups\/[a-z0-9-]+\/[a-zA-Z0-9_-][a-zA-Z0-9._-]*\.(png|jpe?g|webp)$/).refine((key) => !key.includes('..')), sha256: z.string().regex(/^[a-f0-9]{64}$/) }).optional(),
 }).passthrough();
+const effectPoint = z.object({ x: z.number().min(0).max(1), y: z.number().min(0).max(1) });
+export const effectSchema = z.discriminatedUnion('type', [
+  z.object({ type: z.literal('direction'), angle: z.number().min(0).lt(360) }),
+  z.object({ type: z.literal('path'), points: z.array(effectPoint).min(1) }),
+]);
 export const lineupSchema = z.object({
   id, mapId: id, agentId: id, abilityId: id,
   uploader: uploaderSchema,
   title: z.string().min(1).max(200), side: z.enum(['attack', 'defense']), area: z.string().min(1).max(100),
   videoBvid: z.union([z.literal(''), z.string().regex(/^BV[0-9A-Za-z]{10}$/, '教学视频必须填写完整 BV 号')]),
   target: z.object({ groupId: id, x: z.number().min(0).max(1), y: z.number().min(0).max(1) }).passthrough(),
+  effect: effectSchema.optional(),
   instructions: z.string().max(1000),
   media: z.object({ stance: z.array(mediaItemSchema), aim: z.array(mediaItemSchema), effect: z.array(mediaItemSchema) }).passthrough(),
 }).passthrough().superRefine((lineup, ctx) => {
+  const error = effectError(lineup);
+  if (error) ctx.addIssue({ code: 'custom', path: ['effect'], message: error });
   for (const item of allMedia([lineup])) if (!item.key.startsWith(`lineups/${lineup.id}/`)) ctx.addIssue({ code: 'custom', message: '图片必须位于所属点位目录' });
 });
 export const lineupsSchema = z.array(lineupSchema);
