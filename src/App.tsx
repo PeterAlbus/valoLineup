@@ -15,6 +15,7 @@ import ZoomControls from './ZoomControls';
 import ImageLightbox from './ImageLightbox';
 import ExitEditDialog from './ExitEditDialog';
 import ConfirmDialog from './ConfirmDialog';
+import UsageGuide from './UsageGuide';
 import PackageImport from './PackageImport';
 import AbilityOverlay from './AbilityOverlay';
 import AbilityGeometrySummary from './AbilityGeometrySummary';
@@ -823,7 +824,7 @@ export default function App() {
         <header className="topbar">
           <div>
             <p className="eyebrow">无畏契约 · LINEUP 图鉴</p>
-            <h1>{showHistory ? '更新历史' : activeMap.name}</h1>
+            <div className="page-title"><h1>{showHistory ? '更新历史' : activeMap.name}</h1><UsageGuide mobile={isMobileView} /></div>
           </div>
           <div className="topbar-tools">
             {!isMobileView ? <div className="agent-tabs" aria-label="英雄选择" style={showHistory ? { display: 'none' } : undefined}>

@@ -999,16 +999,379 @@
     name: PeterAlbus
     source: toy
     toyOpenId: toid_v1_k01_JZ_p5JVd_Vj1Qw8HfyAGfgs3Ya26Y3BH5Bx3OIM3NR_a
-  title: 回放B
+  title: A小进攻
   side: attack
-  area: B点
+  area: A点
   videoBvid: BV1PTgoz3EMv
   target:
     groupId: bind-fade-6cb958ca-6b8a-41d2-aa68-53fcc4cde3e4-target
-    x: 0.97145
-    y: 0.17358
-  instructions: 错误点位，忽略
+    x: 0.72554
+    y: 0.39676
+  instructions: 跳投
+  media:
+    stance: []
+    aim:
+      - key: lineups/bind-fade-6cb958ca-6b8a-41d2-aa68-53fcc4cde3e4/aim-6e643b62-bba7-4ff9-a7e5-495ce2e73596.webp
+        alt: A小进攻瞄点图 1
+    effect:
+      - key: lineups/bind-fade-6cb958ca-6b8a-41d2-aa68-53fcc4cde3e4/effect-724a1dc1-12e9-4c15-b80f-6cb40efac366.webp
+        alt: A小进攻道具效果图 1
+- id: bind-fade-bb067581-69a3-4c4b-a3ff-874bf6f97f6e
+  mapId: bind
+  agentId: fade
+  abilityId: haunt
+  uploader:
+    name: PeterAlbus
+    source: toy
+    toyOpenId: toid_v1_k01_JZ_p5JVd_Vj1Qw8HfyAGfgs3Ya26Y3BH5Bx3OIM3NR_a
+  title: 快攻进攻
+  side: attack
+  area: A点
+  videoBvid: BV1PTgoz3EMv
+  target:
+    groupId: bind-fade-bb067581-69a3-4c4b-a3ff-874bf6f97f6e-target
+    x: 0.63658
+    y: 0.34092
+  instructions: 瞄准房檐上区域，随手跳投
   media:
     stance: []
     aim: []
+    effect: []
+- id: bind-fade-24928079-2b31-4032-9c1d-81d96421601a
+  mapId: bind
+  agentId: fade
+  abilityId: haunt
+  uploader:
+    name: PeterAlbus
+    source: toy
+    toyOpenId: toid_v1_k01_JZ_p5JVd_Vj1Qw8HfyAGfgs3Ya26Y3BH5Bx3OIM3NR_a
+  title: B小进攻
+  side: attack
+  area: B点
+  videoBvid: ""
+  target:
+    groupId: bind-fade-24928079-2b31-4032-9c1d-81d96421601a-target
+    x: 0.34474
+    y: 0.30458
+  instructions: 瞄准建筑物左侧区域，跑跳投
+  media:
+    stance: []
+    aim:
+      - key: lineups/bind-fade-24928079-2b31-4032-9c1d-81d96421601a/aim-de9195ea-730b-4782-a276-1c652550b276.webp
+        alt: B小进攻瞄点图 1
+    effect:
+      - key: lineups/bind-fade-24928079-2b31-4032-9c1d-81d96421601a/effect-3bdb3b18-55c3-4e3c-b349-b21ae06286b5.webp
+        alt: B小进攻道具效果图 1
+- id: bind-fade-0a61c151-1a90-40cc-bac7-ced5d2a0104f
+  mapId: bind
+  agentId: fade
+  abilityId: haunt
+  uploader:
+    name: PeterAlbus
+    source: toy
+    toyOpenId: toid_v1_k01_JZ_p5JVd_Vj1Qw8HfyAGfgs3Ya26Y3BH5Bx3OIM3NR_a
+  title: B大进攻
+  side: attack
+  area: B点
+  videoBvid: ""
+  target:
+    groupId: bind-fade-0a61c151-1a90-40cc-bac7-ced5d2a0104f-target
+    x: 0.22005
+    y: 0.2948
+  instructions: 靠墙角，第二个突起往上一点，跑跳投（快碰到突起时跳投）
+  media:
+    stance: []
+    aim:
+      - key: lineups/bind-fade-0a61c151-1a90-40cc-bac7-ced5d2a0104f/aim-ed2e6e47-33b8-4406-b30f-5ad6355b78a9.webp
+        alt: B大进攻瞄点图 1
+    effect:
+      - key: lineups/bind-fade-0a61c151-1a90-40cc-bac7-ced5d2a0104f/effect-f21cc581-aaaa-4884-b6f0-e8dc5eebe19d.webp
+        alt: B大进攻道具效果图 1
+- id: bind-fade-9c7f3dd2-a0e5-4824-bd5e-3418ba6e34ff
+  mapId: bind
+  agentId: fade
+  abilityId: seize
+  uploader:
+    name: PeterAlbus
+    source: toy
+    toyOpenId: toid_v1_k01_JZ_p5JVd_Vj1Qw8HfyAGfgs3Ya26Y3BH5Bx3OIM3NR_a
+  title: 捆管道+死点
+  side: attack
+  area: B点
+  videoBvid: ""
+  target:
+    groupId: bind-fade-9c7f3dd2-a0e5-4824-bd5e-3418ba6e34ff-target
+    x: 0.33697
+    y: 0.28134
+  instructions: ""
+  media:
+    stance: []
+    aim: []
+    effect: []
+- id: bind-fade-47dad066-9ac7-4dac-89a8-8176eb5ccb62
+  mapId: bind
+  agentId: fade
+  abilityId: seize
+  uploader:
+    name: PeterAlbus
+    source: toy
+    toyOpenId: toid_v1_k01_JZ_p5JVd_Vj1Qw8HfyAGfgs3Ya26Y3BH5Bx3OIM3NR_a
+  title: 捆点后
+  side: attack
+  area: B点
+  videoBvid: ""
+  target:
+    groupId: bind-fade-47dad066-9ac7-4dac-89a8-8176eb5ccb62-target
+    x: 0.28926
+    y: 0.25343
+  instructions: ""
+  media:
+    stance: []
+    aim: []
+    effect: []
+- id: haven-sova-33ed863a-7d4c-4323-a9ab-1af91d38ed45
+  mapId: haven
+  agentId: sova
+  abilityId: recon-bolt
+  uploader:
+    name: PeterAlbus
+    source: toy
+    toyOpenId: toid_v1_k01_JZ_p5JVd_Vj1Qw8HfyAGfgs3Ya26Y3BH5Bx3OIM3NR_a
+  title: A厅
+  side: defense
+  area: A点
+  videoBvid: BV1bqwUzuEjk
+  target:
+    groupId: haven-sova-33ed863a-7d4c-4323-a9ab-1af91d38ed45-target
+    x: 0.6153
+    y: 0.33763
+  instructions: |-
+    站在阴影上，瞄准缺口，
+    两次反弹满格蓄力
+  media:
+    stance:
+      - key: lineups/haven-sova-33ed863a-7d4c-4323-a9ab-1af91d38ed45/stance-5b5eb368-6e28-47ea-bba3-ba118953f37a.webp
+        alt: A厅站位图 1
+    aim:
+      - key: lineups/haven-sova-33ed863a-7d4c-4323-a9ab-1af91d38ed45/aim-1b3fed1b-cd91-4629-b78b-1f72e9249c19.webp
+        alt: A厅瞄点图 1
+    effect:
+      - key: lineups/haven-sova-33ed863a-7d4c-4323-a9ab-1af91d38ed45/effect-047acd46-831c-4a68-9d53-6d6e37e18c99.webp
+        alt: A厅道具效果图 1
+- id: haven-sova-57ce3cb9-8067-446f-a16e-4033adc7b11d
+  mapId: haven
+  agentId: sova
+  abilityId: recon-bolt
+  uploader:
+    name: PeterAlbus
+    source: toy
+    toyOpenId: toid_v1_k01_JZ_p5JVd_Vj1Qw8HfyAGfgs3Ya26Y3BH5Bx3OIM3NR_a
+  title: 开局A外探测
+  side: defense
+  area: A点
+  videoBvid: ""
+  target:
+    groupId: haven-sova-57ce3cb9-8067-446f-a16e-4033adc7b11d-target
+    x: 0.6921
+    y: 0.34831
+  instructions: 顶住光幕，用ui第一格反弹框住灯泡，一格蓄力
+  media:
+    stance:
+      - key: lineups/haven-sova-57ce3cb9-8067-446f-a16e-4033adc7b11d/stance-4a3e6257-4f85-428d-acd5-c1157909a47d.webp
+        alt: 开局A外探测站位图 1
+    aim:
+      - key: lineups/haven-sova-57ce3cb9-8067-446f-a16e-4033adc7b11d/aim-860a8188-b1ab-4ffe-97f5-b6d67f662078.webp
+        alt: 开局A外探测瞄点图 1
+    effect:
+      - key: lineups/haven-sova-57ce3cb9-8067-446f-a16e-4033adc7b11d/effect-c789c9ee-0a83-4ffb-be3d-1570b3ee07d9.webp
+        alt: 开局A外探测道具效果图 1
+- id: haven-sova-454a2a18-8a49-486f-a84b-29911bbc110d
+  mapId: haven
+  agentId: sova
+  abilityId: recon-bolt
+  uploader:
+    name: PeterAlbus
+    source: toy
+    toyOpenId: toid_v1_k01_JZ_p5JVd_Vj1Qw8HfyAGfgs3Ya26Y3BH5Bx3OIM3NR_a
+  title: A点支援C
+  side: defense
+  area: C点
+  videoBvid: ""
+  target:
+    groupId: haven-sova-454a2a18-8a49-486f-a84b-29911bbc110d-target
+    x: 0.48592
+    y: 0.90094
+  instructions: 站在墙角，瞄准花盆中央靠上区域，两格蓄力
+  media:
+    stance: []
+    aim:
+      - key: lineups/haven-sova-454a2a18-8a49-486f-a84b-29911bbc110d/aim-cd07d7c8-fb39-4da9-9aeb-888761da3336.webp
+        alt: A点支援C瞄点图 1
+    effect: []
+- id: haven-sova-40bb7f3d-230f-439b-8c05-9d80b93b1b0c
+  mapId: haven
+  agentId: sova
+  abilityId: recon-bolt
+  uploader:
+    name: PeterAlbus
+    source: toy
+    toyOpenId: toid_v1_k01_JZ_p5JVd_Vj1Qw8HfyAGfgs3Ya26Y3BH5Bx3OIM3NR_a
+  title: A点回防
+  side: defense
+  area: A点
+  videoBvid: ""
+  target:
+    groupId: haven-sova-40bb7f3d-230f-439b-8c05-9d80b93b1b0c-target
+    x: 0.44934
+    y: 0.26335
+  instructions: AB连、警家均可，射到黄色墙面上即可
+  media:
+    stance: []
+    aim: []
+    effect: []
+- id: haven-sova-97f13fba-a0af-46ca-bcca-24b1c4f49466
+  mapId: haven
+  agentId: sova
+  abilityId: recon-bolt
+  uploader:
+    name: PeterAlbus
+    source: toy
+    toyOpenId: toid_v1_k01_JZ_p5JVd_Vj1Qw8HfyAGfgs3Ya26Y3BH5Bx3OIM3NR_a
+  title: 开局A大箭
+  side: attack
+  area: A点
+  videoBvid: ""
+  target:
+    groupId: haven-sova-97f13fba-a0af-46ca-bcca-24b1c4f49466-target
+    x: 0.52919
+    y: 0.11863
+  instructions: 一格蓄力
+  media:
+    stance:
+      - key: lineups/haven-sova-97f13fba-a0af-46ca-bcca-24b1c4f49466/stance-49070667-423f-42ec-870a-909e1a8b7a72.webp
+        alt: 开局A大箭站位图 1
+    aim:
+      - key: lineups/haven-sova-97f13fba-a0af-46ca-bcca-24b1c4f49466/aim-2b3ee7dd-fc81-468f-b992-ffca156f4a0e.webp
+        alt: 开局A大箭瞄点图 1
+    effect: []
+- id: haven-sova-3f1b9f14-3ad7-4fbc-8a98-dd3886ea4ca2
+  mapId: haven
+  agentId: sova
+  abilityId: recon-bolt
+  uploader:
+    name: PeterAlbus
+    source: toy
+    toyOpenId: toid_v1_k01_JZ_p5JVd_Vj1Qw8HfyAGfgs3Ya26Y3BH5Bx3OIM3NR_a
+  title: A小箭
+  side: attack
+  area: A点
+  videoBvid: ""
+  target:
+    groupId: haven-sova-3f1b9f14-3ad7-4fbc-8a98-dd3886ea4ca2-target
+    x: 0.46822
+    y: 0.3389
+  instructions: |-
+    靠木箱，黄色木条平移到右侧黄色墙体
+    两次反弹那，满格蓄力
+  media:
+    stance: []
+    aim:
+      - key: lineups/haven-sova-3f1b9f14-3ad7-4fbc-8a98-dd3886ea4ca2/aim-b8699df6-3f29-4a88-b8ed-545a2b30472c.webp
+        alt: A小箭瞄点图 1
+    effect: []
+- id: haven-sova-dd2cf803-81b1-47be-aff4-0909797e437e
+  mapId: haven
+  agentId: sova
+  abilityId: recon-bolt
+  uploader:
+    name: PeterAlbus
+    source: toy
+    toyOpenId: toid_v1_k01_JZ_p5JVd_Vj1Qw8HfyAGfgs3Ya26Y3BH5Bx3OIM3NR_a
+  title: 车库箭
+  side: attack
+  area: C点
+  videoBvid: ""
+  target:
+    groupId: haven-sova-dd2cf803-81b1-47be-aff4-0909797e437e-target
+    x: 0.50423
+    y: 0.66826
+  instructions: 顶住光幕ui描点，两次反弹，满格蓄力
+  media:
+    stance: []
+    aim:
+      - key: lineups/haven-sova-dd2cf803-81b1-47be-aff4-0909797e437e/aim-f7426478-c8fa-4529-982c-acdee2702e49.webp
+        alt: 车库箭瞄点图 1
+    effect: []
+- id: haven-sova-81daff4d-9ea1-4abc-a4ff-2f9d4355c0a2
+  mapId: haven
+  agentId: sova
+  abilityId: recon-bolt
+  uploader:
+    name: PeterAlbus
+    source: toy
+    toyOpenId: toid_v1_k01_JZ_p5JVd_Vj1Qw8HfyAGfgs3Ya26Y3BH5Bx3OIM3NR_a
+  title: C进攻
+  side: attack
+  area: C点
+  videoBvid: ""
+  target:
+    groupId: haven-sova-81daff4d-9ea1-4abc-a4ff-2f9d4355c0a2-target
+    x: 0.31592
+    y: 0.79178
+  instructions: 一格蓄力
+  media:
+    stance:
+      - key: lineups/haven-sova-81daff4d-9ea1-4abc-a4ff-2f9d4355c0a2/stance-084b11c0-c63d-465f-9bfe-8f167b79dddd.webp
+        alt: C进攻站位图 1
+    aim:
+      - key: lineups/haven-sova-81daff4d-9ea1-4abc-a4ff-2f9d4355c0a2/aim-8ecd97b1-0a33-49f5-a97e-fb5a5c3e707d.webp
+        alt: C进攻瞄点图 1
+    effect: []
+- id: haven-sova-54b03c98-4193-46c9-9b06-75f4cd76c9cb
+  mapId: haven
+  agentId: sova
+  abilityId: recon-bolt
+  uploader:
+    name: PeterAlbus
+    source: toy
+    toyOpenId: toid_v1_k01_JZ_p5JVd_Vj1Qw8HfyAGfgs3Ya26Y3BH5Bx3OIM3NR_a
+  title: B点箭
+  side: attack
+  area: B点
+  videoBvid: ""
+  target:
+    groupId: haven-sova-54b03c98-4193-46c9-9b06-75f4cd76c9cb-target
+    x: 0.31672
+    y: 0.49589
+  instructions: 顶住窗口。蹲下后瞄准绿色区域，满格蓄力
+  media:
+    stance: []
+    aim:
+      - key: lineups/haven-sova-54b03c98-4193-46c9-9b06-75f4cd76c9cb/aim-4382ed2f-aacc-469a-a6c2-8ba80837c3fe.webp
+        alt: B点箭瞄点图 1
+    effect: []
+- id: haven-sova-99238e99-3431-49e9-804e-c113b66c8570
+  mapId: haven
+  agentId: sova
+  abilityId: shock-bolt
+  uploader:
+    name: PeterAlbus
+    source: toy
+    toyOpenId: toid_v1_k01_JZ_p5JVd_Vj1Qw8HfyAGfgs3Ya26Y3BH5Bx3OIM3NR_a
+  title: 电绊线
+  side: attack
+  area: C点
+  videoBvid: ""
+  target:
+    groupId: haven-sova-99238e99-3431-49e9-804e-c113b66c8570-target
+    x: 0.50503
+    y: 0.81143
+  instructions: 一次反弹，一格蓄力
+  media:
+    stance:
+      - key: lineups/haven-sova-99238e99-3431-49e9-804e-c113b66c8570/stance-d7dfe4c1-77c5-4359-a24d-35fab4e35e20.webp
+        alt: 电绊线站位图 1
+    aim:
+      - key: lineups/haven-sova-99238e99-3431-49e9-804e-c113b66c8570/aim-e95e38c5-2fdb-400c-b817-6e2c1f7eadb5.webp
+        alt: 电绊线瞄点图 1
     effect: []

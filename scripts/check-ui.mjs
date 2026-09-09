@@ -107,7 +107,9 @@ try {
   await wait("document.querySelector('.side-filter button:nth-child(2)').getAttribute('aria-pressed') === 'true'");
   await click('.map-card:nth-child(2)');
   await wait("document.querySelector('.mobile-agent-select select').options.length < 3");
-  await click('.map-card:nth-child(3)');
+  const emptyMapIndex = content.maps.findIndex(map => !content.lineups.some(lineup => lineup.mapId === map.id));
+  assert(emptyMapIndex >= 0, 'The empty-map scenario needs a map without built-in points');
+  await click(`.map-card:nth-child(${emptyMapIndex + 1})`);
   await wait("document.querySelector('.mobile-agent-select select').disabled");
   assert((await evaluate("document.querySelector('.empty-state').textContent")).includes('切换阵营'));
   await click('.history-toggle'); await wait("document.querySelector('.local-edit-card')");
