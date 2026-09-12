@@ -14,7 +14,7 @@ export function makeLineups() {
     makeLineup({ videoBvid: '' }),
     makeLineup({ id: 'test-shared-second', title: '第二种方法', instructions: '第二种固定说明' }),
     makeLineup({ id: 'test-shared-third', title: '第三种方法' }),
-    makeLineup({ id: 'test-independent', target: { groupId: 'test-independent', x: .7, y: .6 }, videoBvid: '' }),
+    makeLineup({ id: 'test-independent', target: { groupId: 'test-independent', x: .85, y: .15 }, videoBvid: '' }),
     makeLineup({ id: 'test-other-map', mapId: 'bind', uploader: { name: 'Another Author', source: 'local' }, target: { groupId: 'test-shared', x: .3, y: .2 } }),
   ];
 }
