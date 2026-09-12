@@ -103,6 +103,8 @@ button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
 .lineup-pin:hover, .lineup-pin.is-active { border-color: var(--accent); background: #1c1717; transform: translate(-50%, -50%) scale(1.08); }
 .lineup-pin.is-editable { cursor: grab; border-style: dashed; border-color: rgba(255,90,68,.8); touch-action: none; }
 .lineup-pin.is-editable:active { cursor: grabbing; }
+.lineup-pin.is-editable.is-active { z-index: 5; }
+.method-edit-hint { margin: 10px 0 0; color: var(--muted); font-size: 11px; line-height: 1.5; }
 .lineup-pin.is-editable .pin-pulse { border-color: rgba(255,90,68,.48); animation: editor-pulse 1.4s ease-in-out infinite; }
 .lineup-pin img { width: 25px; height: 25px; object-fit: contain; }
 .lineup-pin b { position: absolute; right: -5px; top: -5px; display: grid; width: 22px; height: 22px; place-items: center; border-radius: 50%; background: var(--accent); color: white; font-size: 11px; }

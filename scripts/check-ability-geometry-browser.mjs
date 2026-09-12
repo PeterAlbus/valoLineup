@@ -178,8 +178,11 @@ try {
   await dragControl('.lineup-pin[aria-label*=几何路径]', [.55,.55]);
   assert.deepEqual(await pathLine(), confirmedPath, 'Saved endpoints stay fixed until reset');
   await pick('同点第二种方法');
+  assert(!await evaluate("document.querySelector('.lineup-pin[aria-label*=同点第二种方法]').classList.contains('is-path-fixed')"), 'A sibling path must not lock this independent point');
   await dragControl('.lineup-pin[aria-label*=同点第二种方法]', [.45,.55]);
-  await pick('几何路径'); assert.deepEqual(await pathLine(), confirmedPath, 'Shared origins remain fixed while a path uses them');
+  const independentCenter = await center('.lineup-pin[aria-label*=同点第二种方法]'), expectedCenter = await mapPoint(.45,.55);
+  assert(Math.hypot(independentCenter.x-expectedCenter.x,independentCenter.y-expectedCenter.y)<1);
+  await pick('几何路径'); assert.deepEqual(await pathLine(), confirmedPath, 'Moving the independent sibling must not change the saved path');
   await button('编辑路径'); await button('重置'); await click('.geometry-save');
   assert.equal(await evaluate("document.querySelectorAll('.ability-path').length"), 0);
   await pick('几何方向'); await button('寻敌箭');

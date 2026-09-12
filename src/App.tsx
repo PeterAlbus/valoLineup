@@ -17,6 +17,7 @@ import ExitEditDialog from './ExitEditDialog';
 import ConfirmDialog from './ConfirmDialog';
 import UsageGuide from './UsageGuide';
 import MapDetailNavigation from './MapDetailNavigation';
+import { clusterDestinations, editorDestinations, moveIndependentTarget } from './lineup-selection.mjs';
 import PackageImport from './PackageImport';
 import AbilityOverlay from './AbilityOverlay';
 import StanceMarkers, { StanceConnections } from './StanceMarkers';
@@ -45,7 +46,6 @@ const sideFilterLabels = { attack: '进攻方道具', defense: '防守方道具'
 const SUPPORTED_IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/webp'] as const;
 const MAX_IMAGE_BYTES = 12 * 1024 * 1024;
 const MIN_ZOOM = 1;
-const DESTINATION_CLUSTER_DISTANCE = 0.0125;
 const MOBILE_VIEW_QUERY = '(max-width: 760px), (max-width: 980px) and (max-height: 500px)';
 
 type Point = { x: number; y: number };
@@ -63,60 +63,6 @@ function rotatePoint(point: Point, degrees: number) {
     x: 0.5 + x * cos - y * sin,
     y: 0.5 + x * sin + y * cos,
   };
-}
-
-function clusterDestinations(items: Lineup[], mergeNearby: boolean) {
-  const exact = new Map<string, Lineup[]>();
-  for (const lineup of items) {
-    // Methods at the same origin can have different path endpoints.
-    const point = effectPosition(lineup);
-    const key = `${lineup.target.groupId}@${point.x},${point.y}`;
-    exact.set(key, [...(exact.get(key) ?? []), lineup]);
-  }
-
-  const destinations = [...exact.values()].map((lineups) => ({
-    // A position changes while dragging; use a member's stable ID for React keys and pointer capture.
-    id: lineups[0].id,
-    lineups,
-    ...effectPosition(lineups[0]),
-  }));
-
-  if (!mergeNearby) {
-    return destinations.map((destination) => ({
-      id: destination.id,
-      memberIds: [destination.id],
-      items: destination.lineups,
-      x: destination.x,
-      y: destination.y,
-    }));
-  }
-
-  const parents = destinations.map((_, index) => index);
-  const find = (index: number): number => parents[index] === index ? index : (parents[index] = find(parents[index]));
-  const unite = (left: number, right: number) => {
-    const leftRoot = find(left);
-    const rightRoot = find(right);
-    if (leftRoot !== rightRoot) parents[rightRoot] = leftRoot;
-  };
-
-  for (let left = 0; left < destinations.length; left += 1) {
-    for (let right = left + 1; right < destinations.length; right += 1) {
-      if (Math.hypot(destinations[left].x - destinations[right].x, destinations[left].y - destinations[right].y) <= DESTINATION_CLUSTER_DISTANCE) unite(left, right);
-    }
-  }
-
-  const clusters = new Map<number, typeof destinations>();
-  destinations.forEach((destination, index) => clusters.set(find(index), [...(clusters.get(find(index)) ?? []), destination]));
-  return [...clusters.values()].map((cluster) => {
-    const lineups = cluster.flatMap((destination) => destination.lineups);
-    return {
-      id: cluster[0].id,
-      memberIds: cluster.map((destination) => destination.id),
-      items: lineups,
-      x: cluster.reduce((sum, destination) => sum + destination.x, 0) / cluster.length,
-      y: cluster.reduce((sum, destination) => sum + destination.y, 0) / cluster.length,
-    };
-  });
 }
 
 function instructionSummary(lineup: Lineup) {
@@ -189,7 +135,8 @@ export default function App() {
   const mapClickPointRef = useRef<Point | null>(null);
   const { viewport: mapViewport, isDragging: isDraggingMap, setZoom, reset: resetMapViewport, handlers: mapHandlers } = usePanZoom(mapStageRef, mapCanvasRef);
   const [geometryEditing, setGeometryEditing] = useState<GeometryEditing | null>(null);
-  const pinDragRef = useRef<{ pointerId: number; lineupIds: string[] } | null>(null);
+  const pinDragRef = useRef<{ pointerId: number; lineupId: string; origin: Point; moved: boolean; canDrag: boolean } | null>(null);
+  const suppressPinClickRef = useRef(false);
 
   useEffect(() => {
     if (!editorNotice) return;
@@ -244,8 +191,9 @@ export default function App() {
   const filteredMapLineups = mapLineups.filter((lineup) => (lineup.id === newLineupId || sideFilter === 'all' || lineup.side === sideFilter) && !(newLineupPlacement && lineup.id === newLineupId));
   const agentLineups = filteredMapLineups.filter((lineup) => lineup.agentId === selectedAgentId);
   const availableAgents = agents.filter((agent) => filteredMapLineups.some((lineup) => lineup.agentId === agent.id));
-  const groups = clusterDestinations(agentLineups, !isEditMode);
-  const pathOriginIds = new Set(mapLineups.filter((lineup) => lineup.effect?.type === 'path').map((lineup) => lineup.target.groupId));
+  const groups = clusterDestinations(agentLineups);
+  const mapGroups = isEditMode ? editorDestinations(agentLineups) : groups;
+  const pathOriginIds = new Set(mapLineups.filter((lineup) => lineup.effect?.type === 'path').map((lineup) => lineup.id));
   const activeGroup = groups.find((group) => group.items.some((lineup) => lineup.id === selectedLineupId)) ?? groups.find((group) => group.memberIds.includes(selectedGroupId)) ?? groups[0];
   const activeLineup = newLineupPlacement ? undefined : activeGroup?.items.find((lineup) => lineup.id === selectedLineupId) ?? activeGroup?.items[0];
   const activeAgent = agents.find((agent) => agent.id === selectedAgentId) ?? availableAgents[0] ?? agents[0];
@@ -445,12 +393,13 @@ export default function App() {
     window.getSelection()?.removeAllRanges();
     setStancePlacementId(null);
     setGeometryEditing(null);
+    suppressPinClickRef.current = false;
     selectGroup(group);
     event.preventDefault();
     event.stopPropagation();
     event.currentTarget.setPointerCapture(event.pointerId);
-    if (group.items.some((item) => pathOriginIds.has(item.target.groupId))) return;
-    pinDragRef.current = { pointerId: event.pointerId, lineupIds: group.items.map((lineup) => lineup.id) };
+    pinDragRef.current = { pointerId: event.pointerId, lineupId: group.items[0].id, origin: { x: event.clientX, y: event.clientY }, moved: false,
+      canDrag: !pathOriginIds.has(group.items[0].id) };
   }
 
   function handlePinPointerMove(event: React.PointerEvent<HTMLButtonElement>) {
@@ -458,17 +407,27 @@ export default function App() {
     if (!isEditMode || !drag || drag.pointerId !== event.pointerId) return;
     event.preventDefault();
     event.stopPropagation();
+    if (!drag.canDrag || (!drag.moved && Math.hypot(event.clientX - drag.origin.x, event.clientY - drag.origin.y) < 4)) return;
     const point = rawPointFromPointer(event.clientX, event.clientY);
     if (!point) return;
-    setDraftLineups((current) => current.map((lineup) => lineup.mapId === selectedMapId && drag.lineupIds.includes(lineup.id)
-      ? { ...lineup, target: { ...lineup.target, ...point } } : lineup));
+    drag.moved = true;
+    setDraftLineups((current) => moveIndependentTarget(current, drag.lineupId, point));
     setEditorNotice(null);
   }
 
   function finishPinDrag(event: React.PointerEvent<HTMLButtonElement>) {
     if (pinDragRef.current?.pointerId !== event.pointerId) return;
+    if (event.type === 'pointerup') handlePinPointerMove(event);
+    suppressPinClickRef.current = pinDragRef.current.moved || event.type === 'pointercancel';
     pinDragRef.current = null;
     if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
+  }
+
+  function selectPin(event: React.MouseEvent<HTMLButtonElement>, group: (typeof groups)[number]) {
+    if (activeGeometryEditing || isPlacingStance || isEditorBusy) return;
+    if (suppressPinClickRef.current && event.detail !== 0) { suppressPinClickRef.current = false; return; }
+    suppressPinClickRef.current = false;
+    selectGroup(group);
   }
 
   function clearPendingUploads() {
@@ -970,7 +929,7 @@ export default function App() {
                     >{isMobileView ? filter === 'all' ? '全部' : sideLabels[filter] : sideFilterLabels[filter]}</button>
                   ))}
                 </div>
-                {!isMobileView ? <div className="legend"><span /> {activeMap.sites.map((site) => site.label).join('/')} 包点 · {activeAgent?.name ?? '未选择英雄'} · {groups.length} 个落点</div> : null}
+                {!isMobileView ? <div className="legend"><span /> {activeMap.sites.map((site) => site.label).join('/')} 包点 · {activeAgent?.name ?? '未选择英雄'} · {mapGroups.length} 个{isEditMode ? '点位' : '落点'}</div> : null}
               </div>
             </div>
 
@@ -1008,7 +967,7 @@ export default function App() {
               <div className="map-zoom-controls">
                 <ZoomControls label="地图" zoom={mapViewport.zoom} onZoom={setZoom} onReset={resetMapViewport} />
               </div>
-              <div className="map-gesture-hint">{activeGeometryEditing ? activeGeometryEditing.type === 'path' ? '拖动绘制路径 · 沿线回拖缩短 · Esc 取消' : '拖动箭头调整方向 · Esc 取消' : isEditMode ? '拖动标记修改落点 · 滚轮缩放地图' : '滚轮 / 双指缩放 · 放大后拖动地图 · 100%–800%'}</div>
+              <div className="map-gesture-hint">{activeGeometryEditing ? activeGeometryEditing.type === 'path' ? '拖动绘制路径 · 沿线回拖缩短 · Esc 取消' : '拖动箭头调整方向 · Esc 取消' : isEditMode ? '右侧切换相近方法 · 拖动仅移动当前点位 · 滚轮缩放' : '滚轮 / 双指缩放 · 放大后拖动地图 · 100%–800%'}</div>
               {mapImage.status !== 'ready' ? <div className="canvas-status" role="status">{mapImage.status === 'error' ? <>地图加载失败<button type="button" onClick={mapImage.retry}>重试</button></> : `正在加载${activeMap.name}…`}</div> : null}
               {isEditMode && newLineupPlacement ? (
                 <div className="placement-banner" role="status">
@@ -1051,22 +1010,25 @@ export default function App() {
                     <b>{site.label}</b><span>包点</span>
                   </div>
                 ))}
-                {groups.map((group, index) => {
+                {mapGroups.map((group, index) => {
                   const representative = group.items[0];
+                  const isActive = isEditMode ? representative.id === activeLineup?.id : group.id === activeGroup?.id;
                   const ability = activeAgent?.abilities.find((item) => item.id === representative.abilityId);
                   return (
                     <button
-                      aria-label={`${representative.area}，${representative.title || '新增点位'}，${group.items.length} 种 Lineup${isEditMode ? group.items.some((item) => pathOriginIds.has(item.target.groupId)) ? '，原位已有路径，重置路径后可拖动' : '，可拖动' : ''}`}
-                      aria-pressed={group.id === activeGroup?.id}
-                      className={`lineup-pin ${representative.id === newLineupId ? 'is-new' : ''} ${group.id === activeGroup?.id ? 'is-active' : ''} ${isEditMode ? 'is-editable' : ''} ${group.items.some((item) => pathOriginIds.has(item.target.groupId)) ? 'is-path-fixed' : ''}`}
+                      aria-label={`${representative.area}，${representative.title || '新增点位'}，${group.items.length} 种 Lineup${isEditMode ? pathOriginIds.has(representative.id) ? '，原位已有路径，重置路径后可拖动' : '，可独立拖动，相近方法在右侧选择' : ''}`}
+                      aria-pressed={isActive}
+                      data-lineup-id={representative.id}
+                      className={`lineup-pin ${representative.id === newLineupId ? 'is-new' : ''} ${isActive ? 'is-active' : ''} ${isEditMode ? 'is-editable' : ''} ${pathOriginIds.has(representative.id) ? 'is-path-fixed' : ''}`}
                       key={group.id}
                       disabled={Boolean(newLineupId && !group.items.some((item) => item.id === newLineupId)) || Boolean(newLineupPlacement)}
-                      onClick={() => { if (!activeGeometryEditing) selectGroup(group); }}
+                      onClick={(event) => selectPin(event, group)}
                       onPointerCancel={finishPinDrag}
+                      onLostPointerCapture={finishPinDrag}
                       onPointerDown={(event) => handlePinPointerDown(event, group)}
                       onPointerMove={handlePinPointerMove}
                       onPointerUp={finishPinDrag}
-                      style={pointStyle(group.id === activeGroup?.id && activeGeometryEditing && activeLineup ? effectPosition(withEffect(activeLineup, activeGeometryEditing.effect)) : group)}
+                      style={pointStyle(isActive && activeGeometryEditing && activeLineup ? effectPosition(withEffect(activeLineup, activeGeometryEditing.effect)) : group)}
                       type="button"
                     >
                       <span className="pin-pulse" />
@@ -1097,21 +1059,23 @@ export default function App() {
               <>
                 {activeGroup.items.length > 1 ? (
                   <section className="method-picker" aria-label="相近落点的 Lineup 方法">
-                    <div className="method-heading"><p className="eyebrow">{isEditMode ? '同一落点' : '相近落点'}</p><span>{activeGroup.items.length} 种方法</span></div>
+                    <div className="method-heading"><p className="eyebrow">相近落点</p><span>{activeGroup.items.length} 种方法</span></div>
                     <div className="method-list">
                       {activeGroup.items.map((lineup, index) => (
                         <button
                           aria-pressed={lineup.id === activeLineup.id}
                           className={lineup.id === activeLineup.id ? 'is-active' : ''}
+                          data-lineup-id={lineup.id}
                           key={lineup.id}
                           disabled={Boolean(newLineupId)} onClick={() => selectMethod(lineup.id)}
                           type="button"
                         >
                           <span>{String(index + 1).padStart(2, '0')}</span>
-                          <span><b>方法 {index + 1}</b><small>{instructionSummary(lineup)}</small></span>
+                          <span><b>{isEditMode ? lineup.title || `方法 ${index + 1}` : `方法 ${index + 1}`}</b><small>{isEditMode ? `${activeAgent?.abilities.find((ability) => ability.id === lineup.abilityId)?.name ?? ''} · ${sideLabels[lineup.side]} · ` : ''}{instructionSummary(lineup)}</small></span>
                         </button>
                       ))}
                     </div>
+                    {isEditMode ? <p className="method-edit-hint">选中方法的标记会置顶，拖动只移动该点位。</p> : null}
                   </section>
                 ) : null}
 
