@@ -1,13 +1,15 @@
 import assert from 'node:assert/strict';
 import { execFile } from 'node:child_process';
 import { createHash, randomUUID } from 'node:crypto';
-import { access, cp, mkdir, mkdtemp, readFile, readdir, rm, symlink, writeFile } from 'node:fs/promises';
+import { access, mkdir, mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { promisify } from 'node:util';
 import JSZip from 'jszip';
 import sharp from 'sharp';
 import { parse } from 'yaml';
+import { makeContentFixture, writeContentFixture } from './fixtures/content.mjs';
+import { makeLineup } from './fixtures/lineups.mjs';
 import { allMedia } from '../src/package-model.mjs';
 
 const execFileAsync = promisify(execFile);
@@ -23,7 +25,7 @@ async function createPackage(name, changes, assets = []) {
   const supplied = new Map(assets.map((asset) => [asset.key, asset]));
   for (const item of allMedia([...changes.added, ...changes.updated.map((change) => change.after)])) {
     if (supplied.has(item.key)) continue;
-    const bytes = await readFile(path.join(root, 'public', item.key));
+    const bytes = await readFile(path.join(temporaryRoot, 'public', item.key));
     supplied.set(item.key, { ...item, bytes, size: bytes.length, sha256: createHash('sha256').update(bytes).digest('hex'), mimeType: item.key.endsWith('.png') ? 'image/png' : item.key.endsWith('.webp') ? 'image/webp' : 'image/jpeg' });
   }
   assets = [...supplied.values()];
@@ -57,29 +59,13 @@ async function importPackage(packagePath) {
 }
 
 try {
-  await cp(path.join(root, 'content'), path.join(temporaryRoot, 'content'), { recursive: true });
-  await writeFile(path.join(temporaryRoot, 'content', 'history.json'), '[]');
-  await mkdir(path.join(temporaryRoot, 'public', 'lineups'), { recursive: true });
-  await symlink(path.join(root, 'public', 'maps'), path.join(temporaryRoot, 'public', 'maps'), 'dir');
-  await symlink(path.join(root, 'public', 'agents'), path.join(temporaryRoot, 'public', 'agents'), 'dir');
-  for (const entry of await readdir(path.join(root, 'public', 'lineups'), { withFileTypes: true })) {
-    if (entry.isDirectory()) {
-      await symlink(
-        path.join(root, 'public', 'lineups', entry.name),
-        path.join(temporaryRoot, 'public', 'lineups', entry.name),
-        'dir',
-      );
-    }
-  }
-  await mkdir(path.join(temporaryRoot, 'src', 'data'), { recursive: true });
-
-  const base = parse(await readFile(path.join(temporaryRoot, 'content', 'lineups.yaml'), 'utf8'));
-  const firstBefore = base[0];
-  const secondBefore = base.find((lineup) => lineup.target.groupId === 'a-site-fast');
+  const { lineups: base } = await writeContentFixture(temporaryRoot, makeContentFixture());
+  const firstBefore = base.find(lineup => lineup.id === 'test-primary');
+  const secondBefore = base.find((lineup) => lineup.id === 'test-independent');
   const firstAfter = changed(firstBefore, 'BV17x411w7KC');
   const secondAfter = changed(secondBefore, 'BV1xx411c7mD');
   const conflictingAfter = changed(firstBefore, 'BV1Q541167Qg');
-  const sharedGroupBefore = base.filter((lineup) => lineup.target.groupId === 'a-site-scan');
+  const sharedGroupBefore = base.filter((lineup) => lineup.mapId === 'ascent' && lineup.target.groupId === 'test-shared');
   const sharedGroupAfter = sharedGroupBefore.map((lineup) => ({
     ...lineup,
     target: { ...lineup.target, x: lineup.target.x + 0.01 },
@@ -142,6 +128,10 @@ try {
   assert.equal(finalLineups.find((lineup) => lineup.id === firstBefore.id).videoBvid, firstAfter.videoBvid);
   assert.equal(finalLineups.find((lineup) => lineup.id === secondBefore.id).videoBvid, secondAfter.videoBvid);
   assert.ok(finalLineups.some((lineup) => lineup.id === added.id), 'A stale addition package must still merge');
+  assert.equal(finalLineups.length, base.length + 1, 'Only the accepted addition changes the total');
+  for (const original of base.filter(lineup => ![firstBefore.id, secondBefore.id].includes(lineup.id))) {
+    assert.deepEqual(finalLineups.find(lineup => lineup.id === original.id), original, 'Unrelated records retain every field');
+  }
   const convertedImage = finalLineups.find((lineup) => lineup.id === added.id).media.effect[0];
   assert.ok(convertedImage.key.endsWith('.webp'));
   await access(path.join(temporaryRoot, 'public', convertedImage.key));
@@ -167,6 +157,7 @@ try {
   const deletePackage = await createPackage('delete', { added: [], updated: [], deleted: [{ id: added.id, before: deletedRecord }] });
   await importPackage(deletePackage);
   const afterDelete = parse(await readFile(path.join(temporaryRoot, 'content', 'lineups.yaml'), 'utf8'));
+  assert.equal(afterDelete.length, base.length, 'Deleting the test addition restores the original total');
   assert(!afterDelete.some((lineup) => lineup.id === added.id));
   const deletionHistory = JSON.parse(await readFile(path.join(temporaryRoot, 'content', 'history.json'), 'utf8'));
   assert.equal(deletionHistory.at(-1).deleted, 1);
@@ -175,7 +166,7 @@ try {
   await importPackage(deletePackage);
   assert.equal(JSON.stringify(JSON.parse(await readFile(path.join(temporaryRoot, 'content', 'history.json'), 'utf8'))), historyBeforeRepeat);
 
-  const geometric = { ...firstBefore, id: 'geometry-import', title: '引导路径导入', agentId: 'harbor', abilityId: 'high-tide', target: { groupId: 'geometry-import', x: .5, y: .5 }, effect: { type: 'path', points: [{ x: .45, y: .5 }, { x: .4, y: .55 }] }, media: { stance: [], aim: [], effect: [] } };
+  const geometric = makeLineup({ id: 'geometry-import', title: '引导路径导入', agentId: 'harbor', abilityId: 'high-tide', target: { groupId: 'geometry-import', x: .5, y: .5 }, effect: { type: 'path', points: [{ x: .45, y: .5 }, { x: .4, y: .55 }] }, media: { stance: [], aim: [], effect: [] } });
   const sharedOrigin = { ...geometric, id: 'geometry-shared-origin', abilityId: 'cove', title: '同原位的独立方法' };
   delete sharedOrigin.effect;
   await importPackage(await createPackage('geometry', { added: [geometric, sharedOrigin], updated: [] }));
@@ -201,6 +192,7 @@ try {
   assert.equal(await readFile(path.join(temporaryRoot, 'content', 'lineups.yaml'), 'utf8'), beforeRollback, 'Failed builds must restore YAML');
   assert.equal(JSON.stringify(JSON.parse(await readFile(path.join(temporaryRoot, 'content', 'history.json'), 'utf8'))), historyBeforeRepeat, 'Failed builds must restore history');
   await assert.rejects(access(path.join(temporaryRoot, 'public', rollbackKey)), 'Failed builds must remove new image files');
+  assert.deepEqual(await readdir(path.join(temporaryRoot, 'public', 'lineups', rollbackId)), [], 'Rollback also removes the converted WebP, not just the original PNG');
 
   console.log('Edit package checks passed: parallel updates merge, conflicts skip per lineup, additions and images remain importable.');
 } finally {

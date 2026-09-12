@@ -1512,6 +1512,10 @@
         "x": 0.29186,
         "y": 0.2166
       },
+      "stance": {
+        "x": 0.69876,
+        "y": 0.23875
+      },
       "instructions": "两格蓄力无反弹",
       "media": {
         "stance": [
@@ -1564,6 +1568,10 @@
         "groupId": "a-site-scan",
         "x": 0.29186,
         "y": 0.2166
+      },
+      "stance": {
+        "x": 0.69897,
+        "y": 0.23074
       },
       "instructions": "一次反弹满格蓄力",
       "media": {
@@ -1618,6 +1626,10 @@
         "x": 0.29186,
         "y": 0.2166
       },
+      "stance": {
+        "x": 0.61357,
+        "y": 0.24556
+      },
       "instructions": "建筑物边缘转角，一格蓄力",
       "media": {
         "stance": [
@@ -1671,6 +1683,10 @@
         "x": 0.32099,
         "y": 0.21682
       },
+      "stance": {
+        "x": 0.68525,
+        "y": 0.23824
+      },
       "instructions": "顶住木箱，一格蓄力",
       "media": {
         "stance": [],
@@ -1714,6 +1730,10 @@
         "groupId": "a-site-upper",
         "x": 0.25584,
         "y": 0.08337
+      },
+      "stance": {
+        "x": 0.56622,
+        "y": 0.29801
       },
       "instructions": "天空图形尖端，一格蓄力",
       "media": {
@@ -1768,6 +1788,10 @@
         "x": 0.43889,
         "y": 0.43387
       },
+      "stance": {
+        "x": 0.64438,
+        "y": 0.38278
+      },
       "instructions": "一次反弹满格蓄力，中路右侧死角可以藏人",
       "media": {
         "stance": [
@@ -1820,6 +1844,10 @@
         "groupId": "mid-arch",
         "x": 0.42571,
         "y": 0.49514
+      },
+      "stance": {
+        "x": 0.68447,
+        "y": 0.38357
       },
       "instructions": "L型电线下方，两次反弹满格蓄力",
       "media": {
@@ -1874,6 +1902,10 @@
         "x": 0.3717,
         "y": 0.47114
       },
+      "stance": {
+        "x": 0.68253,
+        "y": 0.39056
+      },
       "instructions": "路灯下方，一次反弹满格蓄力",
       "media": {
         "stance": [
@@ -1927,6 +1959,10 @@
         "x": 0.29303,
         "y": 0.51981
       },
+      "stance": {
+        "x": 0.67218,
+        "y": 0.39018
+      },
       "instructions": "背靠墙，满格蓄力",
       "media": {
         "stance": [],
@@ -1971,6 +2007,10 @@
         "x": 0.3503,
         "y": 0.51439
       },
+      "stance": {
+        "x": 0.64267,
+        "y": 0.38287
+      },
       "instructions": "",
       "media": {
         "stance": [],
@@ -2005,6 +2045,10 @@
         "groupId": "b-window",
         "x": 0.39603,
         "y": 0.43736
+      },
+      "stance": {
+        "x": 0.537,
+        "y": 0.66673
       },
       "instructions": "满格蓄力",
       "media": {
@@ -2049,6 +2093,10 @@
         "groupId": "b-eaves",
         "x": 0.21416,
         "y": 0.68492
+      },
+      "stance": {
+        "x": 0.53725,
+        "y": 0.77619
       },
       "instructions": "一次反弹满格蓄力，16:9UI描点（蓄力条左侧）",
       "media": {
@@ -2103,6 +2151,10 @@
         "x": 0.20631,
         "y": 0.82126
       },
+      "stance": {
+        "x": 0.50264,
+        "y": 0.75272
+      },
       "instructions": "",
       "media": {
         "stance": [],
@@ -2147,6 +2199,10 @@
         "x": 0.24947,
         "y": 0.61768
       },
+      "stance": {
+        "x": 0.48211,
+        "y": 0.75389
+      },
       "instructions": "满格蓄力",
       "media": {
         "stance": [],
@@ -2190,6 +2246,10 @@
         "groupId": "a-retake",
         "x": 0.30546,
         "y": 0.21684
+      },
+      "stance": {
+        "x": 0.15059,
+        "y": 0.23353
       },
       "instructions": "满格蓄力跳射",
       "media": {
@@ -2243,6 +2303,10 @@
         "x": 0.54665,
         "y": 0.30061
       },
+      "stance": {
+        "x": 0.2668,
+        "y": 0.08288
+      },
       "instructions": "一格蓄力",
       "media": {
         "stance": [
@@ -2278,41 +2342,6 @@
       }
     },
     {
-      "id": "ascent-sova-17",
-      "mapId": "ascent",
-      "agentId": "sova",
-      "abilityId": "recon-bolt",
-      "uploader": {
-        "name": "PeterAlbus",
-        "source": "curated",
-        "bilibiliUid": "2003822"
-      },
-      "title": "开大箭",
-      "side": "defense",
-      "area": "A点",
-      "videoBvid": "BV1dDLV6zE15",
-      "target": {
-        "groupId": "a-retake",
-        "x": 0.30546,
-        "y": 0.21684
-      },
-      "instructions": "",
-      "media": {
-        "stance": [],
-        "aim": [
-          {
-            "key": "lineups/ascent-sova-17/aim-01-290c7982350e3786.webp",
-            "alt": "开大箭瞄点图 1",
-            "original": {
-              "key": "lineups/ascent-sova-17/aim-01.png",
-              "sha256": "4e0c01058c281f2f47d3f77b3831aa3c13e42cdf65a6e6939c297223d0983503"
-            }
-          }
-        ],
-        "effect": []
-      }
-    },
-    {
       "id": "ascent-sova-18",
       "mapId": "ascent",
       "agentId": "sova",
@@ -2330,6 +2359,10 @@
         "groupId": "b-support",
         "x": 0.27541,
         "y": 0.85299
+      },
+      "stance": {
+        "x": 0.14742,
+        "y": 0.37371
       },
       "instructions": "",
       "media": {
@@ -2384,6 +2417,10 @@
         "x": 0.35935,
         "y": 0.51797
       },
+      "stance": {
+        "x": 0.29171,
+        "y": 0.55863
+      },
       "instructions": "跳射射到水塔上",
       "media": {
         "stance": [],
@@ -2418,6 +2455,10 @@
         "groupId": "mid-second-timing",
         "x": 0.52281,
         "y": 0.4015
+      },
+      "stance": {
+        "x": 0.15482,
+        "y": 0.44793
       },
       "instructions": "瞄准45度斜的墙壁，一格反弹满格蓄力，跳射合适，站位随意",
       "media": {
@@ -2463,6 +2504,10 @@
         "x": 0.45133,
         "y": 0.75495
       },
+      "stance": {
+        "x": 0.2105,
+        "y": 0.63779
+      },
       "instructions": "",
       "media": {
         "stance": [],
@@ -2497,6 +2542,10 @@
         "groupId": "b-outside-platform",
         "x": 0.54029,
         "y": 0.76692
+      },
+      "stance": {
+        "x": 0.20911,
+        "y": 0.76572
       },
       "instructions": "一格蓄力\n替换为雷击箭可处理kj小鸡",
       "media": {
@@ -2551,6 +2600,10 @@
         "x": 0.62189,
         "y": 0.71251
       },
+      "stance": {
+        "x": 0.2571,
+        "y": 0.60488
+      },
       "instructions": "两格蓄力一格反弹",
       "media": {
         "stance": [],
@@ -2585,6 +2638,10 @@
         "groupId": "b-anti-rush",
         "x": 0.28863,
         "y": 0.696
+      },
+      "stance": {
+        "x": 0.19516,
+        "y": 0.61512
       },
       "instructions": "站警家角落，一次反弹满格蓄力，射关门按钮的屋檐上",
       "media": {
@@ -2627,8 +2684,12 @@
       "videoBvid": "",
       "target": {
         "groupId": "b-boathouse",
-        "x": 0.22169,
-        "y": 0.78035
+        "x": 0.32684,
+        "y": 0.60609
+      },
+      "stance": {
+        "x": 0.25922,
+        "y": 0.89041
       },
       "instructions": "满格蓄力",
       "media": {
@@ -2640,41 +2701,6 @@
             "original": {
               "key": "lineups/ascent-sova-25/aim-01.png",
               "sha256": "5f9eeeb5e62d7ad019a08f9bba202974bb2e053d547120f7d69fca939d8db066"
-            }
-          }
-        ],
-        "effect": []
-      }
-    },
-    {
-      "id": "ascent-sova-26",
-      "mapId": "ascent",
-      "agentId": "sova",
-      "abilityId": "recon-bolt",
-      "uploader": {
-        "name": "PeterAlbus",
-        "source": "curated",
-        "bilibiliUid": "2003822"
-      },
-      "title": "支援A，射进点墙上",
-      "side": "defense",
-      "area": "B点",
-      "videoBvid": "BV1dDLV6zE15",
-      "target": {
-        "groupId": "a-retake",
-        "x": 0.30546,
-        "y": 0.21684
-      },
-      "instructions": "站绿箱房檐边角向上移动少许",
-      "media": {
-        "stance": [],
-        "aim": [
-          {
-            "key": "lineups/ascent-sova-26/aim-01-13c7337ab86daaaf.webp",
-            "alt": "支援A，射进点墙上瞄点图 1",
-            "original": {
-              "key": "lineups/ascent-sova-26/aim-01.png",
-              "sha256": "98d2f26f028f8964d13097333dfacf6e6e73361739f5272ced504705a4626f53"
             }
           }
         ],
@@ -2699,6 +2725,10 @@
         "groupId": "bind-fade-8cd238d1-19b1-4faf-88c1-860f81ab6196-target",
         "x": 0.33477,
         "y": 0.60367
+      },
+      "stance": {
+        "x": 0.31453,
+        "y": 0.38535
       },
       "instructions": "站位瞄准地砖，描点瞄棱往下拉，跑到准星和黑色方块对齐跳投",
       "media": {
@@ -2752,6 +2782,10 @@
         "groupId": "bind-fade-254c2450-47ad-447e-b353-18e3f2d05332-target",
         "x": 0.17434,
         "y": 0.56447
+      },
+      "stance": {
+        "x": 0.21648,
+        "y": 0.41506
       },
       "instructions": "顶住光幕，跳投",
       "media": {
@@ -2832,6 +2866,10 @@
         "x": 0.86119,
         "y": 0.48017
       },
+      "stance": {
+        "x": 0.79323,
+        "y": 0.35212
+      },
       "instructions": "瞄准交点，跑一步跳投",
       "media": {
         "stance": [
@@ -2885,6 +2923,10 @@
         "x": 0.6335,
         "y": 0.30161
       },
+      "stance": {
+        "x": 0.55791,
+        "y": 0.15897
+      },
       "instructions": "跑到人走到阴阳分界线处跳投，容错较大",
       "media": {
         "stance": [],
@@ -2929,6 +2971,10 @@
         "x": 0.72554,
         "y": 0.39676
       },
+      "stance": {
+        "x": 0.70872,
+        "y": 0.52138
+      },
       "instructions": "跳投",
       "media": {
         "stance": [],
@@ -2965,6 +3011,10 @@
         "x": 0.63658,
         "y": 0.34092
       },
+      "stance": {
+        "x": 0.63223,
+        "y": 0.50734
+      },
       "instructions": "瞄准房檐上区域，随手跳投",
       "media": {
         "stance": [],
@@ -2990,6 +3040,10 @@
         "groupId": "bind-fade-24928079-2b31-4032-9c1d-81d96421601a-target",
         "x": 0.34474,
         "y": 0.30458
+      },
+      "stance": {
+        "x": 0.41718,
+        "y": 0.51815
       },
       "instructions": "瞄准建筑物左侧区域，跑跳投",
       "media": {
@@ -3026,6 +3080,10 @@
         "groupId": "bind-fade-0a61c151-1a90-40cc-bac7-ced5d2a0104f-target",
         "x": 0.22005,
         "y": 0.2948
+      },
+      "stance": {
+        "x": 0.14896,
+        "y": 0.4557
       },
       "instructions": "靠墙角，第二个突起往上一点，跑跳投（快碰到突起时跳投）",
       "media": {
@@ -16677,6 +16735,60 @@
       "added": 25,
       "updated": 0,
       "deleted": 0
+    },
+    {
+      "id": "17c1f058-8787-4ec3-9932-082c38290704",
+      "packageId": "a2510248-914b-4dd1-9250-38ce50151ea0",
+      "revision": 5,
+      "appliedAt": "2026-09-12T15:15:09.996Z",
+      "author": {
+        "name": "PeterAlbus",
+        "source": "toy",
+        "toyOpenId": "toid_v1_k01_JZ_p5JVd_Vj1Qw8HfyAGfgs3Ya26Y3BH5Bx3OIM3NR_a"
+      },
+      "mapIds": [
+        "ascent",
+        "bind"
+      ],
+      "lineupIds": [
+        "ascent-sova-01",
+        "ascent-sova-02",
+        "ascent-sova-03",
+        "ascent-sova-04",
+        "ascent-sova-05",
+        "ascent-sova-06",
+        "ascent-sova-07",
+        "ascent-sova-08",
+        "ascent-sova-09",
+        "ascent-sova-10",
+        "ascent-sova-11",
+        "ascent-sova-12",
+        "ascent-sova-13",
+        "ascent-sova-14",
+        "bind-fade-6cb958ca-6b8a-41d2-aa68-53fcc4cde3e4",
+        "bind-fade-bb067581-69a3-4c4b-a3ff-874bf6f97f6e",
+        "bind-fade-24928079-2b31-4032-9c1d-81d96421601a",
+        "bind-fade-0a61c151-1a90-40cc-bac7-ced5d2a0104f",
+        "ascent-sova-15",
+        "ascent-sova-16",
+        "ascent-sova-18",
+        "ascent-sova-19",
+        "ascent-sova-20",
+        "ascent-sova-21",
+        "ascent-sova-22",
+        "ascent-sova-23",
+        "ascent-sova-24",
+        "ascent-sova-25",
+        "bind-fade-8cd238d1-19b1-4faf-88c1-860f81ab6196",
+        "bind-fade-254c2450-47ad-447e-b353-18e3f2d05332",
+        "bind-fade-486250fe-4807-4b6d-898b-dc01284f5bf4",
+        "bind-fade-428b9bdd-5961-4a5a-9243-00c863829166",
+        "ascent-sova-17",
+        "ascent-sova-26"
+      ],
+      "added": 0,
+      "updated": 32,
+      "deleted": 2
     }
   ],
   "mediaBytes": {
@@ -16721,7 +16833,6 @@
     "lineups/ascent-sova-16/stance-01-6ab7cd0599c0a3ca.webp": 90366,
     "lineups/ascent-sova-16/aim-01-3f178e967389c672.webp": 151302,
     "lineups/ascent-sova-16/effect-430468ad-dc09-49eb-adb7-4f3610e99f64-1b8e71735ea71466.webp": 67314,
-    "lineups/ascent-sova-17/aim-01-290c7982350e3786.webp": 133520,
     "lineups/ascent-sova-18/stance-01-19b0a212d2932609.webp": 116216,
     "lineups/ascent-sova-18/aim-01-f34b92de04f9f5ae.webp": 127658,
     "lineups/ascent-sova-18/effect-5a3f4ae7-983c-4d89-92c2-a93323ad7e1b-3049da065b3c35e0.webp": 63798,
@@ -16736,7 +16847,6 @@
     "lineups/ascent-sova-24/aim-01-eb90cbac79ec7dd8.webp": 93558,
     "lineups/ascent-sova-24/effect-4e619dc9-b4b7-4f45-b610-360696830b34-15af6afdf7941e29.webp": 52576,
     "lineups/ascent-sova-25/aim-01-ef7f3ce041e020c6.webp": 102256,
-    "lineups/ascent-sova-26/aim-01-13c7337ab86daaaf.webp": 115510,
     "lineups/bind-fade-8cd238d1-19b1-4faf-88c1-860f81ab6196/stance-de944a08-e07f-4d2a-bfd7-460d79d1792a-3b3f82871afe1b3d.webp": 72666,
     "lineups/bind-fade-8cd238d1-19b1-4faf-88c1-860f81ab6196/aim-c65b672f-07a0-4114-aa3e-9d4bc91fd16d-303cd6b363641e04.webp": 17942,
     "lineups/bind-fade-8cd238d1-19b1-4faf-88c1-860f81ab6196/effect-564dbd69-012b-42df-b0a3-83bc3d62803e-301961c14a80f291.webp": 66684,

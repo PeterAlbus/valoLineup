@@ -132,5 +132,59 @@
     "added": 25,
     "updated": 0,
     "deleted": 0
+  },
+  {
+    "id": "17c1f058-8787-4ec3-9932-082c38290704",
+    "packageId": "a2510248-914b-4dd1-9250-38ce50151ea0",
+    "revision": 5,
+    "appliedAt": "2026-09-12T15:15:09.996Z",
+    "author": {
+      "name": "PeterAlbus",
+      "source": "toy",
+      "toyOpenId": "toid_v1_k01_JZ_p5JVd_Vj1Qw8HfyAGfgs3Ya26Y3BH5Bx3OIM3NR_a"
+    },
+    "mapIds": [
+      "ascent",
+      "bind"
+    ],
+    "lineupIds": [
+      "ascent-sova-01",
+      "ascent-sova-02",
+      "ascent-sova-03",
+      "ascent-sova-04",
+      "ascent-sova-05",
+      "ascent-sova-06",
+      "ascent-sova-07",
+      "ascent-sova-08",
+      "ascent-sova-09",
+      "ascent-sova-10",
+      "ascent-sova-11",
+      "ascent-sova-12",
+      "ascent-sova-13",
+      "ascent-sova-14",
+      "bind-fade-6cb958ca-6b8a-41d2-aa68-53fcc4cde3e4",
+      "bind-fade-bb067581-69a3-4c4b-a3ff-874bf6f97f6e",
+      "bind-fade-24928079-2b31-4032-9c1d-81d96421601a",
+      "bind-fade-0a61c151-1a90-40cc-bac7-ced5d2a0104f",
+      "ascent-sova-15",
+      "ascent-sova-16",
+      "ascent-sova-18",
+      "ascent-sova-19",
+      "ascent-sova-20",
+      "ascent-sova-21",
+      "ascent-sova-22",
+      "ascent-sova-23",
+      "ascent-sova-24",
+      "ascent-sova-25",
+      "bind-fade-8cd238d1-19b1-4faf-88c1-860f81ab6196",
+      "bind-fade-254c2450-47ad-447e-b353-18e3f2d05332",
+      "bind-fade-486250fe-4807-4b6d-898b-dc01284f5bf4",
+      "bind-fade-428b9bdd-5961-4a5a-9243-00c863829166",
+      "ascent-sova-17",
+      "ascent-sova-26"
+    ],
+    "added": 0,
+    "updated": 32,
+    "deleted": 2
   }
 ]

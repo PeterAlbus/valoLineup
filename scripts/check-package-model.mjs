@@ -1,11 +1,12 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import JSZip from 'jszip';
+import { makeContentFixture } from './fixtures/content.mjs';
 import { collectChanges, manifestSchema, applyLayers, readPackage, validateReferences, same, sameLineup } from '../src/package-model.mjs';
 
 // Do not rewrite the frozen fixture when evolving the format: retain a v4 reader/migration instead.
 const fixture = JSON.parse(await readFile(new URL('./fixtures/edit-package-v4.json', import.meta.url), 'utf8'));
-const content = JSON.parse(await readFile('src/data/content.json', 'utf8'));
+const content = makeContentFixture();
 assert.doesNotThrow(() => manifestSchema.parse(fixture));
 validateReferences(fixture, content.maps, content.agents);
 const zip = new JSZip(); zip.file('manifest.json', JSON.stringify(fixture));

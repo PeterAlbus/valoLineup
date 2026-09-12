@@ -1,9 +1,11 @@
+import { browserFixture, requireFixtureServer } from './fixtures/browser.mjs';
 // Run against an isolated Chromium instance with remote debugging enabled:
 // node scripts/check-viewer.mjs http://127.0.0.1:9335 http://127.0.0.1:4174/
 import assert from 'node:assert/strict';
-import { readFile, writeFile } from 'node:fs/promises';
+import { writeFile } from 'node:fs/promises';
 
 const [debugUrl = 'http://127.0.0.1:9335', appUrl = 'http://127.0.0.1:4174/'] = process.argv.slice(2);
+await requireFixtureServer(appUrl);
 const tabs = await fetch(`${debugUrl}/json`).then((response) => response.json());
 const tab = tabs.find((item) => item.type === 'page' && item.url.startsWith(appUrl));
 assert(tab, 'Open the app in an isolated browser before running this check');
@@ -94,7 +96,7 @@ try {
   await waitFor(`document.querySelector('${mapRange}').value === '350'`);
   console.log('PASS desktop wheel isolation, numeric zoom, continuous slider');
 
-  const content = JSON.parse(await readFile(new URL('../src/data/content.json', import.meta.url), 'utf8'));
+  const content = await browserFixture();
   const bindMap = content.maps.find((map) => map.id === 'bind');
   await send('Fetch.enable', { patterns: [{ urlPattern: `*${bindMap.imageHiRes}*`, requestStage: 'Request' }] });
   await click('.map-card:nth-child(2)');

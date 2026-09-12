@@ -1,3 +1,4 @@
+import { browserFixture, requireFixtureServer } from './fixtures/browser.mjs';
 // Use only an isolated Chromium instance: this resets the test origin's local edits.
 // Optional third argument saves screenshots to an existing directory.
 import assert from 'node:assert/strict';
@@ -9,6 +10,7 @@ for (const file of await readdir('src')) {
   assert(!/\b(?:window\.)?(?:confirm|alert|prompt)\s*\(/.test(await readFile(`src/${file}`, 'utf8')), `${file} must not use host-blocked system prompts`);
 }
 const [debugUrl = 'http://127.0.0.1:9335', appUrl = 'http://127.0.0.1:4174/', output] = process.argv.slice(2);
+await requireFixtureServer(appUrl);
 const tab = (await fetch(`${debugUrl}/json`).then((r) => r.json())).find((tab) => tab.type === 'page' && tab.url.startsWith(appUrl));
 assert(tab, 'Open the app in an isolated test browser');
 const ws = new WebSocket(tab.webSocketDebuggerUrl);
@@ -98,7 +100,7 @@ try {
   await wait("window.scrollY === 0 && !document.querySelector('.page-back-top')");
   console.log('PASS detail navigation, map visibility, text clearance, selection preservation and desktop/tablet/phone layouts');
   await size(390,844);
-  const content = JSON.parse(await readFile('src/data/content.json', 'utf8'));
+  const content = await browserFixture();
   const fixture = {
     format: 'valo-lineup-edit-package', version: 5, packageId: 'baaa5138-4667-48ac-9117-19c971e68fc1', revision: 1,
     createdAt: '2026-09-07T00:00:00.000Z', updatedAt: '2026-09-07T00:00:00.000Z', author: {name:'Mobile Test',source:'local'},

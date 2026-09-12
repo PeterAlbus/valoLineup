@@ -1,8 +1,10 @@
+import { requireFixtureServer } from './fixtures/browser.mjs';
 // Run against an isolated Chromium instance; guide read state is reset for this test.
 import assert from 'node:assert/strict';
 import { writeFile } from 'node:fs/promises';
 import path from 'node:path';
 const [debugUrl = 'http://127.0.0.1:9335', appUrl = 'http://127.0.0.1:4174/', output] = process.argv.slice(2);
+await requireFixtureServer(appUrl);
 const tab = (await fetch(`${debugUrl}/json`).then((r) => r.json())).find((tab) => tab.type === 'page' && tab.url.startsWith(appUrl));
 assert(tab, 'Open the app in an isolated test browser');
 const ws = new WebSocket(tab.webSocketDebuggerUrl);

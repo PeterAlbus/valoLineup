@@ -1,13 +1,15 @@
+import { browserFixture, requireFixtureServer } from './fixtures/browser.mjs';
 // Isolated Chromium integration check: node scripts/check-local-library.mjs [debug URL] [app URL]
 import assert from 'node:assert/strict';
-import { readFile, writeFile } from 'node:fs/promises';
+import { writeFile } from 'node:fs/promises';
 import { randomUUID, createHash } from 'node:crypto';
 import JSZip from 'jszip';
 import sharp from 'sharp';
 import { applyLayers, manifestSchema, readPackage, same } from '../src/package-model.mjs';
 
 const [debugUrl = 'http://127.0.0.1:9335', appUrl = 'http://127.0.0.1:4174/'] = process.argv.slice(2);
-const content = JSON.parse(await readFile('src/data/content.json', 'utf8'));
+await requireFixtureServer(appUrl);
+const content = await browserFixture();
 const base = content.lineups[0];
 async function fixture(label, color, packageId = randomUUID()) {
   const bytes = await sharp({ create: { width: 2, height: 2, channels: 4, background: color } }).png().toBuffer();

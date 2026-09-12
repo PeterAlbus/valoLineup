@@ -1,10 +1,10 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { lineupsSchema } from './content-model.mjs';
+import { assertGeneratedContent } from './content-assertions.mjs';
 
-const content = JSON.parse(await readFile('src/data/content.json', 'utf8'));
+const content = await assertGeneratedContent();
 const packageJson = JSON.parse(await readFile('package.json', 'utf8'));
-const groupIds = new Set(content.lineups.map((lineup) => lineup.target.groupId));
+const groupIds = new Set(content.lineups.map((lineup) => `${lineup.mapId}:${lineup.target.groupId}`));
 const media = content.lineups.flatMap((lineup) => [
   ...lineup.media.stance,
   ...lineup.media.aim,
@@ -39,30 +39,18 @@ assert.equal(content.agents.find((agent) => agent.id === 'miks')?.name, '迷核'
 assert.equal(content.agents.find((agent) => agent.id === 'veto')?.name, '禁灭');
 assert.ok(content.agents.every((agent) => agent.abilities.length >= 4), 'Every agent must expose all active abilities');
 assert.ok(content.agents.every((agent) => agent.icon.endsWith('.webp') && agent.abilities.every((ability) => ability.icon.endsWith('.webp'))), 'Agent media must use local optimized WebP assets');
-assert.equal(content.lineups.length, 72, 'Preserve all imported lineups');
-assert.ok(content.lineups.every((lineup) => lineup.uploader.name === 'PeterAlbus'), 'Preserve the imported attribution');
 assert.equal(new Set(content.lineups.map((lineup) => lineup.id)).size, content.lineups.length, 'Lineup IDs must be unique');
 assert.ok(Array.isArray(content.history), 'Generated content must include repository update history');
 assert.ok(content.lineups.every((lineup) => typeof lineup.instructions === 'string'), 'Every lineup must use one editable instructions string');
-assert.equal(content.lineups.filter((lineup) => lineup.videoBvid).length, 41, 'Preserve the imported teaching videos');
-assert.doesNotThrow(() => lineupsSchema.parse([{ ...content.lineups[0], videoBvid: 'BV17x411w7KC' }]));
-assert.throws(() => lineupsSchema.parse([{ ...content.lineups[0], videoBvid: 'https://www.bilibili.com/video/BV17x411w7KC' }]));
 assert.ok(content.maps.every((map) => !map.image.startsWith('/') && !map.imageHiRes.startsWith('/')), 'Map assets must be relative to the static site base');
 assert.ok(content.agents.every((agent) => !agent.icon.startsWith('/') && agent.abilities.every((ability) => !ability.icon.startsWith('/'))), 'Agent assets must be relative to the static site base');
 assert.ok(content.lineups.every((lineup) => !('source' in lineup)), 'Runtime records must not retain Markdown provenance');
-assert.equal(groupIds.size, 68, 'Preserve all imported destinations');
-assert.equal(content.lineups.filter((lineup) => lineup.target.groupId === 'a-site-scan').length, 3, 'A-site scan destination must offer three methods');
-assert.equal(media.length, 107, 'Preserve all imported images');
 assert.ok(media.every((item) => item.key.endsWith('.webp')), 'Only WebP images are deployed');
 assert.ok(media.every((item) => content.mediaBytes[item.key] > 0), 'Build provides image sizes for live package usage');
 assert.ok(media.every((item) => item.key.startsWith('lineups/') && !item.key.includes('..')), 'Runtime media must use safe logical asset keys');
 assert.ok(content.lineups.every((lineup) => lineup.target.x >= 0 && lineup.target.x <= 1 && lineup.target.y >= 0 && lineup.target.y <= 1), 'Target coordinates must be normalized');
-assert.ok([...groupIds].every((groupId) => {
-  const targets = content.lineups.filter((lineup) => lineup.target.groupId === groupId).map((lineup) => lineup.target);
-  return targets.every((target) => target.x === targets[0].x && target.y === targets[0].y);
-}), 'Every shared destination group must use one exact coordinate');
 assert.equal(packageJson.scripts['content:import'], 'node scripts/import-markdown.mjs', 'Markdown import must remain an explicit command');
 assert.equal(packageJson.scripts['content:import-edits'], 'node scripts/import-edit-package.mjs', 'Edit packages must have one explicit repository import command');
 assert.ok(['predev', 'prebuild', 'test'].every((name) => !packageJson.scripts[name].includes('content:import')), 'Normal development and builds must never import Markdown');
 
-console.log('Content checks passed: 72 lineups, 68 destinations, 107 WebP media files.');
+console.log(`Content checks passed: ${content.lineups.length} lineups, ${groupIds.size} destinations, ${media.length} WebP media references (source-verified, not fixed quotas).`);

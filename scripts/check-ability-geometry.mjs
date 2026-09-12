@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import JSZip from 'jszip';
+import { makeLineup } from './fixtures/lineups.mjs';
 import { abilityGeometry, mapUnitsPerMeter, geometryFor, pathDistance, pathLength, tracePath, effectPosition, effectError, withEffect, stancePosition, moveStance } from '../src/ability-geometry.mjs';
 import { lineupSchema, manifestSchema, readPackage, applyLayers, collectChanges, same } from '../src/package-model.mjs';
 const content = JSON.parse(await readFile(new URL('../src/data/content.json', import.meta.url), 'utf8'));
@@ -15,7 +16,7 @@ for (const record of content.lineups) {
 }
 near(30 * mapUnitsPerMeter.ascent, .21);
 near(30 * mapUnitsPerMeter.bind, .177);
-const base = { ...content.lineups[0], id: 'geometry-check', agentId: 'harbor', abilityId: 'high-tide', target: { groupId: 'geometry-check-target', x: .5, y: .5 }, media: { stance: [], aim: [], effect: [] } };
+const base = makeLineup({ id: 'geometry-check', agentId: 'harbor', abilityId: 'high-tide', target: { groupId: 'geometry-check-target', x: .5, y: .5 }, media: { stance: [], aim: [], effect: [] } });
 const path = withEffect(base, { type: 'path', points: [{ x: .43, y: .5 }, { x: .43, y: .57 }] });
 near(pathDistance(path.target, path.effect.points, 'ascent'), 20);
 assert.equal(effectError(path), null);

@@ -1,10 +1,11 @@
+import { requireFixtureServer } from './fixtures/browser.mjs';
 // Run only in the isolated browser used by test:browser. This resets the test origin's local edits.
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
 import { randomUUID } from 'node:crypto';
 import JSZip from 'jszip';
 
 const [debugUrl = 'http://127.0.0.1:9335', appUrl = 'http://127.0.0.1:4174/'] = process.argv.slice(2);
+await requireFixtureServer(appUrl);
 const tabs = await fetch(`${debugUrl}/json`).then((response) => response.json());
 const tab = tabs.find((item) => item.type === 'page' && item.url.startsWith(appUrl));
 assert(tab, 'Open the app in an isolated browser');
@@ -112,7 +113,7 @@ try {
   // Import via the new main-page entry inside the sandbox, then remove layers independently.
   const manifest = { ...JSON.parse(saved).manual, packageId: randomUUID() };
   const zip = new JSZip(); zip.file('manifest.json', JSON.stringify(manifest));
-  for (const asset of manifest.uploadedAssets) zip.file(asset.key, await readFile(`public/${asset.key}`));
+  for (const asset of manifest.uploadedAssets) zip.file(asset.key, new Uint8Array(await (await fetch(new URL(asset.key, appUrl))).arrayBuffer()));
   const base64 = await zip.generateAsync({ type: 'base64' });
   await evaluate(`(() => {const w=${frame}; const dt=new w.DataTransfer();dt.items.add(new w.File([Uint8Array.from(atob(${JSON.stringify(base64)}),c=>c.charCodeAt(0))],'confirm-fixture.zip',{type:'application/zip'}));const input=${doc}.querySelector('.topbar .package-import input');input.files=dt.files;input.dispatchEvent(new w.Event('change',{bubbles:true}));})()`);
   await wait(`JSON.parse(localStorage.getItem(${JSON.stringify(storageKey)})).packages.length === 1 && !${doc}.querySelector('.package-import input').disabled`);

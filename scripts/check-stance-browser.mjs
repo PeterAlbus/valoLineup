@@ -1,8 +1,10 @@
+import { browserFixture, requireFixtureServer } from './fixtures/browser.mjs';
 // Run only against an isolated Chromium instance; edits stay in the test browser.
 import assert from 'node:assert/strict';
-import { readFile, writeFile } from 'node:fs/promises';
+import { writeFile } from 'node:fs/promises';
 
 const [debugUrl = 'http://127.0.0.1:9335', appUrl = 'http://127.0.0.1:4174/', output] = process.argv.slice(2);
+await requireFixtureServer(appUrl);
 const tab = (await fetch(`${debugUrl}/json`).then((r) => r.json())).find((tab) => tab.type === 'page' && tab.url.startsWith(appUrl));
 assert(tab, 'Open the app in an isolated test browser');
 const ws = new WebSocket(tab.webSocketDebuggerUrl);
@@ -50,7 +52,7 @@ async function mouse(type, point) {
   await send('Input.dispatchMouseEvent', { type, ...point, button: 'left', buttons: type === 'mouseReleased' ? 0 : 1, clickCount: 1 });
 }
 
-const content = JSON.parse(await readFile('src/data/content.json', 'utf8'));
+const content = await browserFixture();
 const base = content.lineups[0];
 const make = (id, abilityId, target) => ({ ...base, id, title: id, agentId: 'sova', abilityId, target, media: { stance: [], aim: [], effect: [] } });
 const target = { groupId: 'stance-methods', x: .6, y: .4 };

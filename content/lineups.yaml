@@ -14,6 +14,9 @@
     groupId: a-site-scan
     x: 0.29186
     y: 0.2166
+  stance:
+    x: 0.69876
+    y: 0.23875
   instructions: 两格蓄力无反弹
   media:
     stance:
@@ -50,6 +53,9 @@
     groupId: a-site-scan
     x: 0.29186
     y: 0.2166
+  stance:
+    x: 0.69897
+    y: 0.23074
   instructions: 一次反弹满格蓄力
   media:
     stance:
@@ -86,6 +92,9 @@
     groupId: a-site-scan
     x: 0.29186
     y: 0.2166
+  stance:
+    x: 0.61357
+    y: 0.24556
   instructions: 建筑物边缘转角，一格蓄力
   media:
     stance:
@@ -122,6 +131,9 @@
     groupId: a-site-fast
     x: 0.32099
     y: 0.21682
+  stance:
+    x: 0.68525
+    y: 0.23824
   instructions: 顶住木箱，一格蓄力
   media:
     stance: []
@@ -153,6 +165,9 @@
     groupId: a-site-upper
     x: 0.25584
     y: 0.08337
+  stance:
+    x: 0.56622
+    y: 0.29801
   instructions: 天空图形尖端，一格蓄力
   media:
     stance:
@@ -189,6 +204,9 @@
     groupId: mid-eaves
     x: 0.43889
     y: 0.43387
+  stance:
+    x: 0.64438
+    y: 0.38278
   instructions: 一次反弹满格蓄力，中路右侧死角可以藏人
   media:
     stance:
@@ -225,6 +243,9 @@
     groupId: mid-arch
     x: 0.42571
     y: 0.49514
+  stance:
+    x: 0.68447
+    y: 0.38357
   instructions: L型电线下方，两次反弹满格蓄力
   media:
     stance:
@@ -261,6 +282,9 @@
     groupId: mid-arch-inner
     x: 0.3717
     y: 0.47114
+  stance:
+    x: 0.68253
+    y: 0.39056
   instructions: 路灯下方，一次反弹满格蓄力
   media:
     stance:
@@ -297,6 +321,9 @@
     groupId: mid-ult-setup
     x: 0.29303
     y: 0.51981
+  stance:
+    x: 0.67218
+    y: 0.39018
   instructions: 背靠墙，满格蓄力
   media:
     stance: []
@@ -328,6 +355,9 @@
     groupId: mid-utility
     x: 0.3503
     y: 0.51439
+  stance:
+    x: 0.64267
+    y: 0.38287
   instructions: ""
   media:
     stance: []
@@ -354,6 +384,9 @@
     groupId: b-window
     x: 0.39603
     y: 0.43736
+  stance:
+    x: 0.537
+    y: 0.66673
   instructions: 满格蓄力
   media:
     stance: []
@@ -385,6 +418,9 @@
     groupId: b-eaves
     x: 0.21416
     y: 0.68492
+  stance:
+    x: 0.53725
+    y: 0.77619
   instructions: 一次反弹满格蓄力，16:9UI描点（蓄力条左侧）
   media:
     stance:
@@ -421,6 +457,9 @@
     groupId: b-tree
     x: 0.20631
     y: 0.82126
+  stance:
+    x: 0.50264
+    y: 0.75272
   instructions: ""
   media:
     stance: []
@@ -452,6 +491,9 @@
     groupId: b-platform
     x: 0.24947
     y: 0.61768
+  stance:
+    x: 0.48211
+    y: 0.75389
   instructions: 满格蓄力
   media:
     stance: []
@@ -483,6 +525,9 @@
     groupId: a-retake
     x: 0.30546
     y: 0.21684
+  stance:
+    x: 0.15059
+    y: 0.23353
   instructions: 满格蓄力跳射
   media:
     stance:
@@ -519,6 +564,9 @@
     groupId: a-outside
     x: 0.54665
     y: 0.30061
+  stance:
+    x: 0.2668
+    y: 0.08288
   instructions: 一格蓄力
   media:
     stance:
@@ -539,32 +587,6 @@
         original:
           key: lineups/ascent-sova-16/effect-430468ad-dc09-49eb-adb7-4f3610e99f64.png
           sha256: e03bf1ad64096146286af6a039991d577ed3724cb23c74d0f755d16de1a550e8
-- id: ascent-sova-17
-  mapId: ascent
-  agentId: sova
-  abilityId: recon-bolt
-  uploader:
-    name: PeterAlbus
-    source: curated
-    bilibiliUid: "2003822"
-  title: 开大箭
-  side: defense
-  area: A点
-  videoBvid: BV1dDLV6zE15
-  target:
-    groupId: a-retake
-    x: 0.30546
-    y: 0.21684
-  instructions: ""
-  media:
-    stance: []
-    aim:
-      - key: lineups/ascent-sova-17/aim-01-290c7982350e3786.webp
-        alt: 开大箭瞄点图 1
-        original:
-          key: lineups/ascent-sova-17/aim-01.png
-          sha256: 4e0c01058c281f2f47d3f77b3831aa3c13e42cdf65a6e6939c297223d0983503
-    effect: []
 - id: ascent-sova-18
   mapId: ascent
   agentId: sova
@@ -581,6 +603,9 @@
     groupId: b-support
     x: 0.27541
     y: 0.85299
+  stance:
+    x: 0.14742
+    y: 0.37371
   instructions: ""
   media:
     stance:
@@ -617,6 +642,9 @@
     groupId: mid-water-tower
     x: 0.35935
     y: 0.51797
+  stance:
+    x: 0.29171
+    y: 0.55863
   instructions: 跳射射到水塔上
   media:
     stance: []
@@ -643,6 +671,9 @@
     groupId: mid-second-timing
     x: 0.52281
     y: 0.4015
+  stance:
+    x: 0.15482
+    y: 0.44793
   instructions: 瞄准45度斜的墙壁，一格反弹满格蓄力，跳射合适，站位随意
   media:
     stance: []
@@ -674,6 +705,9 @@
     groupId: b-shock
     x: 0.45133
     y: 0.75495
+  stance:
+    x: 0.2105
+    y: 0.63779
   instructions: ""
   media:
     stance: []
@@ -700,6 +734,9 @@
     groupId: b-outside-platform
     x: 0.54029
     y: 0.76692
+  stance:
+    x: 0.20911
+    y: 0.76572
   instructions: |-
     一格蓄力
     替换为雷击箭可处理kj小鸡
@@ -738,6 +775,9 @@
     groupId: b-outside-roof
     x: 0.62189
     y: 0.71251
+  stance:
+    x: 0.2571
+    y: 0.60488
   instructions: 两格蓄力一格反弹
   media:
     stance: []
@@ -764,6 +804,9 @@
     groupId: b-anti-rush
     x: 0.28863
     y: 0.696
+  stance:
+    x: 0.19516
+    y: 0.61512
   instructions: 站警家角落，一次反弹满格蓄力，射关门按钮的屋檐上
   media:
     stance: []
@@ -793,8 +836,11 @@
   videoBvid: ""
   target:
     groupId: b-boathouse
-    x: 0.22169
-    y: 0.78035
+    x: 0.32684
+    y: 0.60609
+  stance:
+    x: 0.25922
+    y: 0.89041
   instructions: 满格蓄力
   media:
     stance: []
@@ -804,32 +850,6 @@
         original:
           key: lineups/ascent-sova-25/aim-01.png
           sha256: 5f9eeeb5e62d7ad019a08f9bba202974bb2e053d547120f7d69fca939d8db066
-    effect: []
-- id: ascent-sova-26
-  mapId: ascent
-  agentId: sova
-  abilityId: recon-bolt
-  uploader:
-    name: PeterAlbus
-    source: curated
-    bilibiliUid: "2003822"
-  title: 支援A，射进点墙上
-  side: defense
-  area: B点
-  videoBvid: BV1dDLV6zE15
-  target:
-    groupId: a-retake
-    x: 0.30546
-    y: 0.21684
-  instructions: 站绿箱房檐边角向上移动少许
-  media:
-    stance: []
-    aim:
-      - key: lineups/ascent-sova-26/aim-01-13c7337ab86daaaf.webp
-        alt: 支援A，射进点墙上瞄点图 1
-        original:
-          key: lineups/ascent-sova-26/aim-01.png
-          sha256: 98d2f26f028f8964d13097333dfacf6e6e73361739f5272ced504705a4626f53
     effect: []
 - id: bind-fade-8cd238d1-19b1-4faf-88c1-860f81ab6196
   mapId: bind
@@ -847,6 +867,9 @@
     groupId: bind-fade-8cd238d1-19b1-4faf-88c1-860f81ab6196-target
     x: 0.33477
     y: 0.60367
+  stance:
+    x: 0.31453
+    y: 0.38535
   instructions: 站位瞄准地砖，描点瞄棱往下拉，跑到准星和黑色方块对齐跳投
   media:
     stance:
@@ -883,6 +906,9 @@
     groupId: bind-fade-254c2450-47ad-447e-b353-18e3f2d05332-target
     x: 0.17434
     y: 0.56447
+  stance:
+    x: 0.21648
+    y: 0.41506
   instructions: 顶住光幕，跳投
   media:
     stance: []
@@ -940,6 +966,9 @@
     groupId: bind-fade-486250fe-4807-4b6d-898b-dc01284f5bf4-target
     x: 0.86119
     y: 0.48017
+  stance:
+    x: 0.79323
+    y: 0.35212
   instructions: 瞄准交点，跑一步跳投
   media:
     stance:
@@ -976,6 +1005,9 @@
     groupId: bind-fade-428b9bdd-5961-4a5a-9243-00c863829166-target
     x: 0.6335
     y: 0.30161
+  stance:
+    x: 0.55791
+    y: 0.15897
   instructions: 跑到人走到阴阳分界线处跳投，容错较大
   media:
     stance: []
@@ -1007,6 +1039,9 @@
     groupId: bind-fade-6cb958ca-6b8a-41d2-aa68-53fcc4cde3e4-target
     x: 0.72554
     y: 0.39676
+  stance:
+    x: 0.70872
+    y: 0.52138
   instructions: 跳投
   media:
     stance: []
@@ -1032,6 +1067,9 @@
     groupId: bind-fade-bb067581-69a3-4c4b-a3ff-874bf6f97f6e-target
     x: 0.63658
     y: 0.34092
+  stance:
+    x: 0.63223
+    y: 0.50734
   instructions: 瞄准房檐上区域，随手跳投
   media:
     stance: []
@@ -1053,6 +1091,9 @@
     groupId: bind-fade-24928079-2b31-4032-9c1d-81d96421601a-target
     x: 0.34474
     y: 0.30458
+  stance:
+    x: 0.41718
+    y: 0.51815
   instructions: 瞄准建筑物左侧区域，跑跳投
   media:
     stance: []
@@ -1078,6 +1119,9 @@
     groupId: bind-fade-0a61c151-1a90-40cc-bac7-ced5d2a0104f-target
     x: 0.22005
     y: 0.2948
+  stance:
+    x: 0.14896
+    y: 0.4557
   instructions: 靠墙角，第二个突起往上一点，跑跳投（快碰到突起时跳投）
   media:
     stance: []

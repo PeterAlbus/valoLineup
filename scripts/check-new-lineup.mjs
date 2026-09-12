@@ -1,8 +1,9 @@
+import { browserFixture, requireFixtureServer } from './fixtures/browser.mjs';
 // Run only against an isolated Chromium instance; edits stay in the test browser.
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
 
 const [debugUrl = 'http://127.0.0.1:9335', appUrl = 'http://127.0.0.1:4174/'] = process.argv.slice(2);
+await requireFixtureServer(appUrl);
 const tab = (await fetch(`${debugUrl}/json`).then((r) => r.json())).find((tab) => tab.type === 'page' && tab.url.startsWith(appUrl));
 assert(tab, 'Open the app in an isolated test browser');
 const ws = new WebSocket(tab.webSocketDebuggerUrl);
@@ -73,7 +74,7 @@ async function save() {
 }
 const storageKey = `valo-lineup:v4:${new URL(appUrl).pathname}`;
 const library = `JSON.parse(localStorage.getItem(${JSON.stringify(storageKey)}))`;
-const content = JSON.parse(await readFile(new URL('../src/data/content.json', import.meta.url), 'utf8'));
+const content = await browserFixture();
 try {
   await send('Page.enable'); await size(1440, 900);
   await send('Browser.setDownloadBehavior', { behavior: 'deny' });
