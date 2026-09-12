@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import JSZip from 'jszip';
-import { abilityGeometry, mapUnitsPerMeter, geometryFor, pathDistance, pathLength, tracePath, effectPosition, effectError, withEffect } from '../src/ability-geometry.mjs';
+import { abilityGeometry, mapUnitsPerMeter, geometryFor, pathDistance, pathLength, tracePath, effectPosition, effectError, withEffect, stancePosition, moveStance } from '../src/ability-geometry.mjs';
 import { lineupSchema, manifestSchema, readPackage, applyLayers, collectChanges, same } from '../src/package-model.mjs';
 const content = JSON.parse(await readFile(new URL('../src/data/content.json', import.meta.url), 'utf8'));
 const near = (a, b) => assert(Math.abs(a - b) < 1e-8, `${a} != ${b}`);
@@ -11,8 +11,7 @@ for (const [agentId, abilities] of Object.entries(abilityGeometry)) for (const a
 }
 for (const record of content.lineups) {
   assert(same(lineupSchema.parse(record), record), 'Existing records round-trip unchanged');
-  geometryFor(record);
-  assert(!Object.hasOwn(record, 'effect'), 'Rendering does not write geometry into content');
+  assert.equal(effectError(record), null, 'Imported skill settings are valid');
 }
 near(30 * mapUnitsPerMeter.ascent, .21);
 near(30 * mapUnitsPerMeter.bind, .177);
@@ -51,10 +50,10 @@ for (const version of [4, 5]) {
 console.log('Ability geometry checks passed: map scales, legacy records, bounded paths, optional fields and v4/v5 ZIP round-trips.');
 
 assert.equal(geometryFor({agentId:'jett', abilityId:'cloudburst'}).shape, 'circle');
-assert.equal(geometryFor({agentId:'tejo', abilityId:'stealth-drone'}).maxDistance, 30);
+assert.equal(geometryFor({agentId:'tejo', abilityId:'stealth-drone'}).maxDistance, 45);
 const drone = { ...base, agentId: 'tejo', abilityId: 'stealth-drone' };
-assert.equal(effectError(withEffect(drone, {type:'path', points:[{x:.395,y:.5},{x:.395,y:.605}]})), null);
-assert(effectError(withEffect(drone, {type:'path', points:[{x:.395,y:.5},{x:.395,y:.615}]})));
+assert.equal(effectError(withEffect(drone, {type:'path', points:[{x:.395,y:.5},{x:.395,y:.71}]})), null);
+assert(effectError(withEffect(drone, {type:'path', points:[{x:.395,y:.5},{x:.395,y:.72}]})));
 
 const origin = { x: .2, y: .2 }, limit = .2, tolerance = .002;
 let trace = [];
@@ -84,3 +83,28 @@ const loop = [{x:.3,y:.2},{x:.3,y:.3},{x:.2,y:.3},{x:.2,y:.21}];
 const closedLoop = tracePath(origin, loop, origin, 1, tolerance);
 assert.equal(closedLoop.length, 5, 'Crossing an older part while drawing keeps the existing curve');
 near(pathLength(origin, closedLoop), .4);
+
+const standing = { ...direction, stance: { x: .2, y: .3 } };
+assert.deepEqual(stancePosition(standing), standing.stance);
+assert.equal(stancePosition(direction), undefined);
+assert.equal(stancePosition(base), undefined, 'A path skill without a path has no stance');
+assert.deepEqual(stancePosition(path), path.target);
+assert(!lineupSchema.safeParse({ ...path, stance: { x: .2, y: .3 } }).success);
+for (const stance of [{ x: -1, y: .2 }, { x: .2, y: 1.1 }, { x: NaN, y: .5 }]) assert(!lineupSchema.safeParse({ ...direction, stance }).success);
+const movedStance = moveStance(standing, { x: .3, y: .4 });
+assert.deepEqual(movedStance.target, standing.target, 'Moving a stance preserves its destination');
+assert.deepEqual(movedStance.effect, standing.effect);
+const movedStart = moveStance(path, { x: .48, y: .51 });
+assert.deepEqual(stancePosition(movedStart), { ...path.target, x: .48, y: .51 });
+assert.deepEqual(movedStart.effect, path.effect, 'Moving a path origin preserves its remaining curve and endpoint');
+assert.equal(moveStance(path, { x: .99, y: .99 }), path, 'Path origin dragging respects maximum distance');
+for (const version of [4, 5]) {
+  const manifest = manifestSchema.parse({ format: 'valo-lineup-edit-package', version, packageId: crypto.randomUUID(), revision: 1, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), author: base.uploader, changes: { added: [standing], updated: [] }, uploadedAssets: [] });
+  const zip = new JSZip(); zip.file('manifest.json', JSON.stringify(manifest));
+  const restored = await readPackage(await zip.generateAsync({ type: 'uint8array' }));
+  assert.deepEqual(restored.manifest.changes.added[0].stance, standing.stance);
+  const applied = applyLayers([], [restored.manifest]);
+  assert.deepEqual(applied.lineups[0].stance, standing.stance);
+  assert.deepEqual(collectChanges(null, applied.lineups, [movedStance]).updated[0].after.stance, movedStance.stance);
+}
+console.log('Stance checks passed: optional coordinates, derived path origins, movement bounds and ZIP persistence.');

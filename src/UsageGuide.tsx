@@ -28,7 +28,7 @@ function GuideDialog({ mobile, onClose }: { mobile: boolean; onClose: () => void
         <button autoFocus className="guide-close" type="button" aria-label="关闭使用引导" onClick={onClose}>×</button>
       </div>
       <div className="guide-body">
-        {mobile ? <p className="guide-desktop-note">建议通过 PC 端访问本页，PC 端支持个人点位编辑。<a href={desktopUrl} target="_blank" rel="noreferrer">PC 端访问地址 <span aria-hidden="true">↗</span></a></p> : null}
+        {mobile ? <p className="guide-desktop-note">建议通过 PC 端访问本页，PC 端支持个人点位编辑。可长按复制以下网址，在电脑浏览器中打开。<span className="guide-desktop-url">{desktopUrl}</span></p> : null}
         <p>本页面是基于 B 站 Toy 的 Lineup 点位集合，目前仍在开发中，主要用于查阅教学视频中的站位、瞄点和技能效果。</p>
         <ol className="guide-steps">
           <li><span aria-hidden="true">01</span><div><h3>点位查看</h3><p>{mobile

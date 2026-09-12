@@ -85,5 +85,52 @@
     "added": 15,
     "updated": 1,
     "deleted": 0
+  },
+  {
+    "id": "12b74569-b997-49d7-8f04-5eb40afa38cf",
+    "packageId": "e4e2ced3-f403-4d2d-b7c5-ca3a9bd012df",
+    "revision": 7,
+    "appliedAt": "2026-09-10T02:04:09.456Z",
+    "author": {
+      "name": "PeterAlbus",
+      "source": "toy",
+      "toyOpenId": "toid_v1_k01_JZ_p5JVd_Vj1Qw8HfyAGfgs3Ya26Y3BH5Bx3OIM3NR_a"
+    },
+    "mapIds": [
+      "split",
+      "icebox",
+      "breeze",
+      "fracture"
+    ],
+    "lineupIds": [
+      "split-sova-973f77f2-921c-458d-9a1a-f7efab0220bf",
+      "split-skye-f33ae705-c529-490d-a6b8-ca1e7cfc0877",
+      "split-skye-0c448a98-ed69-42f1-94df-088ed3cd60a4",
+      "split-skye-281474f4-c37f-456d-bbaa-595ea15efe0a",
+      "icebox-skye-13e82cab-3c78-4e91-b184-3dfd5a50fb7e",
+      "icebox-sova-a5523ba0-9105-427d-be98-05d796655d0b",
+      "icebox-sova-57dabac8-8338-488b-ae82-20c59d65832f",
+      "icebox-sova-3189fe96-fcf4-44dc-a8c3-8f5b36918fef",
+      "icebox-sova-647ba87b-b915-4cd3-ad11-5a9a0d050c83",
+      "icebox-sova-5ad81fdc-812c-4bc9-bd67-bd69d680e838",
+      "icebox-sova-a6a653f2-f19e-43de-ba67-0905498e7d79",
+      "icebox-sova-111c45b1-8ca2-4338-a96c-2897a6099660",
+      "icebox-sova-5a4a1c0b-9d33-4bf1-b5cd-26ced2615955",
+      "icebox-sova-bcf96a5e-fd68-4559-b983-ec5cf6a66a7f",
+      "breeze-sova-1ef021b0-3493-4554-97d8-c9512f1ccec1",
+      "breeze-sova-d20a9748-470b-4de0-8db8-ed012c9b27bd",
+      "breeze-sova-76e1138d-569f-4aa8-a983-320eb40fbd67",
+      "breeze-sova-36520450-79f2-4cb1-a89e-73dd9d861ded",
+      "fracture-sova-0c00f6c5-e21e-422c-8dec-24c3149ad690",
+      "fracture-breach-af919cdf-8c19-4b91-a73e-012642dd6f81",
+      "fracture-breach-2fa916c4-e154-4952-a9cf-eb15a6cf1ecd",
+      "fracture-breach-f449772a-c284-46b9-b11a-25e15a7ac3a7",
+      "fracture-breach-646db3ae-6ace-4cd2-9aaa-9c65b9f24483",
+      "fracture-breach-0c1c4cb2-7071-473d-a895-364bd4f1312c",
+      "fracture-breach-b4901399-82d3-460d-8041-351709a7e034"
+    ],
+    "added": 25,
+    "updated": 0,
+    "deleted": 0
   }
 ]

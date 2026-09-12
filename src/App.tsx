@@ -16,11 +16,13 @@ import ImageLightbox from './ImageLightbox';
 import ExitEditDialog from './ExitEditDialog';
 import ConfirmDialog from './ConfirmDialog';
 import UsageGuide from './UsageGuide';
+import MapDetailNavigation from './MapDetailNavigation';
 import PackageImport from './PackageImport';
 import AbilityOverlay from './AbilityOverlay';
+import StanceMarkers, { StanceConnections } from './StanceMarkers';
 import AbilityGeometrySummary from './AbilityGeometrySummary';
 import AbilityGeometryEditor, { type GeometryEditing } from './AbilityGeometryEditor';
-import { effectError, effectPosition, geometryFor, withEffect, type AbilityEffect } from './ability-geometry.mjs';
+import { effectError, effectPosition, geometryFor, withEffect, usesPath, stancePosition, moveStance, type AbilityEffect } from './ability-geometry.mjs';
 
 type PendingUpload = {
   key: string;
@@ -179,6 +181,7 @@ export default function App() {
   const newLineupOriginRef = useRef({ lineupId: '', sideFilter: 'attack' as SideFilter });
   const [newLineupPlacement, setNewLineupPlacement] = useState<{ agentId: string; abilityId: string; side: Perspective } | null>(null);
   const [validation, setValidation] = useState<{ id: string; field: 'title' | 'area' | 'videoBvid' } | null>(null);
+  const [stancePlacementId, setStancePlacementId] = useState<string | null>(null);
   const detailPanelRef = useRef<HTMLElement>(null);
   const mapCanvasRef = useRef<HTMLDivElement>(null);
   const mapStageRef = useRef<HTMLDivElement>(null);
@@ -247,6 +250,17 @@ export default function App() {
   const activeLineup = newLineupPlacement ? undefined : activeGroup?.items.find((lineup) => lineup.id === selectedLineupId) ?? activeGroup?.items[0];
   const activeAgent = agents.find((agent) => agent.id === selectedAgentId) ?? availableAgents[0] ?? agents[0];
   const activeGeometryEditing = isEditMode && geometryEditing?.id === activeLineup?.id ? geometryEditing : null;
+  const isPlacingStance = isEditMode && stancePlacementId === activeLineup?.id;
+  useEffect(() => {
+    if (!isPlacingStance) return;
+    const cancel = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); setStancePlacementId(null); }
+    };
+    window.addEventListener('keydown', cancel);
+    return () => window.removeEventListener('keydown', cancel);
+  }, [isPlacingStance]);
+  const canAddStance = isEditMode && activeLineup && !usesPath(activeLineup) && !stancePosition(activeLineup);
+  const visibleMethods = (activeGroup?.items ?? []).map((lineup) => activeGeometryEditing?.id === lineup.id ? withEffect(lineup, activeGeometryEditing.effect) : lineup);
   const activeAbility = activeAgent?.abilities.find((ability) => ability.id === activeLineup?.abilityId);
   const perspectiveRotation = activeMap.perspectives[perspective].rotation;
   const pointForView = (point: Point) => rotatePoint(point, perspectiveRotation);
@@ -280,6 +294,7 @@ export default function App() {
   function selectMap(mapId: string) {
     if (showHistory) location.hash = '';
     if (mapId === selectedMapId) return;
+    setStancePlacementId(null);
     setGeometryEditing(null);
     const nextLineups = lineups.filter((lineup) => lineup.mapId === mapId);
     const first = nextLineups.find((lineup) => sideFilter === 'all' || lineup.side === sideFilter);
@@ -288,7 +303,7 @@ export default function App() {
     if (newLineupPlacement || newLineupId) {
       if (newLineupId) {
         const draft = draftLineups.find((item) => item.id === newLineupId)!;
-        setDraftLineups((current) => current.map((item) => item.id === newLineupId ? { ...withEffect(item), mapId } : item));
+        setDraftLineups((current) => current.map((item) => item.id === newLineupId ? { ...withEffect(item), mapId, stance: undefined } : item));
         setNewLineupPlacement({ agentId: draft.agentId, abilityId: draft.abilityId, side: draft.side });
       }
       return;
@@ -305,6 +320,7 @@ export default function App() {
 
   function selectAgent(agentId: string) {
     if (newLineupPlacement || newLineupId) return;
+    setStancePlacementId(null);
     setGeometryEditing(null);
     const first = filteredMapLineups.find((lineup) => lineup.agentId === agentId);
     setSelectedAgentId(agentId);
@@ -316,9 +332,36 @@ export default function App() {
 
   function selectGroup(group: (typeof groups)[number]) {
     if (newLineupPlacement || (newLineupId && !group.items.some((item) => item.id === newLineupId))) return;
+    setStancePlacementId(null);
     setGeometryEditing(null);
     setSelectedGroupId(group.id);
     setSelectedLineupId(group.items[0].id);
+  }
+
+  function selectMethod(id: string) {
+    if (newLineupId && newLineupId !== id) return;
+    setStancePlacementId(null);
+    setGeometryEditing(null);
+    setSelectedLineupId(id);
+  }
+
+  function beginStancePlacement() {
+    if (!canAddStance || !activeLineup || isEditorBusy) return;
+    setGeometryEditing(null);
+    setStancePlacementId(activeLineup.id);
+    mapStageRef.current?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }
+
+  function updateStance(id: string, point: Point) {
+    if (!isEditMode || isEditorBusy) return;
+    setDraftLineups((current) => current.map((item) => {
+      if (item.id !== id) return item;
+      const next = moveStance(item, point);
+      if (next !== item && usesPath(item) && current.some((other) => other.id !== id && other.mapId === item.mapId && other.target.groupId === item.target.groupId)) {
+        next.target = { ...next.target, groupId: crypto.randomUUID() };
+      }
+      return next;
+    }));
   }
 
   function selectPerspective(nextPerspective: Perspective) {
@@ -370,7 +413,10 @@ export default function App() {
     if (element.closest('button, input, [data-zoom-controls]') && !(activeGeometryEditing && element.closest('.lineup-pin'))) return;
     const point = mapClickPointRef.current;
     if (!point) return;
-    if (!activeGeometryEditing && newLineupPlacement) createNewLineup(point);
+    if (isPlacingStance && activeLineup) {
+      setDraftLineups((current) => current.map((item) => item.id === activeLineup.id ? { ...item, stance: point } : item));
+      setStancePlacementId(null);
+    } else if (!activeGeometryEditing && newLineupPlacement) createNewLineup(point);
   }
 
   function rawPointFromPointer(clientX: number, clientY: number, directionOnly = false) {
@@ -391,8 +437,9 @@ export default function App() {
   }
 
   function handlePinPointerDown(event: React.PointerEvent<HTMLButtonElement>, group: (typeof groups)[number]) {
-    if (activeGeometryEditing || !isEditMode || isEditorBusy || newLineupPlacement || (newLineupId && !group.items.some((item) => item.id === newLineupId)) || event.button !== 0) return;
+    if (isPlacingStance || activeGeometryEditing || !isEditMode || isEditorBusy || newLineupPlacement || (newLineupId && !group.items.some((item) => item.id === newLineupId)) || event.button !== 0) return;
     window.getSelection()?.removeAllRanges();
+    setStancePlacementId(null);
     setGeometryEditing(null);
     selectGroup(group);
     event.preventDefault();
@@ -443,6 +490,7 @@ export default function App() {
 
   function exitEditMode() {
     if (isEditorBusy) return;
+    setStancePlacementId(null);
     setGeometryEditing(null);
     setIsExitConfirmOpen(false);
     clearPendingUploads();
@@ -455,6 +503,7 @@ export default function App() {
   }
 
   function beginNewLineupPlacement() {
+    setStancePlacementId(null);
     setGeometryEditing(null);
     newLineupOriginRef.current = { lineupId: selectedLineupId, sideFilter };
     setNewLineupPlacement({ agentId: activeAgent.id, abilityId: activeAbility?.id ?? activeAgent.abilities[0].id, side: sideFilter === 'all' ? perspective : sideFilter });
@@ -573,8 +622,13 @@ export default function App() {
   function updateActiveFields(fields: Partial<Pick<Lineup, 'title' | 'side' | 'area' | 'agentId' | 'abilityId'>>) {
     if (!activeLineup) return;
     const changingAbility = (fields.agentId && fields.agentId !== activeLineup.agentId) || (fields.abilityId && fields.abilityId !== activeLineup.abilityId);
-    if (changingAbility) setGeometryEditing(null);
-    setDraftLineups((current) => current.map((item) => item.id === activeLineup.id ? { ...(changingAbility ? withEffect(item) : item), ...fields } : item));
+    if (changingAbility) { setGeometryEditing(null); setStancePlacementId(null); }
+    setDraftLineups((current) => current.map((item) => {
+      if (item.id !== activeLineup.id) return item;
+      const next = { ...(changingAbility ? withEffect(item) : item), ...fields };
+      if (usesPath(next)) delete next.stance;
+      return next;
+    }));
     setValidation(null);
     setEditorNotice(null);
     if (fields.agentId) setSelectedAgentId(fields.agentId);
@@ -601,6 +655,7 @@ export default function App() {
     if (!activeLineup) return;
     const spec = geometryFor(activeLineup);
     if (!spec || !('interaction' in spec) || spec.interaction !== type) return;
+    setStancePlacementId(null);
     setGeometryEditing({ id: activeLineup.id, type, effect: activeLineup.effect });
     setEditorNotice(null);
   }
@@ -909,9 +964,9 @@ export default function App() {
               ref={mapStageRef}
               {...mapHandlers}
               aria-busy={mapImage.status === 'loading'}
-              className={`map-stage ${mapViewport.zoom > MIN_ZOOM ? 'is-zoomed' : ''} ${mapViewport.zoom >= 4 ? 'is-detail-zoom' : ''} ${isDraggingMap ? 'is-dragging' : ''} ${isEditMode && newLineupPlacement ? 'is-placing' : ''}`}
+              className={`map-stage ${mapViewport.zoom > MIN_ZOOM ? 'is-zoomed' : ''} ${mapViewport.zoom >= 4 ? 'is-detail-zoom' : ''} ${isDraggingMap ? 'is-dragging' : ''} ${isEditMode && (newLineupPlacement || isPlacingStance) ? 'is-placing' : ''}`}
               onDoubleClick={(event) => {
-                if (newLineupPlacement || activeGeometryEditing || (event.target as HTMLElement).closest('button, input, [data-zoom-controls]') || mapImage.status !== 'ready') return;
+                if (newLineupPlacement || isPlacingStance || activeGeometryEditing || (event.target as HTMLElement).closest('button, input, [data-zoom-controls]') || mapImage.status !== 'ready') return;
                 setZoom(mapViewport.zoom * 1.5, event.clientX, event.clientY);
               }}
               onPointerDown={handleMapPointerDown}
@@ -922,6 +977,7 @@ export default function App() {
               onClick={handleMapClick}
             >
               <div className="map-grid" />
+              {!showHistory && !isEditMode && activeLineup ? <MapDetailNavigation mapRef={mapStageRef} detailRef={detailPanelRef} /> : null}
               <div className="perspective-controls" data-zoom-controls aria-label="地图视角">
                 {(['attack', 'defense'] as const).map((side) => (
                   <button
@@ -946,12 +1002,14 @@ export default function App() {
                   <button onClick={cancelNewLineup} type="button">取消新增</button>
                 </div>
               ) : null}
+              {isPlacingStance ? <div className="placement-banner stance-placement" role="status"><span><b>添加站位</b>点击地图上的英雄站位</span><button type="button" onClick={() => setStancePlacementId(null)}>取消 · Esc</button></div> : null}
               <div className="map-canvas" ref={mapCanvasRef} style={{ visibility: mapImage.status === 'ready' ? 'visible' : 'hidden' }}>
                 <div
                   className="map-transform-layer"
                   style={{ transform: `translate3d(${mapViewport.x}px, ${mapViewport.y}px, 0) scale(${mapViewport.zoom}) rotate(${perspectiveRotation}deg)` }}
                 >
                   <img key={activeMap.id} className="map-image" alt={`${activeMap.name}俯视地图`} draggable="false" src={assetUrl(activeMap.imageHiRes)} />
+                  <StanceConnections lineups={visibleMethods} activeId={activeLineup?.id} />
                   {activeLineup ? <AbilityOverlay lineup={activeGeometryEditing ? withEffect(activeLineup, activeGeometryEditing.effect) : activeLineup} /> : null}
                 </div>
                 {activeMap.sites.map((site) => (
@@ -1005,7 +1063,10 @@ export default function App() {
                     </button>
                   );
                 })}
-                {isEditMode && !isMobileView && activeLineup && mapImage.status === 'ready' ? <AbilityGeometryEditor key={activeLineup.id}
+                <StanceMarkers lineups={visibleMethods} activeId={activeLineup?.id} icon={assetUrl(activeAgent.icon)} editable={isEditMode && !isMobileView}
+                  disabled={isEditorBusy || Boolean(activeGeometryEditing) || isPlacingStance || Boolean(newLineupPlacement)}
+                  pointStyle={pointStyle} pointFromPointer={rawPointFromPointer} onSelect={selectMethod} onMove={updateStance} />
+                {isEditMode && !isMobileView && !isPlacingStance && activeLineup && mapImage.status === 'ready' ? <AbilityGeometryEditor key={activeLineup.id}
                   lineup={activeLineup} editing={activeGeometryEditing} busy={isEditorBusy} rotation={perspectiveRotation} pathTolerance={8 / ((mapCanvasRef.current?.clientWidth || 1) * mapViewport.zoom)}
                   pointStyle={pointStyle} pointFromPointer={rawPointFromPointer} onStart={startGeometryEditing}
                   onPreview={(effect) => { if (activeGeometryEditing) setGeometryEditing({ ...activeGeometryEditing, effect }); }}
@@ -1015,7 +1076,7 @@ export default function App() {
             </div>
           </section>
 
-          <aside className="detail-panel" ref={detailPanelRef} aria-label="点位资料">
+          <aside className={`detail-panel ${!isEditMode && activeLineup ? 'has-scroll-navigation' : ''}`} id="lineup-detail" ref={detailPanelRef} tabIndex={-1} aria-label="点位资料">
             {newLineupPlacement ? (
               <div className="placement-guide"><span className="draft-badge">新增点位 · 选择落点</span><h2>在地图上放下标点</h2><p>点击技能最终落点，再填写名称、说明和截图。</p><p>滚轮缩放，按住地图拖动。切换地图后，请重新选择落点。</p><button className="new-lineup-cancel" onClick={cancelNewLineup} type="button">取消新增</button></div>
             ) : activeLineup && activeGroup ? (
@@ -1029,7 +1090,7 @@ export default function App() {
                           aria-pressed={lineup.id === activeLineup.id}
                           className={lineup.id === activeLineup.id ? 'is-active' : ''}
                           key={lineup.id}
-                          disabled={Boolean(newLineupId)} onClick={() => { setGeometryEditing(null); setSelectedLineupId(lineup.id); }}
+                          disabled={Boolean(newLineupId)} onClick={() => selectMethod(lineup.id)}
                           type="button"
                         >
                           <span>{String(index + 1).padStart(2, '0')}</span>
@@ -1051,6 +1112,7 @@ export default function App() {
                   <button className="new-lineup-confirm" disabled={isEditorBusy} onClick={confirmNewLineup} type="button">确认新增</button>
                 </div></div> : null}
                 {isEditMode ? <section className="lineup-fields">
+                  {canAddStance ? <button className="stance-add" type="button" disabled={isEditorBusy || isPlacingStance} onClick={beginStancePlacement}>＋ 添加站位</button> : null}
                   <label>点位名称<input aria-label="点位名称" maxLength={200} required aria-invalid={validation?.id === activeLineup.id && validation.field === 'title'} value={activeLineup.title} onChange={(event) => updateActiveFields({ title: event.target.value })} /></label>
                   <label>阵营<select aria-label="点位阵营" value={activeLineup.side} onChange={(event) => updateActiveFields({ side: event.target.value as Perspective })}><option value="attack">进攻方</option><option value="defense">防守方</option></select></label>
                   <div className="area-field"><label htmlFor="lineup-area">区域</label><div className="area-input-row">
@@ -1102,7 +1164,13 @@ export default function App() {
                   if (!items.length && !isEditMode) return null;
                   return (
                     <section className={`media-section ${isEditMode ? 'is-editable' : ''}`} key={kind}>
-                      <p><span>0{sectionIndex + 1}</span>{mediaLabels[kind]}</p>
+                      <div className="media-section-heading">
+                        <p><span>0{sectionIndex + 1}</span>{mediaLabels[kind]}</p>
+                        {kind === 'stance' && canAddStance ? <button className="stance-add" type="button" disabled={isEditorBusy || isPlacingStance} onClick={beginStancePlacement}>
+                          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z" /><circle cx="12" cy="10" r="2" /></svg>
+                          在地图上标记站位
+                        </button> : null}
+                      </div>
                       {items.map((item) => (
                         <div className={`media-item ${item.pending ? 'is-pending' : ''}`} key={item.id}>
                           <button
@@ -1116,7 +1184,10 @@ export default function App() {
                             <span aria-hidden="true">↗ 放大查看</span>
                           </button>
                           {item.pending ? <em>未保存</em> : !item.src ? <em>本地图片缺失，请重新导入原包</em> : null}
-                          {isEditMode ? <button className="image-remove" type="button" onClick={() => removeImage(kind, item.id)}>删除此图片</button> : null}
+                          {isEditMode ? <div className="media-item-actions"><button className="image-remove" type="button" onClick={() => removeImage(kind, item.id)}>
+                            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 10v7m4-7v7" /></svg>
+                            删除此图片
+                          </button></div> : null}
                         </div>
                       ))}
                       {isEditMode ? (

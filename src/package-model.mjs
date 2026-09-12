@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import JSZip from 'jszip';
-import { effectError } from './ability-geometry.mjs';
+import { effectError, usesPath } from './ability-geometry.mjs';
 
 export const PACKAGE_VERSION = 5;
 export const MAX_IMAGE_BYTES = 12 * 1024 * 1024;
@@ -29,11 +29,13 @@ export const lineupSchema = z.object({
   videoBvid: z.union([z.literal(''), z.string().regex(/^BV[0-9A-Za-z]{10}$/, '教学视频必须填写完整 BV 号')]),
   target: z.object({ groupId: id, x: z.number().min(0).max(1), y: z.number().min(0).max(1) }).passthrough(),
   effect: effectSchema.optional(),
+  stance: effectPoint.optional(),
   instructions: z.string().max(1000),
   media: z.object({ stance: z.array(mediaItemSchema), aim: z.array(mediaItemSchema), effect: z.array(mediaItemSchema) }).passthrough(),
 }).passthrough().superRefine((lineup, ctx) => {
   const error = effectError(lineup);
   if (error) ctx.addIssue({ code: 'custom', path: ['effect'], message: error });
+  if (usesPath(lineup) && lineup.stance) ctx.addIssue({ code: 'custom', path: ['stance'], message: '路径技能的站位由路径起点确定' });
   for (const item of allMedia([lineup])) if (!item.key.startsWith(`lineups/${lineup.id}/`)) ctx.addIssue({ code: 'custom', message: '图片必须位于所属点位目录' });
 });
 export const lineupsSchema = z.array(lineupSchema);

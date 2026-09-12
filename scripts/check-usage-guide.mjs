@@ -92,7 +92,7 @@ try {
     await evaluate(`localStorage.removeItem(${JSON.stringify(guideKey)})`);
     await send('Page.navigate',{url:appUrl}); await wait("document.querySelector('.usage-guide')?.open");
     assert.equal(await evaluate("document.querySelector('.guide-body').firstElementChild.className"),'guide-desktop-note');
-    assert.equal(await evaluate("document.querySelector('.guide-desktop-note a').href"),'https://www.bilibili.com/toy/valo-lineup/index.html');
+    assert.equal(await evaluate("document.querySelector('.guide-desktop-url').textContent"),'https://www.bilibili.com/toy/valo-lineup/index.html');
     assert.equal(await evaluate("document.querySelectorAll('.editor-enter').length"),0);
     assert(!(await evaluate("document.querySelector('.guide-body').textContent")).includes('确认新增'));
     await assertDialogFits(); await viewportFits(`Guide ${width}`); await screenshot(`guide-mobile-${width}`);
@@ -113,5 +113,5 @@ try {
   await escape(); assert(await evaluate("Boolean(document.querySelector('.placement-guide'))"),'Help does not cancel pending placement');
   await click('.placement-guide .new-lineup-cancel');
   await click('.editor-cancel'); await wait("document.querySelector('.exit-edit-dialog')?.open"); await click('.exit-edit-confirm');
-  console.log('PASS first-visit guide, desktop/mobile copy, PC link, persistent dismissal, title entry, history access, focus restoration, scroll lock and 320px/landscape layouts');
+  console.log('PASS first-visit guide, desktop/mobile copy, PC address text, persistent dismissal, title entry, history access, focus restoration, scroll lock and 320px/landscape layouts');
 } finally { ws.close(); }

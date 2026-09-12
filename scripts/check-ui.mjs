@@ -73,6 +73,31 @@ try {
   const mobileStageTop = await evaluate("document.querySelector('.map-stage').getBoundingClientRect().top");
   assert(mobileStageTop < 190, 'Mobile map starts near the top of the screen');
   assert(!await evaluate("document.querySelector('.editing-toolbar, .editor-enter, .agent-tabs')"), 'Phone browsing has no editing toolbar or expanding hero tabs');
+  for (const [width, height] of [[320,844], [390,844], [844,390]]) {
+    await size(width, height);
+    assert(await evaluate("document.querySelector('.map-detail-jump').getBoundingClientRect().width > 0"), 'Stacked map offers a details button');
+    assert(await evaluate("document.querySelector('.map-detail-jump').getBoundingClientRect().left >= document.querySelector('.perspective-controls').getBoundingClientRect().right"), 'Details button does not overlap perspective controls');
+    assert(!await evaluate("document.querySelector('.page-back-top')"), 'Back to top stays hidden while the map is visible');
+    const selectedPin = await evaluate("document.querySelector('.lineup-pin.is-active')?.getAttribute('aria-label')");
+    await click('.map-detail-jump');
+    await wait("document.querySelector('.page-back-top') && Math.abs(document.querySelector('.detail-panel').getBoundingClientRect().top - 12) < 2");
+    assert.equal(await evaluate("document.activeElement.id"), 'lineup-detail', 'Detail navigation moves keyboard focus to the reading section');
+    assert.equal(await evaluate("document.querySelector('.lineup-pin.is-active')?.getAttribute('aria-label')"), selectedPin, 'Navigation preserves the selected point');
+    assert(await evaluate("(() => { const button=document.querySelector('.page-back-top').getBoundingClientRect(), text=document.querySelector('.detail-lead').getBoundingClientRect(); return button.left >= text.right && button.right <= innerWidth; })()"), 'Back to top stays outside the text column');
+    await viewportFits(`Detail navigation ${width}`);
+    await screenshot(`mobile-details-${width}`);
+    await click('.page-back-top');
+    await wait("window.scrollY === 0 && !document.querySelector('.page-back-top')");
+  }
+  await size(1440);
+  assert(await evaluate("document.querySelector('.map-detail-jump').getBoundingClientRect().width === 0"), 'Side-by-side desktop layout hides scroll navigation');
+  await size(980,900);
+  await click('.map-detail-jump');
+  await wait("Math.abs(document.querySelector('.detail-panel').getBoundingClientRect().top - document.querySelector('.workspace-toolbar').getBoundingClientRect().bottom - 12) < 2");
+  await evaluate("window.scrollTo(0,0)");
+  await wait("window.scrollY === 0 && !document.querySelector('.page-back-top')");
+  console.log('PASS detail navigation, map visibility, text clearance, selection preservation and desktop/tablet/phone layouts');
+  await size(390,844);
   const content = JSON.parse(await readFile('src/data/content.json', 'utf8'));
   const fixture = {
     format: 'valo-lineup-edit-package', version: 5, packageId: 'baaa5138-4667-48ac-9117-19c971e68fc1', revision: 1,
@@ -111,6 +136,7 @@ try {
   assert(emptyMapIndex >= 0, 'The empty-map scenario needs a map without built-in points');
   await click(`.map-card:nth-child(${emptyMapIndex + 1})`);
   await wait("document.querySelector('.mobile-agent-select select').disabled");
+  assert(!await evaluate("document.querySelector('.map-detail-jump, .page-back-top')"), 'Empty maps have no detail navigation');
   assert((await evaluate("document.querySelector('.empty-state').textContent")).includes('切换阵营'));
   await click('.history-toggle'); await wait("document.querySelector('.local-edit-card')");
   assert(await evaluate("!document.querySelector('.editing-toolbar') && !document.querySelector('.local-edit-card .action-primary').disabled"), 'Saved package download remains available in mobile history');

@@ -58,7 +58,7 @@ export const abilityGeometry = Object.freeze({
   sage: { 'slow-orb': circle(6.44), 'barrier-orb': direction('wall', 10.4, 1.5, '玉城') },
   skye: { regrowth: circle(18), trailblazer: guided(45, circle(3.5)), 'guiding-light': guided(36) },
   sova: { 'shock-bolt': circle(4), 'recon-bolt': circle(30, '侦查范围'), 'owl-drone': guided(31), 'hunters-fury': direction('rectangle', 66, 3.52) },
-  tejo: { 'special-delivery': circle(5.25), 'guided-salvo': circle(4.5), 'stealth-drone': guided(30, circle(16, '侦查范围')), armageddon: direction('rectangle', 32, 12) },
+  tejo: { 'special-delivery': circle(5.25), 'guided-salvo': circle(4.5), 'stealth-drone': guided(45, circle(16, '侦查范围')), armageddon: direction('rectangle', 32, 12) },
   veto: { chokehold: circle(6.58), interceptor: circle(18, '拦截范围') },
   viper: { 'snake-bite': circle(4.5), 'poison-cloud': circle(4.5), 'toxic-screen': direction('line', 60, .3, '毒幕'), 'vipers-pit': circle(9) },
   vyse: { razorvine: circle(6.25), shear: direction('wall', 12, 1, '裁断'), 'steel-garden': circle(28) },
@@ -66,6 +66,14 @@ export const abilityGeometry = Object.freeze({
 });
 export function geometryFor(lineup) { return abilityGeometry[lineup.agentId]?.[lineup.abilityId]; }
 export function effectPosition(lineup) { return lineup.effect?.type === 'path' ? lineup.effect.points.at(-1) : lineup.target; }
+export function usesPath(lineup) { return geometryFor(lineup)?.interaction === 'path'; }
+export function stancePosition(lineup) { return usesPath(lineup) ? lineup.effect?.type === 'path' ? lineup.target : undefined : lineup.stance; }
+export function moveStance(lineup, point) {
+  if (!usesPath(lineup)) return { ...lineup, stance: point };
+  if (lineup.effect?.type !== 'path') return lineup;
+  const next = { ...lineup, target: { ...lineup.target, ...point } };
+  return effectError(next) ? lineup : next;
+}
 const distanceBetween = (a, b) => Math.hypot(b.x - a.x, b.y - a.y);
 export function pathLength(start, points) {
   let length = 0, previous = start;

@@ -3,7 +3,7 @@ import type { AbilityEffect } from './ability-geometry.mjs';
 export type Uploader = { name: string; source: 'toy' | 'local' | 'curated'; toyOpenId?: string; bilibiliUid?: string };
 export type MediaKind = 'stance' | 'aim' | 'effect';
 export type MediaItem = { key: string; alt: string; original?: { key: string; sha256: string } };
-export type Lineup = { id: string; mapId: string; agentId: string; abilityId: string; uploader: Uploader; title: string; side: 'attack' | 'defense'; area: string; videoBvid: string; target: { groupId: string; x: number; y: number }; effect?: AbilityEffect; instructions: string; media: Record<MediaKind, MediaItem[]> };
+export type Lineup = { id: string; mapId: string; agentId: string; abilityId: string; uploader: Uploader; title: string; side: 'attack' | 'defense'; area: string; videoBvid: string; target: { groupId: string; x: number; y: number }; effect?: AbilityEffect; stance?: { x: number; y: number }; instructions: string; media: Record<MediaKind, MediaItem[]> };
 export type Asset = MediaItem & { lineupId: string; kind: MediaKind; mimeType: string; size: number; sha256: string };
 export type Changes = { added: Lineup[]; updated: { id: string; before: Lineup; after: Lineup }[]; deleted?: { id: string; before: Lineup }[] };
 export type Manifest = { format: 'valo-lineup-edit-package'; version: 4 | 5; packageId: string; revision: number; createdAt: string; updatedAt: string; author: Uploader; changes: Changes; uploadedAssets: Asset[] };
