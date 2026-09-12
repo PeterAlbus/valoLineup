@@ -1,5 +1,5 @@
 import JSZip from 'jszip';
-import { allMedia, changedLineups, collectChanges, compressPackage, manifestSchema, sha256, verifyImage, type Lineup, type Manifest, type Uploader, type PackageData, type MediaKind } from './package-model.mjs';
+import { allMedia, changedLineups, collectChanges, compactPackage, compressPackage, manifestSchema, sha256, verifyImage, type Lineup, type Manifest, type Uploader, type PackageData, type MediaKind, type RepositoryAssets, type Asset } from './package-model.mjs';
 import { encodeWebp } from './image-compression';
 
 export type PackageUpload = { key: string; lineupId: string; kind: MediaKind; alt: string; file: File };
@@ -8,6 +8,8 @@ export type PackageUpload = { key: string; lineupId: string; kind: MediaKind; al
 export async function buildManualPackage(options: {
   previous: Manifest | null; packageId: string; author: Uploader;
   startLineups: Lineup[]; lineups: Lineup[];
+  repositoryAssets?: RepositoryAssets;
+  localAssets?: Asset[];
   image: (lineupId: string, key: string) => Promise<Blob>;
 }): Promise<PackageData> {
   const { previous, packageId, author, startLineups, lineups, image } = options;
@@ -26,7 +28,7 @@ export async function buildManualPackage(options: {
     verifyImage(bytes, asset);
     manifest.uploadedAssets.push(asset); blobs.set(asset.sha256, blob);
   }
-  return compressPackage({ manifest: manifestSchema.parse(manifest), blobs }, encodeWebp);
+  return compressPackage(compactPackage({ manifest, blobs }, options.repositoryAssets, options.localAssets), encodeWebp);
 }
 
 export async function downloadEditPackage({ manifest, blobs }: PackageData) {

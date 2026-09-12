@@ -2,7 +2,7 @@ import { z } from 'zod';
 import JSZip from 'jszip';
 import { effectError, usesPath } from './ability-geometry.mjs';
 
-export const PACKAGE_VERSION = 5;
+export const PACKAGE_VERSION = 6;
 export const MAX_IMAGE_BYTES = 12 * 1024 * 1024;
 export const MAX_PACKAGE_BYTES = 128 * 1024 * 1024;
 const id = z.string().regex(/^[a-z0-9-]+$/).max(160);
@@ -39,8 +39,13 @@ export const lineupSchema = z.object({
   for (const item of allMedia([lineup])) if (!item.key.startsWith(`lineups/${lineup.id}/`)) ctx.addIssue({ code: 'custom', message: '图片必须位于所属点位目录' });
 });
 export const lineupsSchema = z.array(lineupSchema);
+const assetSchema = z.object({
+  key: mediaItemSchema.shape.key, lineupId: id, kind: z.enum(['stance', 'aim', 'effect']),
+  alt: mediaItemSchema.shape.alt, mimeType: z.enum(['image/png', 'image/jpeg', 'image/webp']),
+  size: z.number().int().positive().max(MAX_IMAGE_BYTES), sha256: z.string().regex(/^[a-f0-9]{64}$/),
+}).passthrough();
 export const manifestSchema = z.object({
-  format: z.literal('valo-lineup-edit-package'), version: z.union([z.literal(4), z.literal(5)]),
+  format: z.literal('valo-lineup-edit-package'), version: z.union([z.literal(4), z.literal(5), z.literal(6)]),
   packageId: z.string().uuid(), revision: z.number().int().positive(),
   createdAt: z.string().datetime(), updatedAt: z.string().datetime(), author: uploaderSchema,
   changes: z.object({
@@ -48,11 +53,8 @@ export const manifestSchema = z.object({
     updated: z.array(z.object({ id, before: lineupSchema, after: lineupSchema }).passthrough()).max(10000),
     deleted: z.array(z.object({ id, before: lineupSchema }).passthrough()).max(10000).optional(),
   }).passthrough(),
-  uploadedAssets: z.array(z.object({
-    key: mediaItemSchema.shape.key, lineupId: id, kind: z.enum(['stance', 'aim', 'effect']),
-    alt: mediaItemSchema.shape.alt, mimeType: z.enum(['image/png', 'image/jpeg', 'image/webp']),
-    size: z.number().int().positive().max(MAX_IMAGE_BYTES), sha256: z.string().regex(/^[a-f0-9]{64}$/),
-  }).passthrough()).max(500),
+  uploadedAssets: z.array(assetSchema).max(500),
+  referencedAssets: z.array(assetSchema).max(500).optional(),
 }).passthrough().superRefine((manifest, ctx) => {
   const fail = (message) => ctx.addIssue({ code: 'custom', message });
   const records = changedLineups(manifest);
@@ -61,11 +63,15 @@ export const manifestSchema = z.object({
   if (new Set(operationIds).size !== operationIds.length) fail('包内点位操作 ID 重复');
   if (deleted.some((item) => item.id !== item.before.id)) fail('删除记录的 ID 不一致');
   if (manifest.version === 4 && deleted.length) fail('删除操作需要 v5 格式，不能被旧客户端静默忽略');
+  if (manifest.version !== 6 && manifest.referencedAssets?.length) fail('图片引用需要 v6 格式');
+  if (manifest.referencedAssets?.some(asset => asset.mimeType !== 'image/webp' || !asset.key.endsWith('.webp'))) fail('已有图片引用必须为 WebP');
   if (manifest.changes.updated.some((update) => update.id !== update.before.id || update.id !== update.after.id)) fail('编辑不能改变点位 ID');
   const media = allMedia(records);
-  const assets = new Map(manifest.uploadedAssets.map((asset) => [asset.key, asset]));
-  if (assets.size !== manifest.uploadedAssets.length || new Set(media.map((item) => item.key)).size !== media.length) fail('图片路径重复');
-  if (assets.size !== media.length) fail('包必须包含所有变更后点位的完整图片');
+  const declared = allAssets(manifest);
+  const assets = new Map(declared.map((asset) => [asset.key, asset]));
+  if (declared.length > 500) fail('包内图片声明超过 500 张');
+  if (assets.size !== declared.length || new Set(media.map((item) => item.key)).size !== media.length) fail('图片路径重复');
+  if (assets.size !== media.length) fail('包必须包含所有变更后点位的完整图片声明');
   for (const item of media) {
     const asset = assets.get(item.key);
     if (!asset || asset.lineupId !== item.lineupId || asset.kind !== item.kind || asset.alt !== item.alt) fail('图片声明与点位引用不一致');
@@ -77,6 +83,71 @@ export function allMedia(lineups) {
   return lineups.flatMap((lineup) => ['stance', 'aim', 'effect'].flatMap((kind) => lineup.media[kind].map((item) => ({ ...item, lineupId: lineup.id, kind }))));
 }
 export function changedLineups(manifest) { return [...manifest.changes.added, ...manifest.changes.updated.map((change) => change.after)]; }
+export function allAssets(manifest) { return [...manifest.uploadedAssets, ...(manifest.referencedAssets ?? [])]; }
+export function matchesRepositoryAsset(asset, repositoryAssets) {
+  const original = repositoryAssets[asset.key];
+  return Boolean(original && original.sha256 === asset.sha256 && original.size === asset.size && original.mimeType === asset.mimeType);
+}
+export function matchesAvailableAsset(asset, repositoryAssets, localAssets = []) {
+  return matchesRepositoryAsset(asset, repositoryAssets) || localAssets.some(original => original.key === asset.key && original.sha256 === asset.sha256 && original.size === asset.size && original.mimeType === asset.mimeType);
+}
+// Reuse matching images in either the repository or other installed package layers.
+export function compactPackage(data, repositoryAssets = {}, localAssets = []) {
+  const manifest = structuredClone(data.manifest);
+  const declared = allAssets(manifest);
+  manifest.uploadedAssets = declared.filter(asset => !matchesAvailableAsset(asset, repositoryAssets, localAssets));
+  const references = declared.filter(asset => matchesAvailableAsset(asset, repositoryAssets, localAssets));
+  if (references.length) { manifest.version = 6; manifest.referencedAssets = references; }
+  else { manifest.version = manifest.changes.deleted?.length ? 5 : 4; delete manifest.referencedAssets; }
+  return { ...data, manifest: manifestSchema.parse(manifest) };
+}
+function imageFailure(manifest, asset, error) {
+  return { lineupId: asset.lineupId, title: changedLineups(manifest).find(record => record.id === asset.lineupId)?.title ?? asset.lineupId, key: asset.key, message: error instanceof Error ? error.message : String(error) };
+}
+function excludeFailedLineups(data, failures) {
+  if (!failures.length) return data;
+  const skipped = new Set(failures.map(item => item.lineupId));
+  const manifest = structuredClone(data.manifest);
+  manifest.changes.added = manifest.changes.added.filter(item => !skipped.has(item.id));
+  manifest.changes.updated = manifest.changes.updated.filter(item => !skipped.has(item.id));
+  manifest.uploadedAssets = manifest.uploadedAssets.filter(item => !skipped.has(item.lineupId));
+  if (manifest.referencedAssets) manifest.referencedAssets = manifest.referencedAssets.filter(item => !skipped.has(item.lineupId));
+  if (!packageStats(manifest).lineups) throw new Error(`没有可导入的点位；${failures.map(item => `${item.title}：${item.message}（${item.key}）`).join('；')}`);
+  const used = new Set(allAssets(manifest).map(asset => asset.sha256));
+  return { manifest: manifestSchema.parse(manifest), blobs: new Map([...data.blobs].filter(([digest]) => used.has(digest))), failures };
+}
+// A failed image skips its whole lineup, without blocking independent lineup changes.
+export async function resolvePackageReferences(data, resolve) {
+  const blobs = new Map(data.blobs);
+  const failures = [...(data.failures ?? [])];
+  for (const asset of data.manifest.referencedAssets ?? []) {
+    if (failures.some(item => item.lineupId === asset.lineupId)) continue;
+    try {
+      const blob = await resolve(asset);
+      const bytes = new Uint8Array(await blob.arrayBuffer());
+      verifyImage(bytes, asset);
+      if (await sha256(bytes) !== asset.sha256) throw new Error('引用图片内容不匹配，请先同步来源更新包');
+      blobs.set(asset.sha256, new Blob([bytes], { type: asset.mimeType }));
+    } catch (error) { failures.push(imageFailure(data.manifest, asset, error)); }
+  }
+  return excludeFailedLineups({ ...data, blobs }, failures);
+}
+// Reimporting a partial revision must not remove the old version of a failed lineup.
+export function retainFailedChanges(data, previous) {
+  if (!previous || previous.packageId !== data.manifest.packageId || !data.failures?.length) return data;
+  const skipped = new Set(data.failures.map(item => item.lineupId));
+  const manifest = structuredClone(data.manifest);
+  manifest.changes.added.push(...previous.changes.added.filter(item => skipped.has(item.id)));
+  manifest.changes.updated.push(...previous.changes.updated.filter(item => skipped.has(item.id)));
+  const deleted = previous.changes.deleted?.filter(item => skipped.has(item.id)) ?? [];
+  if (deleted.length) manifest.changes.deleted = [...(manifest.changes.deleted ?? []), ...deleted];
+  manifest.uploadedAssets.push(...previous.uploadedAssets.filter(item => skipped.has(item.lineupId)));
+  const references = previous.referencedAssets?.filter(item => skipped.has(item.lineupId)) ?? [];
+  if (references.length) manifest.referencedAssets = [...(manifest.referencedAssets ?? []), ...references];
+  if (manifest.referencedAssets?.length) manifest.version = 6;
+  else if (manifest.changes.deleted?.length && manifest.version === 4) manifest.version = 5;
+  return { ...data, manifest: manifestSchema.parse(manifest) };
+}
 export function same(left, right) {
   const canonical = (value) => Array.isArray(value) ? value.map(canonical) : value && typeof value === 'object' ? Object.fromEntries(Object.keys(value).sort().map((key) => [key, canonical(value[key])])) : value;
   return JSON.stringify(canonical(left)) === JSON.stringify(canonical(right));
@@ -116,18 +187,22 @@ export async function readPackage(bytes) {
   const entry = zip.file('manifest.json');
   if (!entry || entry._data.uncompressedSize > 8 * 1024 * 1024) throw new Error('编辑包资料缺失或过大，请重新获取完整文件');
   const raw = JSON.parse(await entry.async('string'));
-  if (![4, 5].includes(raw.version)) throw new Error('当前版本无法读取这个编辑包，请使用本页面导出的编辑包');
+  if (![4, 5, 6].includes(raw.version)) throw new Error('当前版本无法读取这个编辑包，请使用本页面导出的编辑包');
   const manifest = manifestSchema.parse(raw);
   const blobs = new Map();
+  const failures = [];
   for (const asset of manifest.uploadedAssets) {
-    const file = zip.file(asset.key);
-    if (!file || file._data.uncompressedSize !== asset.size) throw new Error('编辑包中的图片缺失或损坏，请重新获取完整文件');
-    const data = await file.async('uint8array');
-    verifyImage(data, asset);
-    if (await sha256(data) !== asset.sha256) throw new Error('编辑包中的图片损坏，请重新获取完整文件');
-    blobs.set(asset.sha256, new Blob([data], { type: asset.mimeType }));
+    if (failures.some(item => item.lineupId === asset.lineupId)) continue;
+    try {
+      const file = zip.file(asset.key);
+      if (!file || file._data.uncompressedSize !== asset.size) throw new Error('编辑包中的图片缺失或损坏，请重新获取完整文件');
+      const data = await file.async('uint8array');
+      verifyImage(data, asset);
+      if (await sha256(data) !== asset.sha256) throw new Error('编辑包中的图片损坏，请重新获取完整文件');
+      blobs.set(asset.sha256, new Blob([data], { type: asset.mimeType }));
+    } catch (error) { failures.push(imageFailure(manifest, asset, error)); }
   }
-  return { manifest, blobs };
+  return excludeFailedLineups({ manifest, blobs }, failures);
 }
 
 export function collectChanges(previous, startLineups, lineups) {
@@ -171,6 +246,7 @@ export function sameLineup(left, right, migrations = {}) {
 export async function compressPackage(data, encode) {
   const manifest = structuredClone(data.manifest);
   const blobs = new Map();
+  for (const asset of manifest.referencedAssets ?? []) if (data.blobs.has(asset.sha256)) blobs.set(asset.sha256, data.blobs.get(asset.sha256));
   for (const asset of manifest.uploadedAssets) {
     const originalBlob = data.blobs.get(asset.sha256);
     if (!originalBlob) throw new Error('部分图片缺失，请重新添加图片或导入原编辑包');
@@ -188,5 +264,5 @@ export async function compressPackage(data, encode) {
     Object.assign(asset, { key: newKey, mimeType: 'image/webp', size: blob.size, sha256: digest });
     verifyImage(bytes, asset); blobs.set(digest, blob);
   }
-  return { manifest: manifestSchema.parse(manifest), blobs };
+  return { ...data, manifest: manifestSchema.parse(manifest), blobs };
 }

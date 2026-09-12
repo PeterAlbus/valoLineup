@@ -1,4 +1,4 @@
-import { randomUUID } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
 import { access, mkdir, readFile, rename, writeFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { parse, stringify } from 'yaml';
@@ -154,8 +154,13 @@ export async function validateContent(content, { root = process.cwd(), verifyAss
     mapIds: z.array(z.string()), lineupIds: z.array(z.string()), added: z.number().int().nonnegative(), updated: z.number().int().nonnegative(), deleted: z.number().int().nonnegative().optional(),
   }).passthrough()).parse(content.history ?? []);
   const mediaBytes = {};
-  if (verifyAssets) for (const lineup of lineups) for (const item of [...lineup.media.stance, ...lineup.media.aim, ...lineup.media.effect]) mediaBytes[item.key] = (await stat(path.join(root, 'public', item.key))).size;
-  return { maps, agents, lineups, history, mediaBytes, imageMigrations: content.imageMigrations ?? {} };
+  const mediaAssets = {};
+  if (verifyAssets) for (const lineup of lineups) for (const item of [...lineup.media.stance, ...lineup.media.aim, ...lineup.media.effect]) {
+    const file = path.join(root, 'public', item.key);
+    mediaBytes[item.key] = (await stat(file)).size;
+    mediaAssets[item.key] = { size: mediaBytes[item.key], sha256: createHash('sha256').update(await readFile(file)).digest('hex'), mimeType: item.key.endsWith('.webp') ? 'image/webp' : item.key.endsWith('.png') ? 'image/png' : 'image/jpeg' };
+  }
+  return { maps, agents, lineups, history, mediaBytes, mediaAssets, imageMigrations: content.imageMigrations ?? {} };
 }
 
 export async function buildContent(root = process.cwd(), { quiet = false } = {}) {

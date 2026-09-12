@@ -1,4 +1,4 @@
-import { compressPackage, manifestSchema, type Manifest, type PackageData, type Asset } from './package-model.mjs';
+import { allAssets, compressPackage, manifestSchema, type Manifest, type PackageData, type Asset } from './package-model.mjs';
 import { encodeWebp } from './image-compression';
 
 export const STORAGE_KEY = `valo-lineup:v4:${new URL(import.meta.env.BASE_URL, location.href).pathname}`;
@@ -35,7 +35,7 @@ export async function readImage(asset: Asset): Promise<Blob> {
       ? resolve(request.result) : reject(new Error('部分图片丢失，请重新导入原编辑包恢复图片'));
   });
 }
-function assetsOf(library: LocalLibrary) { return [...library.packages, ...(library.manual ? [library.manual] : [])].flatMap((item) => item.uploadedAssets); }
+function assetsOf(library: LocalLibrary) { return [...library.packages, ...(library.manual ? [library.manual] : [])].flatMap(allAssets); }
 const migrations = new Map<string, Promise<LocalLibrary>>();
 export async function migrateLegacyImages(library: LocalLibrary): Promise<LocalLibrary> {
   if (!assetsOf(library).some((asset) => asset.mimeType !== 'image/webp')) return library;
@@ -49,7 +49,7 @@ async function convertLegacyImages(library: LocalLibrary) {
   const incoming = new Map<string, Blob>();
   const convert = async (manifest: Manifest) => {
     const blobs = new Map<string, Blob>();
-    for (const asset of manifest.uploadedAssets) blobs.set(asset.sha256, await readImage(asset));
+    for (const asset of allAssets(manifest)) blobs.set(asset.sha256, await readImage(asset));
     const data = await compressPackage({ manifest, blobs }, encodeWebp);
     data.blobs.forEach((blob, key) => incoming.set(key, blob));
     return data.manifest;

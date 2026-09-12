@@ -32,6 +32,7 @@ try {
     { ...good, lineups: [...good.lineups, good.lineups[0]] },
     { ...good, lineups: [{ ...good.lineups[0], instructions: '内容丢失' }] },
     { ...good, mediaBytes: {} },
+    { ...good, mediaAssets: {} },
     { ...good, history: [] },
   ]) {
     await writeFile(generatedPath, JSON.stringify(broken));

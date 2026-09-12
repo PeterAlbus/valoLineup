@@ -145,7 +145,9 @@ try {
   const manualId = await evaluate(`${storage}.manual.packageId`);
   assert.equal(await evaluate(`${storage}.manual.author.toyOpenId`), 'test-private-id');
   assert.equal(await evaluate(`${storage}.manual.changes.updated[0].after.uploader.bilibiliUid`), '2003822', 'Editing keeps original uploader');
-  assert.equal(await evaluate(`${storage}.manual.uploadedAssets.length`), 2);
+  assert.equal(await evaluate(`${storage}.manual.uploadedAssets.length`), 1, 'Only the newly pasted image is carried');
+  assert.equal(await evaluate(`${storage}.manual.referencedAssets.length`), 1, 'Unchanged image from Overlay A is a reference');
+  assert.equal(await evaluate(`${storage}.manual.version`), 6);
   assert(await evaluate(`${storage}.manual.uploadedAssets.every(asset=>asset.mimeType==='image/webp' && asset.key.endsWith('.webp'))`));
   assert.equal(await evaluate(`Number(document.querySelector('.package-size progress').value)`), await evaluate(`${storage}.manual.uploadedAssets.reduce((sum,asset)=>sum+asset.size,0)`));
   await evaluate(`document.querySelector('.media-add-actions').scrollIntoView({block:'center'})`);

@@ -32,7 +32,7 @@ export default function HistoryPage({ packages, manual, dirty, entries, maps, bu
         return <li className="history-card" key={manifest.packageId} data-package-id={manifest.packageId}>
           <h3>{index + 1}. {manifest.author.name} · {stats.maps} 个地图 / {stats.lineups} 个点位</h3>
           <p>{date(manifest.updatedAt)} · 新增 {stats.added} / 修改 {stats.updated} / 删除 {stats.deleted}</p>
-          <p>图片 {formatBytes(manifest.uploadedAssets.reduce((sum, asset) => sum + asset.size, 0))} / 128 MB</p>
+          <p>随包图片 {formatBytes(manifest.uploadedAssets.reduce((sum, asset) => sum + asset.size, 0))} / 128 MB{manifest.referencedAssets?.length ? ` · 引用 ${manifest.referencedAssets.length} 张已有图片` : ''}</p>
           <small>第 {manifest.revision} 次更新</small>
           <div className="history-actions"><button aria-label={`上移第 ${index + 1} 个更新包`} disabled={busy || editing || index === 0} onClick={() => onMove(index, -1)} type="button">↑ 上移</button><button aria-label={`下移第 ${index + 1} 个更新包`} disabled={busy || editing || index === packages.length - 1} onClick={() => onMove(index, 1)} type="button">↓ 下移</button><button className="action-danger" disabled={busy || editing} onClick={() => onRemove(index)} type="button">删除更新包</button></div>
         </li>;

@@ -3,7 +3,7 @@ import { constants } from 'node:fs';
 import { copyFile, mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
-import { readPackage, sameLineup, compressPackage, allMedia, validateReferences } from '../src/package-model.mjs';
+import { readPackage, sameLineup, compressPackage, allMedia, validateReferences, resolvePackageReferences } from '../src/package-model.mjs';
 import { encodeWebp } from './webp.mjs';
 import { buildContent, readSourceContent, stringifyLineups, validateContent, writeTextAtomic } from './content-model.mjs';
 
@@ -15,14 +15,17 @@ if (!packageArgument || ['-h', '--help'].includes(packageArgument)) {
 const root = process.cwd();
 const lineupsPath = path.join(root, 'content', 'lineups.yaml');
 const historyPath = path.join(root, 'content', 'history.json');
-const { manifest, blobs } = await compressPackage(await readPackage(await readFile(path.resolve(packageArgument))), encodeWebp);
+const { manifest, blobs, failures = [] } = await resolvePackageReferences(await compressPackage(await readPackage(await readFile(path.resolve(packageArgument))), encodeWebp), async (asset) => {
+  try { return new Blob([await readFile(path.join(root, 'public', asset.key))], { type: asset.mimeType }); }
+  catch (error) { if (error.code === 'ENOENT') throw new Error('引用图片缺失，请先同步来源更新包到仓库'); throw error; }
+});
 const current = await validateContent(await readSourceContent(root), { root, verifyAssets: true });
 validateReferences(manifest, current.maps, current.agents);
 const currentById = new Map(current.lineups.map((lineup) => [lineup.id, lineup]));
 const same = (left, right) => sameLineup(left, right, current.imageMigrations);
 const accepted = new Map();
 const alreadyApplied = [];
-const conflicts = [];
+const conflicts = failures.map(item => ({ id: item.lineupId, title: item.title, reason: `${item.message}（${item.key}）` }));
 for (const lineup of manifest.changes.added) {
   const existing = currentById.get(lineup.id);
   if (!existing) accepted.set(lineup.id, { kind: 'added', record: lineup });

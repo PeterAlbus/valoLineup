@@ -1,4 +1,5 @@
 import { readFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
 import { parse } from 'yaml';
 import { makeLineups } from './lineups.mjs';
 import { fixtureImage } from './content.mjs';
@@ -12,7 +13,9 @@ export async function browserFixture() {
   first.videoBvid = 'BV17x411w7KC';
   for (const kind of ['stance', 'aim', 'effect']) first.media[kind] = [{ key: `lineups/${first.id}/${kind}.webp`, alt: `固定测试 ${kind}` }];
   const bytes = await fixtureImage();
-  return { maps, agents, lineups, history: [], imageMigrations: {}, mediaBytes: Object.fromEntries(Object.values(first.media).flat().map(item => [item.key, bytes.length])) };
+  const media = Object.values(first.media).flat();
+  const descriptor = { size: bytes.length, sha256: createHash('sha256').update(bytes).digest('hex'), mimeType: 'image/webp' };
+  return { maps, agents, lineups, history: [], imageMigrations: {}, mediaBytes: Object.fromEntries(media.map(item => [item.key, bytes.length])), mediaAssets: Object.fromEntries(media.map(item => [item.key, descriptor])) };
 }
 
 export async function requireFixtureServer(appUrl) {

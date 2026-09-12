@@ -16898,6 +16898,533 @@
     "lineups/breeze-sova-d20a9748-470b-4de0-8db8-ed012c9b27bd/aim-2aa6dc7c-02b8-42fc-84ce-afc62ff07567.webp": 30508,
     "lineups/breeze-sova-d20a9748-470b-4de0-8db8-ed012c9b27bd/effect-f001b032-7f9d-4c33-8b00-8d54f62e6b09.webp": 700504
   },
+  "mediaAssets": {
+    "lineups/ascent-sova-01/stance-01-37db7c34d5327278.webp": {
+      "size": 112064,
+      "sha256": "37db7c34d5327278e84a467a450992af11840add7573e486b3a4a2be7bcb67cd",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-01/aim-01-6c44cd2738a7c63e.webp": {
+      "size": 121126,
+      "sha256": "6c44cd2738a7c63eba5623812d9c5195a8bae4b130b0baa695451d9b00c64544",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-01/effect-b9eed742-9e9e-49b5-a450-91d8560246d7-9beae1a744a30792.webp": {
+      "size": 88934,
+      "sha256": "9beae1a744a30792e385c113ee2248956fffeb2187b137bee72f1143a4df73ce",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-02/stance-01-1c3559ea0640c7c6.webp": {
+      "size": 101210,
+      "sha256": "1c3559ea0640c7c64fe7a292f9a53ffbcd060675dc8a1e7418eda277718bb414",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-02/aim-01-2886f9c55ea3cd8c.webp": {
+      "size": 115608,
+      "sha256": "2886f9c55ea3cd8c99e1c542255af4e77a722eb3dd4acaeafa1de866bcea98b5",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-02/effect-bd6284a3-eb36-4bcb-be30-a14c3b9ded00-9beae1a744a30792.webp": {
+      "size": 88934,
+      "sha256": "9beae1a744a30792e385c113ee2248956fffeb2187b137bee72f1143a4df73ce",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-03/stance-01-4a8a74de25da09ad.webp": {
+      "size": 125026,
+      "sha256": "4a8a74de25da09adaecef87b9d0760df356de84296629722a32be2bde1ce3c87",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-03/aim-01-e37f83d71e37f97f.webp": {
+      "size": 145074,
+      "sha256": "e37f83d71e37f97f4adade56c542e3b49f5e64b060d7e1ded90d72106696d16e",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-03/effect-6073d9fb-3a8a-4b2c-b69d-2dca2bb50d66-9beae1a744a30792.webp": {
+      "size": 88934,
+      "sha256": "9beae1a744a30792e385c113ee2248956fffeb2187b137bee72f1143a4df73ce",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-04/aim-01-89e2e6696bafaa92.webp": {
+      "size": 155734,
+      "sha256": "89e2e6696bafaa9295b616127ae2d8e36518932f837de7956974eb2f2bc5c2c1",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-04/effect-86b742a6-f72c-4efa-9299-010057997674-7dfb0168a8d41152.webp": {
+      "size": 76442,
+      "sha256": "7dfb0168a8d41152c925042452d54cd10f2feca5a0f7693ebe4351736f32cbfd",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-05/stance-01-369606672dad12e9.webp": {
+      "size": 100126,
+      "sha256": "369606672dad12e9e151a60b56d1231d8514386bd1abb616c35c1c891896f631",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-05/aim-01-d23b3b4d189c5fa5.webp": {
+      "size": 134324,
+      "sha256": "d23b3b4d189c5fa5b918c04883235f40e93107cd0fc0f10cc5a5701af2c1b569",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-05/effect-77416093-9cbd-4083-b8d9-fb1a16642c09-88c05353ddc4478b.webp": {
+      "size": 73712,
+      "sha256": "88c05353ddc4478bb9459b9c3eeaa2304cf9e1b535e707fb137fa6db4d306097",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-06/stance-01-4464d7646c3a299a.webp": {
+      "size": 88410,
+      "sha256": "4464d7646c3a299a3a91d595a24a8f8b3a35e1b43ce44ff512c06610bfaaba67",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-06/aim-01-d108071afd31f305.webp": {
+      "size": 98350,
+      "sha256": "d108071afd31f3057ab86dcfd6f8a6780a522cdfdc572e93ee088eb9b9461615",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-06/effect-91c38ab9-a6ce-4fcb-b64d-0400047daa8a-00e66fb6d264fd0d.webp": {
+      "size": 49544,
+      "sha256": "00e66fb6d264fd0d53bd0627c3dbcb8c3e561cedd9820a5ace52c8bf32fd6571",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-07/stance-01-a497d83bfabfbfe9.webp": {
+      "size": 110710,
+      "sha256": "a497d83bfabfbfe9f4279ed0329caded99775a26acceaeda0ed4710707a53c2d",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-07/aim-01-90607ca0b41a2fb9.webp": {
+      "size": 144422,
+      "sha256": "90607ca0b41a2fb95ea36b7af5ada9954bd45a1ced5b19cdfd44f7dc0ada7070",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-07/effect-dd6edfa0-adc0-462a-9b21-760fed72c0a4-7b888f7076dfdaa1.webp": {
+      "size": 56974,
+      "sha256": "7b888f7076dfdaa1fc318097a596d63f252a101cec0ca4315e993c6ddb0b925f",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-08/stance-01-4787bc461e3a711a.webp": {
+      "size": 106138,
+      "sha256": "4787bc461e3a711a1a4b35d518add908c262f932de5c945fdcf6102faa5d47ce",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-08/aim-01-e02a5f4ab20f212d.webp": {
+      "size": 141854,
+      "sha256": "e02a5f4ab20f212d3f87fcd5e2a4b790ed77961b1ceb39b50affaf944c210b54",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-08/effect-9041f835-1d33-4e67-a117-af01f86571fa-b3a2f6c46d8a10f8.webp": {
+      "size": 53744,
+      "sha256": "b3a2f6c46d8a10f8c4435cc10090f0d43870eed6fb48f82ddc88174803ff09ad",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-09/aim-01-b3375afdfaddaf73.webp": {
+      "size": 106054,
+      "sha256": "b3375afdfaddaf73d3165d3d1f096c516d4c0b14551e07e8196f9267b61ac0e5",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-09/effect-9a73a6d1-f21a-43d3-8b89-c2f060b6bd5e-eeccee38e9997fd1.webp": {
+      "size": 47288,
+      "sha256": "eeccee38e9997fd1398827a24b8509699f77b95bafa5471fdb0c8a5c06c04261",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-10/aim-01-4894b5c8b7c616d1.webp": {
+      "size": 128108,
+      "sha256": "4894b5c8b7c616d1fe5fde6794f84d07d27b278b4d9894eeeaf7f36c3ae72311",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-11/aim-01-c6f41dd5af781248.webp": {
+      "size": 158534,
+      "sha256": "c6f41dd5af78124846099a8e85f1d1ead7c359fbb360b26fc57434939e2533cd",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-11/effect-88908f6a-dffe-4f3e-b04f-b512e0e06ad8-2f7fb6c29b832a31.webp": {
+      "size": 52976,
+      "sha256": "2f7fb6c29b832a31b832990457b5479d0af4fd248834d48cfeb368f74f28a55e",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-12/stance-01-bbd522fd3f58127a.webp": {
+      "size": 109874,
+      "sha256": "bbd522fd3f58127adb366e9507449f0c2c5540f4eb6f272efc06eec0554d402a",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-12/aim-01-df0f0fc31b0b63f8.webp": {
+      "size": 165724,
+      "sha256": "df0f0fc31b0b63f8b6a6cbf8144da78321ed60f966acddef4268c4430bcb88ef",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-12/effect-89f99a53-f278-4ffc-ad8c-dcb28ff09aa8-d7a7f191f9dd2d7c.webp": {
+      "size": 80566,
+      "sha256": "d7a7f191f9dd2d7cdad6232f52ffe8196723c68d2760c256d984e711662c94ba",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-13/aim-01-f2cc590c39c17d35.webp": {
+      "size": 140160,
+      "sha256": "f2cc590c39c17d355d2dbc9c1ecb33827440b869e6978b522671f10a53dc5d7a",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-13/effect-644cd1f3-5807-45e9-ba05-bc61a8760ccf-533c7ee423e62ee3.webp": {
+      "size": 35608,
+      "sha256": "533c7ee423e62ee3d9cff86f8645f1c41d0a20b0e8fd8b9fd4104cdfaf568753",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-14/aim-01-cf6bcbc1cee00d6f.webp": {
+      "size": 131316,
+      "sha256": "cf6bcbc1cee00d6f18c758848aee83dac812ae783d647dbe93de27301b2a2a36",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-14/effect-9583a87f-d745-4fc3-94f7-94d2d5dfd1db-00aed3479dd59c24.webp": {
+      "size": 63436,
+      "sha256": "00aed3479dd59c24e66419c0ed0a02fb4ffdb7529f407e618fe61111c2345966",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-15/stance-01-2fd3e18d0531c687.webp": {
+      "size": 105848,
+      "sha256": "2fd3e18d0531c687e5c896b64de1d5d4087ec63ce4a54a27ce45a9a15cb50c81",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-15/aim-01-91c5e7dc9b4972f7.webp": {
+      "size": 111698,
+      "sha256": "91c5e7dc9b4972f74d3db1c6763fa9f84f7f8ff9d6e3ddb683e5bf54a317e452",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-15/aim-02-21fbdce1a0d1536b.webp": {
+      "size": 130732,
+      "sha256": "21fbdce1a0d1536be5bd0a95fb587deb3aa3c6cce3ef081c51ff9e32774fe4b4",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-16/stance-01-6ab7cd0599c0a3ca.webp": {
+      "size": 90366,
+      "sha256": "6ab7cd0599c0a3ca455d81f49c7ae28e10e8731f1afc4c168b592e047187127c",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-16/aim-01-3f178e967389c672.webp": {
+      "size": 151302,
+      "sha256": "3f178e967389c6725d66cc90d42b5f63c572172af573317e77910406f0c2ea76",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-16/effect-430468ad-dc09-49eb-adb7-4f3610e99f64-1b8e71735ea71466.webp": {
+      "size": 67314,
+      "sha256": "1b8e71735ea714665e6e708c04d63b932c9af9c710c911caa65183faa9658154",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-18/stance-01-19b0a212d2932609.webp": {
+      "size": 116216,
+      "sha256": "19b0a212d2932609c48686d5234f26cc5bf066d5f330178b50fb2e7a61ac8a10",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-18/aim-01-f34b92de04f9f5ae.webp": {
+      "size": 127658,
+      "sha256": "f34b92de04f9f5ae3b81cac19a310e6f25f9529d0277da42f619662b66d7d109",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-18/effect-5a3f4ae7-983c-4d89-92c2-a93323ad7e1b-3049da065b3c35e0.webp": {
+      "size": 63798,
+      "sha256": "3049da065b3c35e05b1963a9560cb994a5a0c1e7eb4a1638b53d3f754875796b",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-19/aim-01-a1b2bc7b599c8d11.webp": {
+      "size": 123632,
+      "sha256": "a1b2bc7b599c8d119f662053ed66f3d78a198c99e1e3c1a73d543ffd48cbddc5",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-20/aim-01-fecf1710fd14c985.webp": {
+      "size": 127898,
+      "sha256": "fecf1710fd14c985a51266e2efb2040748ab838520de0c92cb67a0d7a2e0d824",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-20/effect-a28282f4-fd18-4074-97d9-55a746c58dc1-4193e350d8d40516.webp": {
+      "size": 51622,
+      "sha256": "4193e350d8d40516cf7f0213860bfc32a7c105b36b8af4f9b518ebd9e738ce27",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-21/aim-01-ba6dc8ce9a93727e.webp": {
+      "size": 123512,
+      "sha256": "ba6dc8ce9a93727e2d3b70ebd09b789b1cdaad482b11fce5c8f42d4d4929eb08",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-22/stance-01-bba126c32b5da5d2.webp": {
+      "size": 116492,
+      "sha256": "bba126c32b5da5d2ba84d4298ffb446c53838ad671da1a20b6470b2cb1856cf0",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-22/aim-01-2a33b1d4d6c84b49.webp": {
+      "size": 146840,
+      "sha256": "2a33b1d4d6c84b49592e6404b23dae1509246f37654daf0656673c0e61021823",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-22/effect-75516132-fb96-4cdf-93d4-390ecf45d0c0-d831cedad214e3bb.webp": {
+      "size": 35158,
+      "sha256": "d831cedad214e3bb2ea07026e844471fd8bf6e3489d5c8aa89812cee6331f4b5",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-23/aim-01-aaafd02fb7248050.webp": {
+      "size": 187012,
+      "sha256": "aaafd02fb7248050fd290a3eefdd6a5066bbb4429fcacab1b14bf6139e1a37ed",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-24/aim-01-eb90cbac79ec7dd8.webp": {
+      "size": 93558,
+      "sha256": "eb90cbac79ec7dd88a6f39c569511ba43f912b4676b15e1448f81b01a5406251",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-24/effect-4e619dc9-b4b7-4f45-b610-360696830b34-15af6afdf7941e29.webp": {
+      "size": 52576,
+      "sha256": "15af6afdf7941e29845d79ca85cccc73aa697c1b5a6ba8d4c0d4a0ff3b33b62d",
+      "mimeType": "image/webp"
+    },
+    "lineups/ascent-sova-25/aim-01-ef7f3ce041e020c6.webp": {
+      "size": 102256,
+      "sha256": "ef7f3ce041e020c6ec5ed80bb23a13d82aa43792b48967ce81bb864827aeda1a",
+      "mimeType": "image/webp"
+    },
+    "lineups/bind-fade-8cd238d1-19b1-4faf-88c1-860f81ab6196/stance-de944a08-e07f-4d2a-bfd7-460d79d1792a-3b3f82871afe1b3d.webp": {
+      "size": 72666,
+      "sha256": "3b3f82871afe1b3d4c0b895b2070dcfdff52ffb7d313723f58257459d72aacee",
+      "mimeType": "image/webp"
+    },
+    "lineups/bind-fade-8cd238d1-19b1-4faf-88c1-860f81ab6196/aim-c65b672f-07a0-4114-aa3e-9d4bc91fd16d-303cd6b363641e04.webp": {
+      "size": 17942,
+      "sha256": "303cd6b363641e0444abe6bb4c9c1cde3ec48a3927b1cb35807f3b12f4dca1ac",
+      "mimeType": "image/webp"
+    },
+    "lineups/bind-fade-8cd238d1-19b1-4faf-88c1-860f81ab6196/effect-564dbd69-012b-42df-b0a3-83bc3d62803e-301961c14a80f291.webp": {
+      "size": 66684,
+      "sha256": "301961c14a80f291d53bc87a0646c168889374575a93073ab3d0ff6ac388c592",
+      "mimeType": "image/webp"
+    },
+    "lineups/bind-fade-254c2450-47ad-447e-b353-18e3f2d05332/aim-538ed6e9-bc69-4c07-be5c-9e3a57aae4cf-3933939b28343f4e.webp": {
+      "size": 53966,
+      "sha256": "3933939b28343f4ede2ff220e3958194d26ae1f8948d0341ed558310b397cfa7",
+      "mimeType": "image/webp"
+    },
+    "lineups/bind-fade-254c2450-47ad-447e-b353-18e3f2d05332/effect-b359002e-3aaf-4adf-b46e-713ffd0cc49f-acae6f5ac3bcf5a3.webp": {
+      "size": 45566,
+      "sha256": "acae6f5ac3bcf5a39908c34124412528ae7c7f9b518cbb7e229d60ca36ccb902",
+      "mimeType": "image/webp"
+    },
+    "lineups/bind-fade-5987e0fa-b998-4d34-96f6-982b8e10f036/effect-859f8ffb-912f-40c7-9075-96e5f7b05fb2-a97761caffe69f26.webp": {
+      "size": 54942,
+      "sha256": "a97761caffe69f26f4c120a4a9a612ec8eccd0c73964edbc7316ba069f0aead9",
+      "mimeType": "image/webp"
+    },
+    "lineups/bind-fade-486250fe-4807-4b6d-898b-dc01284f5bf4/stance-e4c89b29-c736-41ff-907b-f368d9299869-db499754aeb6fd08.webp": {
+      "size": 218012,
+      "sha256": "db499754aeb6fd0836048a6e232afdb3c2a267b01d8d93b3be944f9e1083742e",
+      "mimeType": "image/webp"
+    },
+    "lineups/bind-fade-486250fe-4807-4b6d-898b-dc01284f5bf4/aim-1c45ca7e-5589-4d7a-a09a-d42f81f20d72-e03c00c8886eded1.webp": {
+      "size": 212266,
+      "sha256": "e03c00c8886eded1270280440bb8315f6ba6463f40a716e0b5bdbbcd53199390",
+      "mimeType": "image/webp"
+    },
+    "lineups/bind-fade-486250fe-4807-4b6d-898b-dc01284f5bf4/effect-bccc7499-410b-4dc9-b376-eb1c07a69c45-cccbf29fbe0610cc.webp": {
+      "size": 307282,
+      "sha256": "cccbf29fbe0610cced1c1f32a5b99aa9ae4c088c7a26670ba67ad96be99db178",
+      "mimeType": "image/webp"
+    },
+    "lineups/bind-fade-428b9bdd-5961-4a5a-9243-00c863829166/aim-658526ea-30d5-4d1b-a03f-425039fc813d-92d376c00413f086.webp": {
+      "size": 260058,
+      "sha256": "92d376c00413f0869825660a03beaaf58e105d59cac9e846ce4bdc56ca445ffb",
+      "mimeType": "image/webp"
+    },
+    "lineups/bind-fade-428b9bdd-5961-4a5a-9243-00c863829166/effect-84fe2761-11fd-445a-b759-e46a90004ac2-b77d28a003e091b6.webp": {
+      "size": 287424,
+      "sha256": "b77d28a003e091b6288cccd77536d679a30ceb85795424f9a8115f81b4c44f52",
+      "mimeType": "image/webp"
+    },
+    "lineups/bind-fade-6cb958ca-6b8a-41d2-aa68-53fcc4cde3e4/aim-6e643b62-bba7-4ff9-a7e5-495ce2e73596.webp": {
+      "size": 79150,
+      "sha256": "ab11815fa44a9b634f3f0cd7310940602798e47129c4889886c53e0f7b255308",
+      "mimeType": "image/webp"
+    },
+    "lineups/bind-fade-6cb958ca-6b8a-41d2-aa68-53fcc4cde3e4/effect-724a1dc1-12e9-4c15-b80f-6cb40efac366.webp": {
+      "size": 130814,
+      "sha256": "637f4bc1664c39bb16f0948c14cb67d41727505be98d9a87c30b4239d81d0d2d",
+      "mimeType": "image/webp"
+    },
+    "lineups/bind-fade-24928079-2b31-4032-9c1d-81d96421601a/aim-de9195ea-730b-4782-a276-1c652550b276.webp": {
+      "size": 101484,
+      "sha256": "9e4395b9348f7ad7bb4202fe68bfbbc2bcf637a71f1691a6e7f21633609166fa",
+      "mimeType": "image/webp"
+    },
+    "lineups/bind-fade-24928079-2b31-4032-9c1d-81d96421601a/effect-3bdb3b18-55c3-4e3c-b349-b21ae06286b5.webp": {
+      "size": 97122,
+      "sha256": "b1a5d1e4f5fd5765a98263e56aa33760d387d45e77e59e7585a3238bca1ce8e1",
+      "mimeType": "image/webp"
+    },
+    "lineups/bind-fade-0a61c151-1a90-40cc-bac7-ced5d2a0104f/aim-ed2e6e47-33b8-4406-b30f-5ad6355b78a9.webp": {
+      "size": 107560,
+      "sha256": "c1027b2298d97a84c0032cf95ee94db6ea11ccfdb85c9c21e6a9e526efb96720",
+      "mimeType": "image/webp"
+    },
+    "lineups/bind-fade-0a61c151-1a90-40cc-bac7-ced5d2a0104f/effect-f21cc581-aaaa-4884-b6f0-e8dc5eebe19d.webp": {
+      "size": 104908,
+      "sha256": "350a505658f30d1de2083d3d98a0ef105d89c76cfd344242b18e88d67926d8bf",
+      "mimeType": "image/webp"
+    },
+    "lineups/haven-sova-33ed863a-7d4c-4323-a9ab-1af91d38ed45/stance-5b5eb368-6e28-47ea-bba3-ba118953f37a.webp": {
+      "size": 117798,
+      "sha256": "7fe4dee5509d5c5a269b5881cf32fd86511249e34bcd306f786666e1aa723150",
+      "mimeType": "image/webp"
+    },
+    "lineups/haven-sova-33ed863a-7d4c-4323-a9ab-1af91d38ed45/aim-1b3fed1b-cd91-4629-b78b-1f72e9249c19.webp": {
+      "size": 142264,
+      "sha256": "f33f271ada97065ab20d26e2f101fd5dd1e7c9c7a03938af4106ec68b7bad3b7",
+      "mimeType": "image/webp"
+    },
+    "lineups/haven-sova-33ed863a-7d4c-4323-a9ab-1af91d38ed45/effect-047acd46-831c-4a68-9d53-6d6e37e18c99.webp": {
+      "size": 142338,
+      "sha256": "2c6f60986496eb725e83458100014c2deeeb15c25ce9ed18071868414e803ef9",
+      "mimeType": "image/webp"
+    },
+    "lineups/haven-sova-57ce3cb9-8067-446f-a16e-4033adc7b11d/stance-4a3e6257-4f85-428d-acd5-c1157909a47d.webp": {
+      "size": 83786,
+      "sha256": "9bc815e205a8e33c263b63dbe5b7b72ace7121b0d3bc3879952e8014f6ec61cb",
+      "mimeType": "image/webp"
+    },
+    "lineups/haven-sova-57ce3cb9-8067-446f-a16e-4033adc7b11d/aim-860a8188-b1ab-4ffe-97f5-b6d67f662078.webp": {
+      "size": 112076,
+      "sha256": "d984d329151fa99c74d7fb1914d1709276887d22512e7138707fa2c7f010a349",
+      "mimeType": "image/webp"
+    },
+    "lineups/haven-sova-57ce3cb9-8067-446f-a16e-4033adc7b11d/effect-c789c9ee-0a83-4ffb-be3d-1570b3ee07d9.webp": {
+      "size": 131000,
+      "sha256": "df0517ffbaf0f592af8f8f7c8fc160379f8e414990a716b1f4e9ee0423620738",
+      "mimeType": "image/webp"
+    },
+    "lineups/haven-sova-454a2a18-8a49-486f-a84b-29911bbc110d/aim-cd07d7c8-fb39-4da9-9aeb-888761da3336.webp": {
+      "size": 105918,
+      "sha256": "f4ed73abe84c2b970ad56a064d76f2945cf00bb044407651c72cc59f9d3c2448",
+      "mimeType": "image/webp"
+    },
+    "lineups/haven-sova-97f13fba-a0af-46ca-bcca-24b1c4f49466/stance-49070667-423f-42ec-870a-909e1a8b7a72.webp": {
+      "size": 95688,
+      "sha256": "cb8ffdb402440d58e0258f4b9e4d269ce8602b1e94cd214de955f4822a4e61f0",
+      "mimeType": "image/webp"
+    },
+    "lineups/haven-sova-97f13fba-a0af-46ca-bcca-24b1c4f49466/aim-2b3ee7dd-fc81-468f-b992-ffca156f4a0e.webp": {
+      "size": 118614,
+      "sha256": "14e4abd0d5274588892f631ff43075daa602c96c78c6c2c67d5dae8a258f8927",
+      "mimeType": "image/webp"
+    },
+    "lineups/haven-sova-3f1b9f14-3ad7-4fbc-8a98-dd3886ea4ca2/aim-b8699df6-3f29-4a88-b8ed-545a2b30472c.webp": {
+      "size": 152004,
+      "sha256": "3329846f1cbb60cfcbabcbc156841dba2acf79bffe9b3cfcbbfe8f7b6dcfae7e",
+      "mimeType": "image/webp"
+    },
+    "lineups/haven-sova-dd2cf803-81b1-47be-aff4-0909797e437e/aim-f7426478-c8fa-4529-982c-acdee2702e49.webp": {
+      "size": 66566,
+      "sha256": "26fe53f4176d8baa07013f5447829f231062b27c918ecea2c4784cb53b9bf3cc",
+      "mimeType": "image/webp"
+    },
+    "lineups/haven-sova-81daff4d-9ea1-4abc-a4ff-2f9d4355c0a2/stance-084b11c0-c63d-465f-9bfe-8f167b79dddd.webp": {
+      "size": 93354,
+      "sha256": "89b479a174bdddb45259ef3fd3b650448ae9a4ac78d3589b0947f14779b97f92",
+      "mimeType": "image/webp"
+    },
+    "lineups/haven-sova-81daff4d-9ea1-4abc-a4ff-2f9d4355c0a2/aim-8ecd97b1-0a33-49f5-a97e-fb5a5c3e707d.webp": {
+      "size": 122910,
+      "sha256": "0d3d98b5b10c845b4251415aeaf07edd67383f0edcbae5105e42487b98bec654",
+      "mimeType": "image/webp"
+    },
+    "lineups/haven-sova-54b03c98-4193-46c9-9b06-75f4cd76c9cb/aim-4382ed2f-aacc-469a-a6c2-8ba80837c3fe.webp": {
+      "size": 166334,
+      "sha256": "344bd83231e6a84ee140ab39d028e7a7619c85f2feb5d66cc8baeea99691a95b",
+      "mimeType": "image/webp"
+    },
+    "lineups/haven-sova-99238e99-3431-49e9-804e-c113b66c8570/stance-d7dfe4c1-77c5-4359-a24d-35fab4e35e20.webp": {
+      "size": 114526,
+      "sha256": "ab92f655b6e0ce9ca78621a5323ccc6576238678c47bd040d8498b94cb737854",
+      "mimeType": "image/webp"
+    },
+    "lineups/haven-sova-99238e99-3431-49e9-804e-c113b66c8570/aim-e95e38c5-2fdb-400c-b817-6e2c1f7eadb5.webp": {
+      "size": 91354,
+      "sha256": "332f19693a2f8cbac1cf7c1b70473badc046387ecf209ce6f9d21ca9c4574819",
+      "mimeType": "image/webp"
+    },
+    "lineups/icebox-skye-13e82cab-3c78-4e91-b184-3dfd5a50fb7e/effect-b7563e53-8b24-488b-89d7-e3ad8426db5e.webp": {
+      "size": 276678,
+      "sha256": "ef7fb2b07af6a165fc2ce43c8b12d74847bd4584389b9c9c6626824bf44e6f16",
+      "mimeType": "image/webp"
+    },
+    "lineups/icebox-sova-a5523ba0-9105-427d-be98-05d796655d0b/stance-47608199-c527-44ac-87f8-9b8c1601540d.webp": {
+      "size": 320618,
+      "sha256": "e926cbc5f61fbfa64ba26cdd4c631713438f09a6ffdfdddb38d20dde08c6897d",
+      "mimeType": "image/webp"
+    },
+    "lineups/icebox-sova-a5523ba0-9105-427d-be98-05d796655d0b/aim-610d4dd5-8e4a-4932-9f11-e82dc37a1fc2.webp": {
+      "size": 358826,
+      "sha256": "d8eb9e8685156af834f92c2da47e1d10c5a85ff0d8b4b0b283e15724278f8bb2",
+      "mimeType": "image/webp"
+    },
+    "lineups/icebox-sova-a5523ba0-9105-427d-be98-05d796655d0b/effect-e9e750d0-afc7-4504-bf58-d09e8f6fbec7.webp": {
+      "size": 280636,
+      "sha256": "220df9a33570e761cd25734135dc4b97b38ade21db5d3ac18e66f22a028f6e8c",
+      "mimeType": "image/webp"
+    },
+    "lineups/icebox-sova-647ba87b-b915-4cd3-ad11-5a9a0d050c83/stance-486dc10b-4266-46f6-81fd-e35fcc251127.webp": {
+      "size": 221588,
+      "sha256": "ec31254141f1a0cc0495248912061d485d0fd5b61e95f0872356afcfbf563b06",
+      "mimeType": "image/webp"
+    },
+    "lineups/icebox-sova-647ba87b-b915-4cd3-ad11-5a9a0d050c83/aim-a6c1e193-b9ea-4cb7-baf2-d96d6d783cd4.webp": {
+      "size": 28732,
+      "sha256": "31b93393a5b6be7e2e5d9a04093db6255addbd1d570c7737dbb9c1c4a5b82154",
+      "mimeType": "image/webp"
+    },
+    "lineups/icebox-sova-647ba87b-b915-4cd3-ad11-5a9a0d050c83/effect-3839f418-3f17-4766-ad5c-6fe3f44a5ff5.webp": {
+      "size": 146638,
+      "sha256": "80bd5be9186352480c2cc73644e29478c630e9316e4b98af25294fafd96d5d92",
+      "mimeType": "image/webp"
+    },
+    "lineups/icebox-sova-a6a653f2-f19e-43de-ba67-0905498e7d79/stance-813f76be-9ca2-423b-a670-2f0613c1034d.webp": {
+      "size": 162790,
+      "sha256": "4e2146fbc83772b9f888789b21ca44f1e584376dc55b1f273105be0d865d82a0",
+      "mimeType": "image/webp"
+    },
+    "lineups/icebox-sova-a6a653f2-f19e-43de-ba67-0905498e7d79/aim-6e295388-67c1-4e3d-84ed-7fcc9be470f4.webp": {
+      "size": 125564,
+      "sha256": "a686d3f3ac1ff8f4be7e396497e9dddb44c7ea090310985573bb3a04daa81089",
+      "mimeType": "image/webp"
+    },
+    "lineups/icebox-sova-a6a653f2-f19e-43de-ba67-0905498e7d79/effect-edcb937c-2f3e-4e7d-a1f6-be36dcab6306.webp": {
+      "size": 189274,
+      "sha256": "a281656a4b3742b6a672b2cd9447c470d8a5188c29b3d80d0645f67f825688e4",
+      "mimeType": "image/webp"
+    },
+    "lineups/icebox-sova-111c45b1-8ca2-4338-a96c-2897a6099660/aim-f17c8086-0b2e-4776-9e5f-29e7157d00d4.webp": {
+      "size": 233764,
+      "sha256": "7c68c49764f2e74a2762f932cda09ba55631bfe60c85b45f7831aa80425884bb",
+      "mimeType": "image/webp"
+    },
+    "lineups/icebox-sova-5a4a1c0b-9d33-4bf1-b5cd-26ced2615955/stance-104a5371-da09-4499-9ec1-80ec2d60fe52.webp": {
+      "size": 203060,
+      "sha256": "840cdea2f11005cf6c0e54dc827e5b4f60693ae1fd25eff4403936613940dff4",
+      "mimeType": "image/webp"
+    },
+    "lineups/icebox-sova-5a4a1c0b-9d33-4bf1-b5cd-26ced2615955/aim-df8d30b7-cf66-4f06-bfa8-d2f48c3b8c71.webp": {
+      "size": 78700,
+      "sha256": "32198b0aec95148ba8a07037341c3da0a27e600780e7dcee7bb9b3b25276f852",
+      "mimeType": "image/webp"
+    },
+    "lineups/icebox-sova-bcf96a5e-fd68-4559-b983-ec5cf6a66a7f/aim-b770e804-cb29-42f0-8d71-ac8c50db8cfb.webp": {
+      "size": 283132,
+      "sha256": "08fb94676d306d858fd886c9205dbb21f5aeda84f3772a23c2a3f2375ea11dcf",
+      "mimeType": "image/webp"
+    },
+    "lineups/breeze-sova-d20a9748-470b-4de0-8db8-ed012c9b27bd/stance-012e4162-58e4-47e4-b185-c36ea7cd67a6.webp": {
+      "size": 206612,
+      "sha256": "b694e406e9988d54568ace41f1c6f6346c09d7da854fcf8b795c82f04f716535",
+      "mimeType": "image/webp"
+    },
+    "lineups/breeze-sova-d20a9748-470b-4de0-8db8-ed012c9b27bd/aim-2aa6dc7c-02b8-42fc-84ce-afc62ff07567.webp": {
+      "size": 30508,
+      "sha256": "a2046750ede29ae023defd19e89460215ab6605eb900b96e63c3f4e446fd426c",
+      "mimeType": "image/webp"
+    },
+    "lineups/breeze-sova-d20a9748-470b-4de0-8db8-ed012c9b27bd/effect-f001b032-7f9d-4c33-8b00-8d54f62e6b09.webp": {
+      "size": 700504,
+      "sha256": "c63722f20ebcdc97c1f0ea7bd5f746ce882d3b4451132a52d1a9d276331191e3",
+      "mimeType": "image/webp"
+    }
+  },
   "imageMigrations": {
     "lineups/ascent-sova-01/aim-01.png": {
       "key": "lineups/ascent-sova-01/aim-01-6c44cd2738a7c63e.webp",

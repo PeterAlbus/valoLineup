@@ -2,7 +2,7 @@ import { ZodError } from 'zod';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import content from './data/content.json';
 import { buildManualPackage, downloadEditPackage } from './edit-package';
-import { allMedia, same, collectChanges, compressPackage, applyLayers, readPackage, validateReferences, packageStats, MAX_PACKAGE_BYTES, type Lineup, type MediaKind, type Manifest, type Uploader, type PackageData } from './package-model.mjs';
+import { allAssets, allMedia, same, collectChanges, compactPackage, compressPackage, matchesAvailableAsset, resolvePackageReferences, retainFailedChanges, applyLayers, readPackage, validateReferences, packageStats, MAX_PACKAGE_BYTES, type Lineup, type MediaKind, type Manifest, type Uploader, type PackageData } from './package-model.mjs';
 import { encodeWebp, formatBytes } from './image-compression';
 import { emptyLibrary, readLibrary, readImage, libraryUrls, persistLibrary, migrateLegacyImages, STORAGE_KEY, type LocalLibrary } from './local-library';
 import HistoryPage, { UploaderLabel } from './HistoryPage';
@@ -267,11 +267,15 @@ export default function App() {
   const activeTargetPoint = activeLineup ? pointForView(activeLineup.target) : null;
   const activePendingUploads = activeLineup ? pendingUploads.filter((upload) => upload.lineupId === activeLineup.id) : [];
   const editChanges = useMemo(() => collectChanges(library.manual, savedLineups, isEditing ? draftLineups : savedLineups), [library.manual, savedLineups, draftLineups, isEditing]);
-  const packageImageBytes = allMedia([...editChanges.added, ...editChanges.updated.map((item) => item.after)]).reduce((sum, item) => {
+  const packageAssets = useMemo(() => library.packages.flatMap(allAssets), [library.packages]);
+  function transferableImageBytes(item: { key: string; lineupId: string }) {
     const pending = pendingUploads.find((upload) => upload.key === item.key);
-    const local = sources.get(item.lineupId)?.uploadedAssets.find((asset) => asset.key === item.key);
-    return sum + (pending?.file.size ?? local?.size ?? (content.mediaBytes as Record<string, number>)[item.key] ?? 0);
-  }, 0);
+    if (pending) return pending.file.size;
+    const source = sources.get(item.lineupId);
+    const local = source && allAssets(source).find((asset) => asset.key === item.key);
+    return local && !matchesAvailableAsset(local, content.mediaAssets, packageAssets) ? local.size : 0;
+  }
+  const packageImageBytes = allMedia([...editChanges.added, ...editChanges.updated.map((item) => item.after)]).reduce((sum, item) => sum + transferableImageBytes(item), 0);
   const isPackageFull = packageImageBytes > MAX_PACKAGE_BYTES;
 
   function pointStyle(point: Point) {
@@ -595,7 +599,7 @@ export default function App() {
       });
     }
     const existingKeys = new Set(allMedia([...editChanges.added, ...editChanges.updated.map((item) => item.after)]).map((item) => item.key));
-    const newlyIncluded = allMedia([activeLineup]).filter((item) => !existingKeys.has(item.key)).reduce((sum, item) => sum + (sources.get(item.lineupId)?.uploadedAssets.find((asset) => asset.key === item.key)?.size ?? (content.mediaBytes as Record<string, number>)[item.key] ?? 0), 0);
+    const newlyIncluded = allMedia([activeLineup]).filter((item) => !existingKeys.has(item.key)).reduce((sum, item) => sum + transferableImageBytes(item), 0);
     if (packageImageBytes + newlyIncluded + uploads.reduce((sum, upload) => sum + upload.file.size, 0) > MAX_PACKAGE_BYTES) throw new Error('图片总量将超过 128 MB，请删除不需要的图片或点位后再上传');
     uploads.forEach((upload) => { upload.previewUrl = URL.createObjectURL(upload.file); });
     setDraftLineups((current) => current.map((lineup) => (
@@ -714,19 +718,20 @@ export default function App() {
 
   async function packageData(manifest: Manifest): Promise<PackageData> {
     const blobs = new Map<string, Blob>();
-    for (const asset of manifest.uploadedAssets) blobs.set(asset.sha256, await readImage(asset));
+    for (const asset of allAssets(manifest)) blobs.set(asset.sha256, await readImage(asset));
     return { manifest, blobs };
   }
 
   async function currentEdits() {
-    if (!isDirty && library.manual) return packageData(library.manual);
+    if (!isDirty && library.manual) return compactPackage(await packageData(library.manual), content.mediaAssets, packageAssets);
     return buildManualPackage({
       previous: library.manual, packageId: manualIdRef.current, author: uploader,
-      startLineups: savedLineups, lineups: draftLineups,
+      startLineups: savedLineups, lineups: draftLineups, repositoryAssets: content.mediaAssets, localAssets: packageAssets,
       image: async (lineupId, key) => {
         const pending = pendingUploads.find((upload) => upload.lineupId === lineupId && upload.key === key);
         if (pending) return pending.file;
-        const local = sources.get(lineupId)?.uploadedAssets.find((asset) => asset.key === key);
+        const source = sources.get(lineupId);
+        const local = source && allAssets(source).find((asset) => asset.key === key);
         if (local) return readImage(local);
         const response = await fetch(assetUrl(key));
         if (!response.ok) throw new Error('无法读取点位图片，请重新添加图片或重新导入编辑包');
@@ -788,7 +793,7 @@ export default function App() {
     setIsEditorBusy(true);
     try {
       const result = await downloadEditPackage(await currentEdits());
-      setEditorNotice({ kind: 'success', text: `已下载一个完整编辑包：新增 ${result.added} / 修改 ${result.updated} / 删除 ${result.deleted} 个点位，${result.uploads} 张图片。${isDirty ? '当前修改尚未保存到浏览器。' : '已保存的编辑仍保留。'}` });
+      setEditorNotice({ kind: 'success', text: `已下载编辑包：新增 ${result.added} / 修改 ${result.updated} / 删除 ${result.deleted} 个点位，携带 ${result.uploads} 张图片（已有图片仅记录引用）。接收方需先应用来源更新包，缺图点位会跳过。${isDirty ? '当前修改尚未保存到浏览器。' : '已保存的编辑仍保留。'}` });
     } catch (error) { setEditorNotice({ kind: 'error', text: editorError(error, '导出失败') }); }
     finally { setIsEditorBusy(false); }
   }
@@ -806,13 +811,22 @@ export default function App() {
     setIsEditorBusy(true);
     try {
       if (file.size > MAX_PACKAGE_BYTES) throw new Error('编辑包超过 128 MB，请选择更小的文件');
-      const data = await compressPackage(await readPackage(await file.arrayBuffer()), encodeWebp);
+      const data = await resolvePackageReferences(await compressPackage(await readPackage(await file.arrayBuffer()), encodeWebp), async (asset) => {
+        try { return await readImage(asset); } catch { /* A fresh browser can fetch the schema-validated, same-origin image path. */ }
+        const response = await fetch(assetUrl(asset.key));
+        if (!response.ok) throw new Error('引用图片不可用，请先更新应用或导入来源更新包');
+        return response.blob();
+      });
       validateReferences(data.manifest, maps, agents);
       const packages = [...library.packages];
       const index = packages.findIndex((item) => item.packageId === data.manifest.packageId);
-      if (index < 0) packages.push(data.manifest); else packages[index] = data.manifest;
-      await commitLibrary({ ...library, packages }, data);
-      setEditorNotice({ kind: 'success', text: '更新包已导入并保存到当前浏览器，你保存的点位修改仍然保留。' });
+      const retained = retainFailedChanges(data, packages[index]);
+      if (index < 0) packages.push(retained.manifest); else packages[index] = retained.manifest;
+      await commitLibrary({ ...library, packages }, retained);
+      const failures = data.failures ?? [];
+      setEditorNotice(failures.length
+        ? { kind: 'info', text: `已导入 ${packageStats(data.manifest).lineups} 个点位，跳过 ${failures.length} 个缺图或图片损坏的点位（原内容保留）：${failures.map(item => `${item.title}：${item.message}（${item.key}）`).join('；')}。补齐图片后可重新导入此包。` }
+        : { kind: 'success', text: '更新包已导入并保存到当前浏览器，你保存的点位修改仍然保留。' });
     } catch (error) { setEditorNotice({ kind: 'error', text: editorError(error, '导入失败，原数据未改变') }); }
     finally { setIsEditorBusy(false); }
   }
@@ -828,7 +842,7 @@ export default function App() {
     return activeLineup.media[kind].map((item) => ({
       id: item.key,
       src: pendingByKey.get(item.key)?.previewUrl ?? (sources.has(activeLineup.id)
-        ? imageUrls.get(sources.get(activeLineup.id)!.uploadedAssets.find((asset) => asset.key === item.key)?.sha256 ?? '')
+        ? imageUrls.get(allAssets(sources.get(activeLineup.id)!).find((asset) => asset.key === item.key)?.sha256 ?? '')
         : assetUrl(item.key)),
       alt: item.alt,
       pending: pendingByKey.has(item.key),
@@ -909,7 +923,7 @@ export default function App() {
         {!isMobileView || isEditing ? <div className="editing-toolbar">
           <div className="editor-status">
             {isEditing ? <div className="save-state" role="status" data-dirty={isDirty}>{isEditorBusy ? '正在处理…' : isDirty ? '有未保存修改' : library.manual ? '已保存到当前浏览器' : '暂无修改'}</div> : null}
-            {isEditing || library.manual ? <div className={`package-size ${isPackageFull ? 'is-full' : ''}`} role="status"><span>图片：{formatBytes(packageImageBytes)} / {formatBytes(MAX_PACKAGE_BYTES)}</span><progress aria-label="编辑包图片容量" max={MAX_PACKAGE_BYTES} value={packageImageBytes} />{isPackageFull ? <small>已超限，请移除图片</small> : null}</div> : null}
+            {isEditing || library.manual ? <div className={`package-size ${isPackageFull ? 'is-full' : ''}`} role="status" title="仅统计需随包携带的图片；内置及其他本地包中内容一致的图片通过引用复用。接收方缺图时仅跳过对应点位。"><span>随包图片：{formatBytes(packageImageBytes)} / {formatBytes(MAX_PACKAGE_BYTES)}</span><progress aria-label="编辑包图片容量" max={MAX_PACKAGE_BYTES} value={packageImageBytes} />{isPackageFull ? <small>已超限，请移除图片</small> : null}</div> : null}
           </div>
             {!isMobileView || library.manual || isEditing ? (
               <div className="editor-actions" aria-label="编辑工具">
