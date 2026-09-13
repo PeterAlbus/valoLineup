@@ -4,7 +4,7 @@ import content from './data/content.json';
 import { buildManualPackage, downloadEditPackage } from './edit-package';
 import { allAssets, allMedia, same, collectChanges, compactPackage, compressPackage, matchesAvailableAsset, resolvePackageReferences, retainFailedChanges, applyLayers, readPackage, validateReferences, packageStats, MAX_PACKAGE_BYTES, type Lineup, type MediaKind, type Manifest, type Uploader, type PackageData } from './package-model.mjs';
 import { encodeWebp, formatBytes } from './image-compression';
-import { emptyLibrary, readLibrary, readImage, libraryUrls, persistLibrary, migrateLegacyImages, STORAGE_KEY, type LocalLibrary } from './local-library';
+import { emptyLibrary, migrateVersionStorage, readImage, libraryUrls, persistLibrary, migrateLegacyImages, STORAGE_KEY, type LocalLibrary } from './local-library';
 import HistoryPage, { UploaderLabel } from './HistoryPage';
 import AgentPicker from './AgentPicker';
 import MobileAgentSelect from './MobileAgentSelect';
@@ -150,7 +150,7 @@ export default function App() {
     void (async () => {
       let metadataLoaded = false;
       try {
-        let value = readLibrary();
+        let value = await migrateVersionStorage();
         for (const manifest of [...value.packages, ...(value.manual ? [value.manual] : [])]) validateReferences(manifest, maps, agents);
         metadataLoaded = true;
         if (active) setLibrary(value);

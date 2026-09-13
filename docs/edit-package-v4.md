@@ -48,7 +48,9 @@ Lineup 必填字段：`id, mapId, agentId, abilityId, uploader, title, side, are
 
 浏览器先完整校验包再应用，忽略 `before` 做整条记录覆盖；`updated` 指向不存在的 ID 时也加入。层顺序严格为仓库 → 排序后的包 → 手动编辑。不因共享目标坐标分歧拒绝浏览器包，各点位按自己的真实坐标显示。
 
-localStorage 键为 `valo-lineup:v4:<部署路径>`，结构 `{version:1,token,packages:Manifest[],manual:Manifest|null}`。`manual` 只有一个，不混入包列表。IndexedDB 数据库为 `<localStorage键>:images`，版本 1，`blobs` store 按 SHA-256 保存 Blob。图片先完成事务，localStorage 元数据后提交；失败不覆盖旧清单。支持时使用 Web Locks 跨标签页串行提交，另用 token 检测过期写入。提交后在锁内回收无引用图片；不支持 Web Locks 的环境保守保留无引用图片，避免跨标签页误删。突然中断可能留下未引用图片，不影响可见资料。
+localStorage 键为 `valo-lineup:v4:<部署路径>`；Toy 部署固定使用 `/toy/<slug>/`，不包含发布版本目录。结构为 `{version:1,token,packages:Manifest[],manual:Manifest|null}`。`manual` 只有一个，不混入包列表。IndexedDB 数据库为 `<localStorage键>:images`，版本 1，`blobs` store 按 SHA-256 保存 Blob。图片先完成事务，localStorage 元数据后提交；失败不覆盖旧清单。支持时使用 Web Locks 跨标签页串行提交，另用 token 检测过期写入。提交后在锁内回收无引用图片；不支持 Web Locks 的环境保守保留无引用图片，避免跨标签页误删。突然中断可能留下未引用图片，不影响可见资料。
+
+启动时若 Toy 固定键不存在，扫描同一 Toy 下形如 `<数字>-v<数字>/` 的历史键。从非空快照中按清单 `updatedAt` 选择最近编辑的一份（相同时按版本路径排序），复制其全部图片并提交到固定键。不会合并多个完整快照，以免恢复已经删除的编辑；其他历史快照保留。固定键已有数据时不覆盖。迁移失败保留源数据；成功后，在支持 Web Locks 且源数据未变化时删除对应旧图片库及旧键，清理失败不影响新版使用。无 Web Locks 时复制后保留源数据。此迁移仅能访问当前浏览器同源存储。
 
 仓库导入通过 `before` 做乐观冲突检测，新增 ID 已占用、快照冲突、图片同路径不同内容及共享坐标不一致时跳过相关点位。每次有实际应用的变更才在 `content/history.json` 追加 `{id,packageId,revision,appliedAt,author,mapIds,lineupIds,added,updated}`。该 author 是包提供者，不是执行命令的操作系统用户。历史、点位和新增图片一起提交，捕获失败时一起回滚；相同内容再次导入不写空历史。
 

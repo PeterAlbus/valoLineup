@@ -1,7 +1,9 @@
 import { allAssets, compressPackage, manifestSchema, type Manifest, type PackageData, type Asset } from './package-model.mjs';
 import { encodeWebp } from './image-compression';
 
-export const STORAGE_KEY = `valo-lineup:v4:${new URL(import.meta.env.BASE_URL, location.href).pathname}`;
+const deploymentPath = new URL(import.meta.env.BASE_URL, location.href).pathname;
+const toyPath = deploymentPath.match(/^\/toy\/[^/]+\//)?.[0];
+export const STORAGE_KEY = `valo-lineup:v4:${toyPath ?? deploymentPath}`;
 export type LocalLibrary = { version: 1; token: string; packages: Manifest[]; manual: Manifest | null };
 export const emptyLibrary = (): LocalLibrary => ({ version: 1, token: '', packages: [], manual: null });
 let database: Promise<IDBDatabase> | undefined;
@@ -20,11 +22,85 @@ function db() {
 export function readLibrary(): LocalLibrary {
   const raw = localStorage.getItem(STORAGE_KEY);
   if (!raw) return emptyLibrary();
+  return parseLibrary(raw);
+}
+function parseLibrary(raw: string): LocalLibrary {
   const value = JSON.parse(raw);
   if (value.version !== 1 || typeof value.token !== 'string' || !Array.isArray(value.packages)) throw new Error('本地资料格式无法识别；未覆盖原始数据，请先备份浏览器数据');
   const packages = value.packages.map((item: unknown) => manifestSchema.parse(item));
   if (new Set(packages.map((item: Manifest) => item.packageId)).size !== packages.length) throw new Error('保存的资料中有重复更新包，请重新导入');
   return { version: 1, token: value.token, packages, manual: value.manual === null ? null : manifestSchema.parse(value.manual) };
+}
+
+let migration: Promise<LocalLibrary> | undefined;
+export function migrateVersionStorage(): Promise<LocalLibrary> {
+  // StrictMode and concurrent mounts must share the same migration.
+  return migration ??= migrateVersionStorageOnce().finally(() => { migration = undefined; });
+}
+async function migrateVersionStorageOnce(): Promise<LocalLibrary> {
+  const migrate = async () => {
+    if (!toyPath || localStorage.getItem(STORAGE_KEY) !== null) return readLibrary();
+    const candidates: { key: string; raw: string; library: LocalLibrary; modified: number }[] = [];
+    for (let index = 0; index < localStorage.length; index++) {
+      const key = localStorage.key(index)!;
+      if (!key.startsWith(STORAGE_KEY) || !/^\d+-v\d+\/$/.test(key.slice(STORAGE_KEY.length))) continue;
+      const raw = localStorage.getItem(key)!;
+      const library = parseLibrary(raw);
+      const manifests = [...library.packages, ...(library.manual ? [library.manual] : [])];
+      if (!manifests.length) continue;
+      candidates.push({ key, raw, library, modified: Math.max(...manifests.map((item) => Date.parse(item.updatedAt) || 0)) });
+    }
+    // Each directory holds a full snapshot. Combining snapshots can resurrect deleted edits.
+    // Recover the most recently edited snapshot and retain other histories untouched.
+    candidates.sort((a, b) => b.modified - a.modified || b.key.localeCompare(a.key, undefined, { numeric: true }));
+    const source = candidates[0];
+    if (!source) return readLibrary();
+    const transfer = async () => {
+      if (localStorage.getItem(STORAGE_KEY) !== null) return readLibrary();
+      if (localStorage.getItem(source.key) !== source.raw) throw new Error('旧版页面正在修改本地资料，请关闭旧版页面后刷新重试');
+      let oldDatabase: IDBDatabase | undefined;
+      const blobs = new Map<string, Blob>();
+      try {
+        if (assetsOf(source.library).length) {
+          oldDatabase = await new Promise<IDBDatabase>((resolve, reject) => {
+            const request = indexedDB.open(`${source.key}:images`);
+            request.onupgradeneeded = () => request.transaction?.abort();
+            request.onerror = () => reject(new Error('旧版本地图片库缺失，已保留原数据'));
+            request.onsuccess = () => resolve(request.result);
+          });
+          for (const asset of assetsOf(source.library)) {
+            const blob = await new Promise<Blob>((resolve, reject) => {
+              const request = oldDatabase!.transaction('blobs', 'readonly').objectStore('blobs').get(asset.sha256);
+              request.onerror = () => reject(request.error);
+              request.onsuccess = () => request.result instanceof Blob && request.result.size === asset.size
+                ? resolve(request.result) : reject(new Error('旧版本地图片不完整，已保留原数据'));
+            });
+            blobs.set(asset.sha256, blob);
+          }
+        }
+        if (localStorage.getItem(source.key) !== source.raw) throw new Error('旧版资料已变化，请刷新重试');
+        const committed = await persistLibrary(emptyLibrary(), source.library, {
+          manifest: source.library.manual ?? source.library.packages[0], blobs,
+        });
+        oldDatabase?.close(); oldDatabase = undefined;
+        // Without cross-tab locks, retain the source to avoid deleting concurrent old-page saves.
+        if (navigator.locks && localStorage.getItem(source.key) === source.raw) {
+          const deleted = await new Promise<boolean>((resolve) => {
+            const request = indexedDB.deleteDatabase(`${source.key}:images`);
+            request.onsuccess = () => resolve(true);
+            request.onerror = request.onblocked = () => resolve(false);
+          }).catch(() => false);
+          // Cleanup is best-effort: the new library is already committed and usable.
+          if (deleted) {
+            try { if (localStorage.getItem(source.key) === source.raw) localStorage.removeItem(source.key); } catch { /* Keep the old metadata if cleanup is unavailable. */ }
+          }
+        }
+        return committed;
+      } finally { oldDatabase?.close(); }
+    };
+    return navigator.locks ? navigator.locks.request(source.key, transfer) : transfer();
+  };
+  return navigator.locks ? navigator.locks.request(`${STORAGE_KEY}:migration`, migrate) : migrate();
 }
 export async function readImage(asset: Asset): Promise<Blob> {
   const database = await db();
