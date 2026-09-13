@@ -33,7 +33,7 @@ export default function HistoryPage({ packages, manual, dirty, entries, maps, bu
           <h3>{index + 1}. {manifest.author.name} · {stats.maps} 个地图 / {stats.lineups} 个点位</h3>
           <p>{date(manifest.updatedAt)} · 新增 {stats.added} / 修改 {stats.updated} / 删除 {stats.deleted}</p>
           <p>随包图片 {formatBytes(manifest.uploadedAssets.reduce((sum, asset) => sum + asset.size, 0))} / 128 MB{manifest.referencedAssets?.length ? ` · 引用 ${manifest.referencedAssets.length} 张已有图片` : ''}</p>
-          <small>第 {manifest.revision} 次更新</small>
+          <small>编辑包修订版 r{manifest.revision}</small>
           <div className="history-actions"><button aria-label={`上移第 ${index + 1} 个更新包`} disabled={busy || editing || index === 0} onClick={() => onMove(index, -1)} type="button">↑ 上移</button><button aria-label={`下移第 ${index + 1} 个更新包`} disabled={busy || editing || index === packages.length - 1} onClick={() => onMove(index, 1)} type="button">↓ 下移</button><button className="action-danger" disabled={busy || editing} onClick={() => onRemove(index)} type="button">删除更新包</button></div>
         </li>;
       })}</ol>
@@ -41,11 +41,11 @@ export default function HistoryPage({ packages, manual, dirty, entries, maps, bu
     <section className="history-section"><h2>内置资料更新</h2>
       <p>这里记录已收录到内置资料的点位更新。作者名称由资料提供者填写。</p>
       {!entries.length ? <p className="history-empty">还没有内置资料更新记录。</p> : null}
-      {[...entries].reverse().map((entry) => <article className="history-card" key={entry.id}>
+      {[...entries].reverse().map((entry, index) => <article className="history-card" key={entry.id}>
         <h3>{entry.author.name} · {entry.mapIds.length} 个地图 / {entry.lineupIds.length} 个点位</h3>
         <p>{date(entry.appliedAt)} · 新增 {entry.added} / 修改 {entry.updated} / 删除 {entry.deleted ?? 0}</p>
         <p>{entry.mapIds.map((id) => maps.find((map) => map.id === id)?.name ?? id).join('、')}</p>
-        <small>第 {entry.revision} 次更新</small>
+        <small>第 {entries.length - index} 次更新 · 编辑包修订版 r{entry.revision}</small>
       </article>)}
     </section>
   </section>;
