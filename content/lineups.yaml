@@ -11763,3 +11763,258 @@
     stance: []
     aim: []
     effect: []
+- id: breeze-sova-d0cdc8e5-7197-4629-8cc5-3d2aa1e4cd84
+  mapId: breeze
+  agentId: viper
+  abilityId: toxic-screen
+  uploader:
+    name: PeterAlbus
+    source: toy
+    toyOpenId: toid_v1_k01_JZ_p5JVd_Vj1Qw8HfyAGfgs3Ya26Y3BH5Bx3OIM3NR_a
+  title: A点墙
+  side: attack
+  area: A点
+  videoBvid: ""
+  target:
+    groupId: breeze-sova-d0cdc8e5-7197-4629-8cc5-3d2aa1e4cd84-target
+    x: 0.66001
+    y: 0.6608
+  effect:
+    type: direction
+    angle: 310
+  stance:
+    x: 0.6484
+    y: 0.66744
+  instructions: ""
+  media:
+    stance: []
+    aim: []
+    effect: []
+- id: breeze-viper-8ddcaa28-d77c-4758-9bb4-75a474ba2493
+  mapId: breeze
+  agentId: viper
+  abilityId: poison-cloud
+  uploader:
+    name: PeterAlbus
+    source: toy
+    toyOpenId: toid_v1_k01_JZ_p5JVd_Vj1Qw8HfyAGfgs3Ya26Y3BH5Bx3OIM3NR_a
+  title: A小烟
+  side: attack
+  area: A点
+  videoBvid: ""
+  target:
+    groupId: breeze-viper-8ddcaa28-d77c-4758-9bb4-75a474ba2493-target
+    x: 0.62155
+    y: 0.45635
+  stance:
+    x: 0.45322
+    y: 0.62396
+  instructions: 顶住光幕
+  media:
+    stance: []
+    aim:
+      - key: lineups/breeze-viper-8ddcaa28-d77c-4758-9bb4-75a474ba2493/aim-fb063469-5549-4ffb-a6c2-34ceda9d6136.webp
+        alt: A小烟瞄点图 1
+    effect: []
+- id: breeze-viper-a7d4e2b8-0f64-4bdb-b280-989402cab591
+  mapId: breeze
+  agentId: viper
+  abilityId: poison-cloud
+  uploader:
+    name: PeterAlbus
+    source: toy
+    toyOpenId: toid_v1_k01_JZ_p5JVd_Vj1Qw8HfyAGfgs3Ya26Y3BH5Bx3OIM3NR_a
+  title: A小单向
+  side: attack
+  area: A点
+  videoBvid: ""
+  target:
+    groupId: breeze-viper-a7d4e2b8-0f64-4bdb-b280-989402cab591-target
+    x: 0.58923
+    y: 0.46764
+  stance:
+    x: 0.45283
+    y: 0.63119
+  instructions: 顶住光幕
+  media:
+    stance: []
+    aim:
+      - key: lineups/breeze-viper-a7d4e2b8-0f64-4bdb-b280-989402cab591/aim-31a3b3fe-e6db-4bbe-a84f-4059da4f7060.webp
+        alt: A小单向瞄点图 1
+    effect: []
+- id: breeze-viper-1185df00-85d7-4950-b971-72ee569b1d08
+  mapId: breeze
+  agentId: viper
+  abilityId: poison-cloud
+  uploader:
+    name: PeterAlbus
+    source: toy
+    toyOpenId: toid_v1_k01_JZ_p5JVd_Vj1Qw8HfyAGfgs3Ya26Y3BH5Bx3OIM3NR_a
+  title: VIP
+  side: attack
+  area: B点
+  videoBvid: ""
+  target:
+    groupId: breeze-viper-1185df00-85d7-4950-b971-72ee569b1d08-target
+    x: 0.43905
+    y: 0.25532
+  stance:
+    x: 0.45283
+    y: 0.63119
+  instructions: 跳投
+  media:
+    stance: []
+    aim:
+      - key: lineups/breeze-viper-1185df00-85d7-4950-b971-72ee569b1d08/aim-17eb6e03-452b-4822-b1b7-4d0fc3e77a52.webp
+        alt: 瞄点图 1
+    effect: []
+- id: breeze-sova-d67507cf-ea3e-4560-9b09-3ca13a6b6256
+  mapId: breeze
+  agentId: viper
+  abilityId: toxic-screen
+  uploader:
+    name: PeterAlbus
+    source: toy
+    toyOpenId: toid_v1_k01_JZ_p5JVd_Vj1Qw8HfyAGfgs3Ya26Y3BH5Bx3OIM3NR_a
+  title: 防守烟
+  side: defense
+  area: B点
+  videoBvid: ""
+  target:
+    groupId: breeze-sova-d67507cf-ea3e-4560-9b09-3ca13a6b6256-target
+    x: 0.33603
+    y: 0.15659
+  effect:
+    type: direction
+    angle: 138
+  instructions: ""
+  media:
+    stance: []
+    aim: []
+    effect: []
+- id: breeze-viper-c2fbdefa-21ef-4659-a18c-c78ec01f76ea
+  mapId: breeze
+  agentId: viper
+  abilityId: toxic-screen
+  uploader:
+    name: PeterAlbus
+    source: toy
+    toyOpenId: toid_v1_k01_JZ_p5JVd_Vj1Qw8HfyAGfgs3Ya26Y3BH5Bx3OIM3NR_a
+  title: 防守烟
+  side: defense
+  area: B点
+  videoBvid: ""
+  target:
+    groupId: breeze-viper-c2fbdefa-21ef-4659-a18c-c78ec01f76ea-target
+    x: 0.24899
+    y: 0.31137
+  effect:
+    type: direction
+    angle: 138
+  instructions: ""
+  media:
+    stance: []
+    aim: []
+    effect: []
+- id: breeze-viper-a946ee47-1233-41df-89fb-bd1cca6df764
+  mapId: breeze
+  agentId: viper
+  abilityId: poison-cloud
+  uploader:
+    name: PeterAlbus
+    source: toy
+    toyOpenId: toid_v1_k01_JZ_p5JVd_Vj1Qw8HfyAGfgs3Ya26Y3BH5Bx3OIM3NR_a
+  title: A大烟
+  side: defense
+  area: A点
+  videoBvid: ""
+  target:
+    groupId: breeze-viper-a946ee47-1233-41df-89fb-bd1cca6df764-target
+    x: 0.85211
+    y: 0.59962
+  stance:
+    x: 0.34513
+    y: 0.2699
+  instructions: ui瞄点，跑+跳投
+  media:
+    stance: []
+    aim:
+      - key: lineups/breeze-viper-a946ee47-1233-41df-89fb-bd1cca6df764/aim-0248e790-755e-4919-8963-a90fbd4a5202.webp
+        alt: 瞄点图 1
+    effect: []
+- id: breeze-viper-bd3a0465-a7fb-4846-814b-25148905c413
+  mapId: breeze
+  agentId: viper
+  abilityId: poison-cloud
+  uploader:
+    name: PeterAlbus
+    source: toy
+    toyOpenId: toid_v1_k01_JZ_p5JVd_Vj1Qw8HfyAGfgs3Ya26Y3BH5Bx3OIM3NR_a
+  title: B大烟
+  side: defense
+  area: B点
+  videoBvid: ""
+  target:
+    groupId: breeze-viper-bd3a0465-a7fb-4846-814b-25148905c413-target
+    x: 0.13819
+    y: 0.41978
+  stance:
+    x: 0.38751
+    y: 0.08324
+  instructions: 跳投
+  media:
+    stance:
+      - key: lineups/breeze-viper-bd3a0465-a7fb-4846-814b-25148905c413/stance-e5d9cbe6-2501-4f39-9143-3ddcf2ff3cf8.webp
+        alt: 站位图 1
+    aim:
+      - key: lineups/breeze-viper-bd3a0465-a7fb-4846-814b-25148905c413/aim-a040aee0-40ab-4f12-bfa3-86edfbfba64e.webp
+        alt: 瞄点图 1
+    effect: []
+- id: breeze-viper-3573d192-26be-4121-9018-66c8b8e50f41
+  mapId: breeze
+  agentId: viper
+  abilityId: toxic-screen
+  uploader:
+    name: PeterAlbus
+    source: toy
+    toyOpenId: toid_v1_k01_JZ_p5JVd_Vj1Qw8HfyAGfgs3Ya26Y3BH5Bx3OIM3NR_a
+  title: A大墙
+  side: defense
+  area: A点
+  videoBvid: ""
+  target:
+    groupId: breeze-viper-3573d192-26be-4121-9018-66c8b8e50f41-target
+    x: 0.68263
+    y: 0.4056
+  effect:
+    type: direction
+    angle: 48
+  instructions: ""
+  media:
+    stance: []
+    aim: []
+    effect: []
+- id: breeze-viper-24ae7b59-0459-40c9-818a-01b0f641f619
+  mapId: breeze
+  agentId: viper
+  abilityId: toxic-screen
+  uploader:
+    name: PeterAlbus
+    source: toy
+    toyOpenId: toid_v1_k01_JZ_p5JVd_Vj1Qw8HfyAGfgs3Ya26Y3BH5Bx3OIM3NR_a
+  title: A大+中路墙
+  side: defense
+  area: A点
+  videoBvid: ""
+  target:
+    groupId: breeze-viper-24ae7b59-0459-40c9-818a-01b0f641f619-target
+    x: 0.92151
+    y: 0.50835
+  effect:
+    type: direction
+    angle: 180
+  instructions: ""
+  media:
+    stance: []
+    aim: []
+    effect: []

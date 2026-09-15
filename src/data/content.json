@@ -22789,6 +22789,340 @@
         "aim": [],
         "effect": []
       }
+    },
+    {
+      "id": "breeze-sova-d0cdc8e5-7197-4629-8cc5-3d2aa1e4cd84",
+      "mapId": "breeze",
+      "agentId": "viper",
+      "abilityId": "toxic-screen",
+      "uploader": {
+        "name": "PeterAlbus",
+        "source": "toy",
+        "toyOpenId": "toid_v1_k01_JZ_p5JVd_Vj1Qw8HfyAGfgs3Ya26Y3BH5Bx3OIM3NR_a"
+      },
+      "title": "A点墙",
+      "side": "attack",
+      "area": "A点",
+      "videoBvid": "",
+      "target": {
+        "groupId": "breeze-sova-d0cdc8e5-7197-4629-8cc5-3d2aa1e4cd84-target",
+        "x": 0.66001,
+        "y": 0.6608
+      },
+      "effect": {
+        "type": "direction",
+        "angle": 310
+      },
+      "stance": {
+        "x": 0.6484,
+        "y": 0.66744
+      },
+      "instructions": "",
+      "media": {
+        "stance": [],
+        "aim": [],
+        "effect": []
+      }
+    },
+    {
+      "id": "breeze-viper-8ddcaa28-d77c-4758-9bb4-75a474ba2493",
+      "mapId": "breeze",
+      "agentId": "viper",
+      "abilityId": "poison-cloud",
+      "uploader": {
+        "name": "PeterAlbus",
+        "source": "toy",
+        "toyOpenId": "toid_v1_k01_JZ_p5JVd_Vj1Qw8HfyAGfgs3Ya26Y3BH5Bx3OIM3NR_a"
+      },
+      "title": "A小烟",
+      "side": "attack",
+      "area": "A点",
+      "videoBvid": "",
+      "target": {
+        "groupId": "breeze-viper-8ddcaa28-d77c-4758-9bb4-75a474ba2493-target",
+        "x": 0.62155,
+        "y": 0.45635
+      },
+      "stance": {
+        "x": 0.45322,
+        "y": 0.62396
+      },
+      "instructions": "顶住光幕",
+      "media": {
+        "stance": [],
+        "aim": [
+          {
+            "key": "lineups/breeze-viper-8ddcaa28-d77c-4758-9bb4-75a474ba2493/aim-fb063469-5549-4ffb-a6c2-34ceda9d6136.webp",
+            "alt": "A小烟瞄点图 1"
+          }
+        ],
+        "effect": []
+      }
+    },
+    {
+      "id": "breeze-viper-a7d4e2b8-0f64-4bdb-b280-989402cab591",
+      "mapId": "breeze",
+      "agentId": "viper",
+      "abilityId": "poison-cloud",
+      "uploader": {
+        "name": "PeterAlbus",
+        "source": "toy",
+        "toyOpenId": "toid_v1_k01_JZ_p5JVd_Vj1Qw8HfyAGfgs3Ya26Y3BH5Bx3OIM3NR_a"
+      },
+      "title": "A小单向",
+      "side": "attack",
+      "area": "A点",
+      "videoBvid": "",
+      "target": {
+        "groupId": "breeze-viper-a7d4e2b8-0f64-4bdb-b280-989402cab591-target",
+        "x": 0.58923,
+        "y": 0.46764
+      },
+      "stance": {
+        "x": 0.45283,
+        "y": 0.63119
+      },
+      "instructions": "顶住光幕",
+      "media": {
+        "stance": [],
+        "aim": [
+          {
+            "key": "lineups/breeze-viper-a7d4e2b8-0f64-4bdb-b280-989402cab591/aim-31a3b3fe-e6db-4bbe-a84f-4059da4f7060.webp",
+            "alt": "A小单向瞄点图 1"
+          }
+        ],
+        "effect": []
+      }
+    },
+    {
+      "id": "breeze-viper-1185df00-85d7-4950-b971-72ee569b1d08",
+      "mapId": "breeze",
+      "agentId": "viper",
+      "abilityId": "poison-cloud",
+      "uploader": {
+        "name": "PeterAlbus",
+        "source": "toy",
+        "toyOpenId": "toid_v1_k01_JZ_p5JVd_Vj1Qw8HfyAGfgs3Ya26Y3BH5Bx3OIM3NR_a"
+      },
+      "title": "VIP",
+      "side": "attack",
+      "area": "B点",
+      "videoBvid": "",
+      "target": {
+        "groupId": "breeze-viper-1185df00-85d7-4950-b971-72ee569b1d08-target",
+        "x": 0.43905,
+        "y": 0.25532
+      },
+      "stance": {
+        "x": 0.45283,
+        "y": 0.63119
+      },
+      "instructions": "跳投",
+      "media": {
+        "stance": [],
+        "aim": [
+          {
+            "key": "lineups/breeze-viper-1185df00-85d7-4950-b971-72ee569b1d08/aim-17eb6e03-452b-4822-b1b7-4d0fc3e77a52.webp",
+            "alt": "瞄点图 1"
+          }
+        ],
+        "effect": []
+      }
+    },
+    {
+      "id": "breeze-sova-d67507cf-ea3e-4560-9b09-3ca13a6b6256",
+      "mapId": "breeze",
+      "agentId": "viper",
+      "abilityId": "toxic-screen",
+      "uploader": {
+        "name": "PeterAlbus",
+        "source": "toy",
+        "toyOpenId": "toid_v1_k01_JZ_p5JVd_Vj1Qw8HfyAGfgs3Ya26Y3BH5Bx3OIM3NR_a"
+      },
+      "title": "防守烟",
+      "side": "defense",
+      "area": "B点",
+      "videoBvid": "",
+      "target": {
+        "groupId": "breeze-sova-d67507cf-ea3e-4560-9b09-3ca13a6b6256-target",
+        "x": 0.33603,
+        "y": 0.15659
+      },
+      "effect": {
+        "type": "direction",
+        "angle": 138
+      },
+      "instructions": "",
+      "media": {
+        "stance": [],
+        "aim": [],
+        "effect": []
+      }
+    },
+    {
+      "id": "breeze-viper-c2fbdefa-21ef-4659-a18c-c78ec01f76ea",
+      "mapId": "breeze",
+      "agentId": "viper",
+      "abilityId": "toxic-screen",
+      "uploader": {
+        "name": "PeterAlbus",
+        "source": "toy",
+        "toyOpenId": "toid_v1_k01_JZ_p5JVd_Vj1Qw8HfyAGfgs3Ya26Y3BH5Bx3OIM3NR_a"
+      },
+      "title": "防守烟",
+      "side": "defense",
+      "area": "B点",
+      "videoBvid": "",
+      "target": {
+        "groupId": "breeze-viper-c2fbdefa-21ef-4659-a18c-c78ec01f76ea-target",
+        "x": 0.24899,
+        "y": 0.31137
+      },
+      "effect": {
+        "type": "direction",
+        "angle": 138
+      },
+      "instructions": "",
+      "media": {
+        "stance": [],
+        "aim": [],
+        "effect": []
+      }
+    },
+    {
+      "id": "breeze-viper-a946ee47-1233-41df-89fb-bd1cca6df764",
+      "mapId": "breeze",
+      "agentId": "viper",
+      "abilityId": "poison-cloud",
+      "uploader": {
+        "name": "PeterAlbus",
+        "source": "toy",
+        "toyOpenId": "toid_v1_k01_JZ_p5JVd_Vj1Qw8HfyAGfgs3Ya26Y3BH5Bx3OIM3NR_a"
+      },
+      "title": "A大烟",
+      "side": "defense",
+      "area": "A点",
+      "videoBvid": "",
+      "target": {
+        "groupId": "breeze-viper-a946ee47-1233-41df-89fb-bd1cca6df764-target",
+        "x": 0.85211,
+        "y": 0.59962
+      },
+      "stance": {
+        "x": 0.34513,
+        "y": 0.2699
+      },
+      "instructions": "ui瞄点，跑+跳投",
+      "media": {
+        "stance": [],
+        "aim": [
+          {
+            "key": "lineups/breeze-viper-a946ee47-1233-41df-89fb-bd1cca6df764/aim-0248e790-755e-4919-8963-a90fbd4a5202.webp",
+            "alt": "瞄点图 1"
+          }
+        ],
+        "effect": []
+      }
+    },
+    {
+      "id": "breeze-viper-bd3a0465-a7fb-4846-814b-25148905c413",
+      "mapId": "breeze",
+      "agentId": "viper",
+      "abilityId": "poison-cloud",
+      "uploader": {
+        "name": "PeterAlbus",
+        "source": "toy",
+        "toyOpenId": "toid_v1_k01_JZ_p5JVd_Vj1Qw8HfyAGfgs3Ya26Y3BH5Bx3OIM3NR_a"
+      },
+      "title": "B大烟",
+      "side": "defense",
+      "area": "B点",
+      "videoBvid": "",
+      "target": {
+        "groupId": "breeze-viper-bd3a0465-a7fb-4846-814b-25148905c413-target",
+        "x": 0.13819,
+        "y": 0.41978
+      },
+      "stance": {
+        "x": 0.38751,
+        "y": 0.08324
+      },
+      "instructions": "跳投",
+      "media": {
+        "stance": [
+          {
+            "key": "lineups/breeze-viper-bd3a0465-a7fb-4846-814b-25148905c413/stance-e5d9cbe6-2501-4f39-9143-3ddcf2ff3cf8.webp",
+            "alt": "站位图 1"
+          }
+        ],
+        "aim": [
+          {
+            "key": "lineups/breeze-viper-bd3a0465-a7fb-4846-814b-25148905c413/aim-a040aee0-40ab-4f12-bfa3-86edfbfba64e.webp",
+            "alt": "瞄点图 1"
+          }
+        ],
+        "effect": []
+      }
+    },
+    {
+      "id": "breeze-viper-3573d192-26be-4121-9018-66c8b8e50f41",
+      "mapId": "breeze",
+      "agentId": "viper",
+      "abilityId": "toxic-screen",
+      "uploader": {
+        "name": "PeterAlbus",
+        "source": "toy",
+        "toyOpenId": "toid_v1_k01_JZ_p5JVd_Vj1Qw8HfyAGfgs3Ya26Y3BH5Bx3OIM3NR_a"
+      },
+      "title": "A大墙",
+      "side": "defense",
+      "area": "A点",
+      "videoBvid": "",
+      "target": {
+        "groupId": "breeze-viper-3573d192-26be-4121-9018-66c8b8e50f41-target",
+        "x": 0.68263,
+        "y": 0.4056
+      },
+      "effect": {
+        "type": "direction",
+        "angle": 48
+      },
+      "instructions": "",
+      "media": {
+        "stance": [],
+        "aim": [],
+        "effect": []
+      }
+    },
+    {
+      "id": "breeze-viper-24ae7b59-0459-40c9-818a-01b0f641f619",
+      "mapId": "breeze",
+      "agentId": "viper",
+      "abilityId": "toxic-screen",
+      "uploader": {
+        "name": "PeterAlbus",
+        "source": "toy",
+        "toyOpenId": "toid_v1_k01_JZ_p5JVd_Vj1Qw8HfyAGfgs3Ya26Y3BH5Bx3OIM3NR_a"
+      },
+      "title": "A大+中路墙",
+      "side": "defense",
+      "area": "A点",
+      "videoBvid": "",
+      "target": {
+        "groupId": "breeze-viper-24ae7b59-0459-40c9-818a-01b0f641f619-target",
+        "x": 0.92151,
+        "y": 0.50835
+      },
+      "effect": {
+        "type": "direction",
+        "angle": 180
+      },
+      "instructions": "",
+      "media": {
+        "stance": [],
+        "aim": [],
+        "effect": []
+      }
     }
   ],
   "history": [
@@ -23086,6 +23420,35 @@
       "added": 57,
       "updated": 22,
       "deleted": 0
+    },
+    {
+      "id": "229b2baf-33da-49f5-8e72-b39731af78cf",
+      "packageId": "a5e6b298-34be-4c73-b9e2-f338091a7fd6",
+      "revision": 4,
+      "appliedAt": "2026-09-15T04:02:55.155Z",
+      "author": {
+        "name": "PeterAlbus",
+        "source": "toy",
+        "toyOpenId": "toid_v1_k01_JZ_p5JVd_Vj1Qw8HfyAGfgs3Ya26Y3BH5Bx3OIM3NR_a"
+      },
+      "mapIds": [
+        "breeze"
+      ],
+      "lineupIds": [
+        "breeze-sova-d0cdc8e5-7197-4629-8cc5-3d2aa1e4cd84",
+        "breeze-viper-8ddcaa28-d77c-4758-9bb4-75a474ba2493",
+        "breeze-viper-a7d4e2b8-0f64-4bdb-b280-989402cab591",
+        "breeze-viper-1185df00-85d7-4950-b971-72ee569b1d08",
+        "breeze-sova-d67507cf-ea3e-4560-9b09-3ca13a6b6256",
+        "breeze-viper-c2fbdefa-21ef-4659-a18c-c78ec01f76ea",
+        "breeze-viper-a946ee47-1233-41df-89fb-bd1cca6df764",
+        "breeze-viper-bd3a0465-a7fb-4846-814b-25148905c413",
+        "breeze-viper-3573d192-26be-4121-9018-66c8b8e50f41",
+        "breeze-viper-24ae7b59-0459-40c9-818a-01b0f641f619"
+      ],
+      "added": 10,
+      "updated": 0,
+      "deleted": 0
     }
   ],
   "mediaBytes": {
@@ -23257,7 +23620,13 @@
     "lineups/abyss-skye-9e36f306-6d50-4bb6-be5e-9bbabf026b5f/aim-f064effc-5ad9-4570-8b03-c74894ebbc65.webp": 238266,
     "lineups/abyss-sova-25413a7c-5a20-465c-89fd-3bbb0d85e249/aim-ab8da1fe-e5b3-4e85-aa57-0db19c0a9c16.webp": 279644,
     "lineups/abyss-sova-399baa43-cd92-4263-9e1f-7c226a1cc3b0/aim-4b02f35b-2da1-44c9-8718-5f1926c6eb8d.webp": 246634,
-    "lineups/abyss-sova-e031399b-a6f1-4505-bb6c-63222b495897/aim-4bef5628-fed5-4e77-96fb-d3cca932b447.webp": 222342
+    "lineups/abyss-sova-e031399b-a6f1-4505-bb6c-63222b495897/aim-4bef5628-fed5-4e77-96fb-d3cca932b447.webp": 222342,
+    "lineups/breeze-viper-8ddcaa28-d77c-4758-9bb4-75a474ba2493/aim-fb063469-5549-4ffb-a6c2-34ceda9d6136.webp": 275524,
+    "lineups/breeze-viper-a7d4e2b8-0f64-4bdb-b280-989402cab591/aim-31a3b3fe-e6db-4bbe-a84f-4059da4f7060.webp": 133422,
+    "lineups/breeze-viper-1185df00-85d7-4950-b971-72ee569b1d08/aim-17eb6e03-452b-4822-b1b7-4d0fc3e77a52.webp": 12598,
+    "lineups/breeze-viper-a946ee47-1233-41df-89fb-bd1cca6df764/aim-0248e790-755e-4919-8963-a90fbd4a5202.webp": 57254,
+    "lineups/breeze-viper-bd3a0465-a7fb-4846-814b-25148905c413/stance-e5d9cbe6-2501-4f39-9143-3ddcf2ff3cf8.webp": 310392,
+    "lineups/breeze-viper-bd3a0465-a7fb-4846-814b-25148905c413/aim-a040aee0-40ab-4f12-bfa3-86edfbfba64e.webp": 378690
   },
   "mediaAssets": {
     "lineups/ascent-sova-01/stance-01-37db7c34d5327278.webp": {
@@ -24103,6 +24472,36 @@
     "lineups/abyss-sova-e031399b-a6f1-4505-bb6c-63222b495897/aim-4bef5628-fed5-4e77-96fb-d3cca932b447.webp": {
       "size": 222342,
       "sha256": "c5e45875518e50cf8cbafd65455157d8a82668009e6935d3b5b24575fae9be73",
+      "mimeType": "image/webp"
+    },
+    "lineups/breeze-viper-8ddcaa28-d77c-4758-9bb4-75a474ba2493/aim-fb063469-5549-4ffb-a6c2-34ceda9d6136.webp": {
+      "size": 275524,
+      "sha256": "6a8711112bfd1dc61e608bc23836d7d010a4bdd886e3b508e7438ac49d90c125",
+      "mimeType": "image/webp"
+    },
+    "lineups/breeze-viper-a7d4e2b8-0f64-4bdb-b280-989402cab591/aim-31a3b3fe-e6db-4bbe-a84f-4059da4f7060.webp": {
+      "size": 133422,
+      "sha256": "03e937027ee2a2e90c30898eb52bb5100b616655496edf559ae8c6aa7bddd746",
+      "mimeType": "image/webp"
+    },
+    "lineups/breeze-viper-1185df00-85d7-4950-b971-72ee569b1d08/aim-17eb6e03-452b-4822-b1b7-4d0fc3e77a52.webp": {
+      "size": 12598,
+      "sha256": "c0b3c96271f69df20815556687bb31c19756e90b67745c67181a769476bf799e",
+      "mimeType": "image/webp"
+    },
+    "lineups/breeze-viper-a946ee47-1233-41df-89fb-bd1cca6df764/aim-0248e790-755e-4919-8963-a90fbd4a5202.webp": {
+      "size": 57254,
+      "sha256": "a656447f995f705bfa461151555789d6d4f1f951a64639bc19b88ac7e6a7e2f7",
+      "mimeType": "image/webp"
+    },
+    "lineups/breeze-viper-bd3a0465-a7fb-4846-814b-25148905c413/stance-e5d9cbe6-2501-4f39-9143-3ddcf2ff3cf8.webp": {
+      "size": 310392,
+      "sha256": "e0c9a3b8ebc5125b7fcfb2bab67d42bc12634f56f0fcbd8f77fbd52f9d212f6f",
+      "mimeType": "image/webp"
+    },
+    "lineups/breeze-viper-bd3a0465-a7fb-4846-814b-25148905c413/aim-a040aee0-40ab-4f12-bfa3-86edfbfba64e.webp": {
+      "size": 378690,
+      "sha256": "4ccef09f0677e187eb79047b8e6b62cc9def71aaa613408bd64a6405471411dc",
       "mimeType": "image/webp"
     }
   },

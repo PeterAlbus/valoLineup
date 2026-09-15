@@ -293,5 +293,34 @@
     "added": 57,
     "updated": 22,
     "deleted": 0
+  },
+  {
+    "id": "229b2baf-33da-49f5-8e72-b39731af78cf",
+    "packageId": "a5e6b298-34be-4c73-b9e2-f338091a7fd6",
+    "revision": 4,
+    "appliedAt": "2026-09-15T04:02:55.155Z",
+    "author": {
+      "name": "PeterAlbus",
+      "source": "toy",
+      "toyOpenId": "toid_v1_k01_JZ_p5JVd_Vj1Qw8HfyAGfgs3Ya26Y3BH5Bx3OIM3NR_a"
+    },
+    "mapIds": [
+      "breeze"
+    ],
+    "lineupIds": [
+      "breeze-sova-d0cdc8e5-7197-4629-8cc5-3d2aa1e4cd84",
+      "breeze-viper-8ddcaa28-d77c-4758-9bb4-75a474ba2493",
+      "breeze-viper-a7d4e2b8-0f64-4bdb-b280-989402cab591",
+      "breeze-viper-1185df00-85d7-4950-b971-72ee569b1d08",
+      "breeze-sova-d67507cf-ea3e-4560-9b09-3ca13a6b6256",
+      "breeze-viper-c2fbdefa-21ef-4659-a18c-c78ec01f76ea",
+      "breeze-viper-a946ee47-1233-41df-89fb-bd1cca6df764",
+      "breeze-viper-bd3a0465-a7fb-4846-814b-25148905c413",
+      "breeze-viper-3573d192-26be-4121-9018-66c8b8e50f41",
+      "breeze-viper-24ae7b59-0459-40c9-818a-01b0f641f619"
+    ],
+    "added": 10,
+    "updated": 0,
+    "deleted": 0
   }
 ]
