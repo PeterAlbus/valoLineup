@@ -1,6 +1,7 @@
 import JSZip from 'jszip';
-import { allMedia, changedLineups, collectChanges, compactPackage, compressPackage, manifestSchema, sha256, verifyImage, type Lineup, type Manifest, type Uploader, type PackageData, type MediaKind, type RepositoryAssets, type Asset } from './package-model.mjs';
+import { allMedia, changedLineups, collectChanges, compactPackage, compressPackage, manifestSchema, readPackage, sha256, verifyImage, type Lineup, type Manifest, type Uploader, type PackageData, type MediaKind, type RepositoryAssets, type Asset } from './package-model.mjs';
 import { encodeWebp } from './image-compression';
+import { assertPackageTextAllowed, type TextReviewResult } from './package-text-review.mjs';
 
 export type PackageUpload = { key: string; lineupId: string; kind: MediaKind; alt: string; file: File };
 
@@ -31,14 +32,22 @@ export async function buildManualPackage(options: {
   return compressPackage(compactPackage({ manifest, blobs }, options.repositoryAssets, options.localAssets), encodeWebp);
 }
 
+export async function readModeratedPackage(bytes: ArrayBuffer | Uint8Array<ArrayBuffer>): Promise<PackageData & TextReviewResult> {
+  const data = await readPackage(bytes);
+  const review = await assertPackageTextAllowed(data.manifest, '导入');
+  return { ...data, ...review };
+}
+
 export async function downloadEditPackage({ manifest, blobs }: PackageData) {
+  manifest = manifestSchema.parse(manifest);
+  const review = await assertPackageTextAllowed(manifest, '导出');
   const zip = new JSZip();
   for (const asset of manifest.uploadedAssets) {
     const blob = blobs.get(asset.sha256);
     if (!blob) throw new Error('部分图片丢失，请重新添加图片或导入原编辑包后再下载');
     zip.file(asset.key, await blob.arrayBuffer());
   }
-  zip.file('manifest.json', `${JSON.stringify(manifestSchema.parse(manifest), null, 2)}\n`);
+  zip.file('manifest.json', `${JSON.stringify(manifest, null, 2)}\n`);
   const blob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE', compressionOptions: { level: 6 } });
   const href = URL.createObjectURL(blob);
   const anchor = document.createElement('a');
@@ -46,5 +55,5 @@ export async function downloadEditPackage({ manifest, blobs }: PackageData) {
   anchor.download = `valo-lineup-edits-${manifest.packageId}-r${manifest.revision}.zip`;
   document.body.append(anchor); anchor.click(); anchor.remove();
   window.setTimeout(() => URL.revokeObjectURL(href), 1000);
-  return { added: manifest.changes.added.length, updated: manifest.changes.updated.length, deleted: manifest.changes.deleted?.length ?? 0, uploads: manifest.uploadedAssets.length };
+  return { added: manifest.changes.added.length, updated: manifest.changes.updated.length, deleted: manifest.changes.deleted?.length ?? 0, uploads: manifest.uploadedAssets.length, ...review };
 }

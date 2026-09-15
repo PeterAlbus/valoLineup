@@ -1,8 +1,9 @@
 import { ZodError } from 'zod';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import content from './data/content.json';
-import { buildManualPackage, downloadEditPackage } from './edit-package';
-import { allAssets, allMedia, same, collectChanges, compactPackage, compressPackage, matchesAvailableAsset, resolvePackageReferences, retainFailedChanges, applyLayers, readPackage, validateReferences, packageStats, MAX_PACKAGE_BYTES, type Lineup, type MediaKind, type Manifest, type Uploader, type PackageData } from './package-model.mjs';
+import { buildManualPackage, downloadEditPackage, readModeratedPackage } from './edit-package';
+import { assertPackageTextAllowed } from './package-text-review.mjs';
+import { allAssets, allMedia, same, collectChanges, compactPackage, compressPackage, matchesAvailableAsset, resolvePackageReferences, retainFailedChanges, applyLayers, validateReferences, packageStats, MAX_PACKAGE_BYTES, type Lineup, type MediaKind, type Manifest, type Uploader, type PackageData } from './package-model.mjs';
 import { encodeWebp, formatBytes } from './image-compression';
 import { emptyLibrary, migrateVersionStorage, readImage, libraryUrls, persistLibrary, migrateLegacyImages, STORAGE_KEY, type LocalLibrary } from './local-library';
 import HistoryPage, { UploaderLabel } from './HistoryPage';
@@ -735,12 +736,13 @@ export default function App() {
     setEditorNotice({ kind: 'info', text: '正在保存本地编辑及图片…' });
     try {
       const data = await currentEdits();
+      const review = await assertPackageTextAllowed(data.manifest, '保存');
       const manual = packageStats(data.manifest).lineups ? data.manifest : null;
       await commitLibrary({ ...library, manual }, data);
       setDraftLineups(applyLayers(initialLineups, library.packages, manual).lineups);
       clearPendingUploads();
       setNewLineupId(null);
-      setEditorNotice({ kind: 'success', text: '已保存到当前浏览器，点位和图片刷新后仍会保留。' });
+      setEditorNotice({ kind: review.textReviewWarning ? 'info' : 'success', text: `已保存到当前浏览器，点位和图片刷新后仍会保留。${review.textReviewWarning}` });
     } catch (error) {
       setEditorNotice({ kind: 'error', text: editorError(error, '保存失败，草稿仍在当前页面') });
     } finally { setIsEditorBusy(false); }
@@ -752,7 +754,7 @@ export default function App() {
     setIsEditorBusy(true);
     try {
       const result = await downloadEditPackage(await currentEdits());
-      setEditorNotice({ kind: 'success', text: `已下载编辑包：新增 ${result.added} / 修改 ${result.updated} / 删除 ${result.deleted} 个点位，携带 ${result.uploads} 张图片（已有图片仅记录引用）。接收方需先应用来源更新包，缺图点位会跳过。${isDirty ? '当前修改尚未保存到浏览器。' : '已保存的编辑仍保留。'}` });
+      setEditorNotice({ kind: result.textReviewWarning ? 'info' : 'success', text: `已下载编辑包：新增 ${result.added} / 修改 ${result.updated} / 删除 ${result.deleted} 个点位，携带 ${result.uploads} 张图片（已有图片仅记录引用）。接收方需先应用来源更新包，缺图点位会跳过。${isDirty ? '当前修改尚未保存到浏览器。' : '已保存的编辑仍保留。'}${result.textReviewWarning}` });
     } catch (error) { setEditorNotice({ kind: 'error', text: editorError(error, '导出失败') }); }
     finally { setIsEditorBusy(false); }
   }
@@ -770,7 +772,8 @@ export default function App() {
     setIsEditorBusy(true);
     try {
       if (file.size > MAX_PACKAGE_BYTES) throw new Error('编辑包超过 128 MB，请选择更小的文件');
-      const data = await resolvePackageReferences(await compressPackage(await readPackage(await file.arrayBuffer()), encodeWebp), async (asset) => {
+      const reviewed = await readModeratedPackage(await file.arrayBuffer());
+      const data = await resolvePackageReferences(await compressPackage(reviewed, encodeWebp), async (asset) => {
         try { return await readImage(asset); } catch { /* A fresh browser can fetch the schema-validated, same-origin image path. */ }
         const response = await fetch(assetUrl(asset.key));
         if (!response.ok) throw new Error('引用图片不可用，请先更新应用或导入来源更新包');
@@ -784,8 +787,8 @@ export default function App() {
       await commitLibrary({ ...library, packages }, retained);
       const failures = data.failures ?? [];
       setEditorNotice(failures.length
-        ? { kind: 'info', text: `已导入 ${packageStats(data.manifest).lineups} 个点位，跳过 ${failures.length} 个缺图或图片损坏的点位（原内容保留）：${failures.map(item => `${item.title}：${item.message}（${item.key}）`).join('；')}。补齐图片后可重新导入此包。` }
-        : { kind: 'success', text: '更新包已导入并保存到当前浏览器，你保存的点位修改仍然保留。' });
+        ? { kind: 'info', text: `已导入 ${packageStats(data.manifest).lineups} 个点位，跳过 ${failures.length} 个缺图或图片损坏的点位（原内容保留）：${failures.map(item => `${item.title}：${item.message}（${item.key}）`).join('；')}。补齐图片后可重新导入此包。${reviewed.textReviewWarning}` }
+        : { kind: reviewed.textReviewWarning ? 'info' : 'success', text: `更新包已导入并保存到当前浏览器，你保存的点位修改仍然保留。${reviewed.textReviewWarning}` });
     } catch (error) { setEditorNotice({ kind: 'error', text: editorError(error, '导入失败，原数据未改变') }); }
     finally { setIsEditorBusy(false); }
   }

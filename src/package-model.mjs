@@ -43,6 +43,7 @@ const assetSchema = z.object({
   key: mediaItemSchema.shape.key, lineupId: id, kind: z.enum(['stance', 'aim', 'effect']),
   alt: mediaItemSchema.shape.alt, mimeType: z.enum(['image/png', 'image/jpeg', 'image/webp']),
   size: z.number().int().positive().max(MAX_IMAGE_BYTES), sha256: z.string().regex(/^[a-f0-9]{64}$/),
+  original: mediaItemSchema.shape.original,
 }).passthrough();
 export const manifestSchema = z.object({
   format: z.literal('valo-lineup-edit-package'), version: z.union([z.literal(4), z.literal(5), z.literal(6)]),
